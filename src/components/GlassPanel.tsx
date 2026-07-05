@@ -6,15 +6,18 @@ export default function GlassPanel({
   hover = false,
   as: Tag = "div",
   glow = false,
+  id,
 }: {
   children: ReactNode;
   className?: string;
   hover?: boolean;
   as?: ElementType;
   glow?: boolean;
+  id?: string;
 }) {
   return (
     <Tag
+      id={id}
       className={[
         "glass rounded-2xl",
         hover ? "glass-hover" : "",
@@ -24,7 +27,3 @@ export default function GlassPanel({
         .filter(Boolean)
         .join(" ")}
     >
-      {children}
-    </Tag>
-  );
-}
