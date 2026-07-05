@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #05090c;
+  --fg: #dbe6ea;
+  --muted: #8da3ad;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #05090c;
+    color: #cdd9de;
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(53, 224, 224, 0.25);
+    color: #eafcff;
+  }
+
+  /* Thin, technical focus ring for accessibility */
+  :focus-visible {
+    outline: 2px solid rgba(94, 242, 242, 0.7);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* Frosted mission-control panel */
+  .glass {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 29, 37, 0.55),
+      rgba(10, 16, 21, 0.55)
+    );
+    border: 1px solid rgba(94, 242, 242, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-hover {
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .glass-hover:hover {
+    border-color: rgba(94, 242, 242, 0.35);
+    box-shadow: 0 0 40px -10px rgba(53, 224, 224, 0.25);
+  }
+
+  /* Small monospaced HUD label */
+  .hud-label {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5ef2f2;
+  }
+
+  .text-gradient {
+    background: linear-gradient(120deg, #eafcff 0%, #7fecf0 55%, #5aa6ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hairline {
+    border-color: rgba(94, 242, 242, 0.12);
+  }
+}
+
+@layer utilities {
+  /* Subtle animated background grid used behind hero + sections */
+  .bg-hud-grid {
+    background-image:
+      linear-gradient(rgba(94, 242, 242, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94, 242, 242, 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
