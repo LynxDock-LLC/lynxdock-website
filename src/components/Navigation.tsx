@@ -6,11 +6,11 @@ import { useState } from "react";
 import GlowButton from "./GlowButton";
 
 const links = [
+  { href: "/mission-control/", label: "Mission Control" },
   { href: "/products/", label: "Products" },
   { href: "/roadmap/", label: "Roadmap" },
   { href: "/docs/", label: "Docs" },
   { href: "/blog/", label: "Blog" },
-  { href: "/company/", label: "Company" },
 ];
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
@@ -58,8 +58,8 @@ export default function Navigation() {
           <GlowButton href={GITHUB_ORG} external variant="ghost">
             GitHub
           </GlowButton>
-          <GlowButton href="/roadmap/" variant="primary">
-            View Roadmap
+          <GlowButton href="/download/" variant="primary">
+            Get LynxDock
           </GlowButton>
         </div>
 
@@ -105,8 +105,8 @@ export default function Navigation() {
               <GlowButton href={GITHUB_ORG} external variant="secondary">
                 GitHub
               </GlowButton>
-              <GlowButton href="/roadmap/" variant="primary">
-                View Roadmap
+              <GlowButton href="/download/" variant="primary">
+                Get LynxDock
               </GlowButton>
             </div>
           </div>

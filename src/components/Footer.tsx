@@ -5,11 +5,13 @@ const GITHUB_ORG = "https://github.com/LynxDock-LLC";
 
 const columns = [
   {
-    title: "Products",
+    title: "Product",
     links: [
       { href: "/products/lynxdock/", label: "LynxDock" },
+      { href: "/mission-control/", label: "Mission Control" },
       { href: "/products/studio/", label: "LynxDock Studio" },
       { href: "/products/bootstrap/", label: "LynxDock Bootstrap" },
+      { href: "/download/", label: "Download" },
     ],
   },
   {
@@ -25,6 +27,7 @@ const columns = [
     title: "Company",
     links: [
       { href: "/company/", label: "About" },
+      { href: "/vision/", label: "Vision" },
       { href: "/privacy/", label: "Privacy" },
       { href: "/terms/", label: "Terms" },
     ],
@@ -49,9 +52,8 @@ export default function Footer() {
             </span>
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-[#7f939b]">
-            Built for People. Not Platforms. Privacy-first, performance-focused
-            software for creators, gamers, developers, and self-hosted
-            communities.
+            Built for People. Not Platforms. The communication platform with a
+            tactical operations center - private, lightweight, and yours.
           </p>
           <a
             href={GITHUB_ORG}

@@ -8,10 +8,13 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
+    "/mission-control",
     "/products",
     "/products/lynxdock",
     "/products/studio",
     "/products/bootstrap",
+    "/vision",
+    "/download",
     "/roadmap",
     "/docs",
     "/docs/getting-started",

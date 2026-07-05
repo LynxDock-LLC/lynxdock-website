@@ -5,7 +5,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Mission-control graphite base
         graphite: {
           950: "#05090c",
           900: "#080d11",
@@ -14,7 +13,6 @@ const config: Config = {
           700: "#141d25",
           600: "#1c2732",
         },
-        // Neon cyan / blue signal accents
         signal: {
           cyan: "#35e0e0",
           bright: "#5ef2f2",
@@ -46,7 +44,8 @@ const config: Config = {
       boxShadow: {
         glow: "0 0 24px rgba(53, 224, 224, 0.25)",
         "glow-lg": "0 0 60px rgba(53, 224, 224, 0.18)",
-        panel: "0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 50px -20px rgba(0,0,0,0.8)",
+        panel:
+          "0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 50px -20px rgba(0,0,0,0.8)",
       },
       backgroundImage: {
         "grid-faint":
@@ -66,10 +65,25 @@ const config: Config = {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.55" },
         },
+        "radar-sweep": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "ping-ring": {
+          "0%": { transform: "scale(0.6)", opacity: "0.7" },
+          "80%, 100%": { transform: "scale(2.2)", opacity: "0" },
+        },
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.25" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out both",
         "pulse-soft": "pulse-soft 2.8s ease-in-out infinite",
+        "radar-sweep": "radar-sweep 6s linear infinite",
+        "ping-ring": "ping-ring 2.4s ease-out infinite",
+        blink: "blink 1.6s ease-in-out infinite",
       },
     },
   },
