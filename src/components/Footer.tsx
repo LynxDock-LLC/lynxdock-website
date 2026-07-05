@@ -89,4 +89,8 @@ export default function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-xs text-[#6f838b] sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright &copy; 2026&ndash;Present LynxDock LLC. All rights reserved.</p>
           <p className="hud-label text-[#5b6f77]">Built for People. Not Platforms.</p>
-        
+        </div>
+      </div>
+    </footer>
+  );
+}

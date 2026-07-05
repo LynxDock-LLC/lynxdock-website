@@ -77,4 +77,10 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Navigatio
+        <Navigation />
+        <main id="main">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}

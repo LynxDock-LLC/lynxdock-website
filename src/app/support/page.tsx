@@ -74,4 +74,10 @@ export default function SupportPage() {
           <div className="mt-4 flex justify-center">
             <GlowButton href={GITHUB_ORG} external variant="ghost">
               Or follow on GitHub
-    
+            </GlowButton>
+          </div>
+        </GlassPanel>
+      </section>
+    </>
+  );
+}

@@ -27,3 +27,7 @@ export default function GlassPanel({
         .filter(Boolean)
         .join(" ")}
     >
+      {children}
+    </Tag>
+  );
+}
