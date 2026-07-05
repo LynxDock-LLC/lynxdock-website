@@ -17,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs/getting-started",
     "/docs/self-hosting",
     "/docs/communities",
+    "/docs/bootstrap",
+    "/docs/faq",
     "/blog",
     "/company",
     "/support",
