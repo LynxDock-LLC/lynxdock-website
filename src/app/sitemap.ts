@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/vision",
     "/download",
     "/roadmap",
+    "/features",
     "/docs",
     "/docs/getting-started",
     "/docs/self-hosting",
