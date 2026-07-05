@@ -18,6 +18,9 @@ project aims to follow semantic versioning once it reaches a stable release.
   `apple-icon.png`, and a multi-size `favicon.ico`. Wired into metadata with a
   `summary_large_image` Twitter card.
 - `.env.example` documenting the optional form endpoint.
+- **Documentation section** — a real `/docs` area with a sticky sidebar and
+  content pages: Overview, Quickstart, Self-hosting a server, and Calls &
+  communities, grounded in the actual product experience.
 
 ## [0.1.0] — 2026-07-04
 
@@ -28,8 +31,4 @@ project aims to follow semantic versioning once it reaches a stable release.
 - **Design system** — dark graphite / mission-control aesthetic with neon
   cyan-blue accents, glass panels, thin borders, and subtle glow. Tokens in
   `tailwind.config.ts`; shared styles in `globals.css`.
-- **Reusable components** — Navigation, Footer, Hero, ProductCard, FeatureCard,
-  ScreenshotShowcase, RoadmapTimeline, GlowButton, GlassPanel, SectionHeader,
-  PageHeader.
-- **Pages** — Home, Products (+ LynxDock, Studio, Bootstrap), Roadmap, Docs,
-  Company, Support (with e
+- **Reusable components** — Navigation, Footer, Hero, ProductCard, 
