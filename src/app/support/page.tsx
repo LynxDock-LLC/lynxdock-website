@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import EarlyAccessForm from "@/components/EarlyAccessForm";
 
 export const metadata: Metadata = {
   title: "Support",
@@ -64,17 +65,13 @@ export default function SupportPage() {
             Request early access
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#9fb2ba]">
-            Early access is opening in phases. Follow the GitHub organization to
-            be first to know when builds are available — a dedicated sign-up is
-            coming soon.
+            Early access is opening in phases. Drop your email to join the list,
+            or follow the GitHub organization for updates.
           </p>
-          <div className="mt-6 flex justify-center">
-            <GlowButton href={GITHUB_ORG} external variant="primary">
-              Follow for updates
-            </GlowButton>
+          <div className="mt-6">
+            <EarlyAccessForm />
           </div>
-        </GlassPanel>
-      </section>
-    </>
-  );
-}
+          <div className="mt-4 flex justify-center">
+            <GlowButton href={GITHUB_ORG} external variant="ghost">
+              Or follow on GitHub
+    

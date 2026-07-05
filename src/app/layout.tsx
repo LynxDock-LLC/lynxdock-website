@@ -25,8 +25,11 @@ export const metadata: Metadata = {
   authors: [{ name: "LynxDock LLC" }],
   creator: "LynxDock LLC",
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
   },
   openGraph: {
     type: "website",
@@ -37,19 +40,19 @@ export const metadata: Metadata = {
       "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
     images: [
       {
-        url: "/logo/lynxdock-icon-512.png",
-        width: 512,
-        height: 512,
-        alt: "LynxDock logo",
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "LynxDock — Built for People. Not Platforms.",
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "LynxDock — Built for People. Not Platforms.",
     description:
       "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
-    images: ["/logo/lynxdock-icon-512.png"],
+    images: ["/og.png"],
   },
   robots: { index: true, follow: true },
 };
@@ -74,10 +77,4 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Navigation />
-        <main id="main">{children}</main>
-        <Footer />
-      </body>
-    </html>
-  );
-}
+        <Navigatio

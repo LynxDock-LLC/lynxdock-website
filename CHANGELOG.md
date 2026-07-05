@@ -7,6 +7,18 @@ project aims to follow semantic versioning once it reaches a stable release.
 
 ## [Unreleased]
 
+### Added
+
+- **Blog** — `/blog` index plus statically-generated post pages (`/blog/[slug]`)
+  driven by `src/data/posts.ts`, with two starter posts. Added to nav and footer.
+- **Early-access form** — accessible email-capture component (`EarlyAccessForm`)
+  wired into the Support and Roadmap CTAs. Posts to `NEXT_PUBLIC_FORM_ENDPOINT`
+  when configured, and falls back to a prefilled `mailto:` link otherwise.
+- **Social & icons** — branded 1200×630 Open Graph image (`/og.png`),
+  `apple-icon.png`, and a multi-size `favicon.ico`. Wired into metadata with a
+  `summary_large_image` Twitter card.
+- `.env.example` documenting the optional form endpoint.
+
 ## [0.1.0] — 2026-07-04
 
 ### Added
@@ -20,16 +32,4 @@ project aims to follow semantic versioning once it reaches a stable release.
   ScreenshotShowcase, RoadmapTimeline, GlowButton, GlassPanel, SectionHeader,
   PageHeader.
 - **Pages** — Home, Products (+ LynxDock, Studio, Bootstrap), Roadmap, Docs,
-  Company, Support (with early-access CTA), Privacy, Terms.
-- **Brand assets** — LynxDock logo, derived cube icon, favicon, and three
-  in-app screenshots presented in glass-frame mockups.
-- **Content data** — structured `products`, `features`, and `roadmap` data.
-- **SEO & metadata** — titles, descriptions, Open Graph, Twitter card, theme
-  color, and favicon.
-- **Docs** — `GENESIS-WEBSITE.md`, `ROADMAP.md`, `CHANGELOG.md`, and an updated
-  `README.md` with dev, build, and Cloudflare Pages deployment instructions.
-
-### Notes
-
-- No analytics, email backend, or heavy client libraries included by design.
-- Replaces the original single-file static "coming soon" placeholder.
+  Company, Support (with e
