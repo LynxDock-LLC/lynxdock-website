@@ -2,7 +2,7 @@
   "name": "lynxdock-website",
   "version": "0.1.0",
   "private": true,
-  "description": "Public website for LynxDock LLC — built for people, not platforms.",
+  "description": "Public website for LynxDock LLC - built for people, not platforms.",
   "scripts": {
     "dev": "next dev -p 4300",
     "build": "next build",
@@ -21,4 +21,6 @@
     "autoprefixer": "10.4.20",
     "postcss": "8.5.1",
     "tailwindcss": "3.4.17",
-    "typ
+    "typescript": "5.7.3"
+  }
+}
