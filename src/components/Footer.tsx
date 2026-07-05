@@ -22,6 +22,7 @@ const columns = [
       { href: "/features/", label: "Future Features" },
       { href: "/blog/", label: "Blog" },
       { href: "/community/", label: "Community" },
+      { href: "/compare/", label: "vs Discord" },
       { href: "/support/", label: "Support" },
     ],
   },
