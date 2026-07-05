@@ -24,7 +24,7 @@ export default function EarlyAccessForm() {
       return;
     }
 
-    // No backend configured — fall back to a prefilled email.
+    // No backend configured - fall back to a prefilled email.
     if (!ENDPOINT) {
       window.location.href = `mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(
         "LynxDock early access"
@@ -97,7 +97,7 @@ export default function EarlyAccessForm() {
           disabled={status === "submitting"}
           className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-signal-cyan/40 bg-signal-cyan/15 px-5 py-2.5 text-sm font-medium text-signal-bright shadow-[0_0_24px_-6px_rgba(53,224,224,0.5)] transition-all hover:bg-signal-cyan/25 hover:border-signal-cyan/70 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "submitting" ? "Submitting…" : "Request access"}
+          {status === "submitting" ? "Submitting..." : "Request access"}
         </button>
       </form>
       {status === "error" && (

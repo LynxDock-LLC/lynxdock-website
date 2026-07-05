@@ -21,7 +21,7 @@ const features: Feature[] = [
   {
     title: "AI grounded in your context",
     description:
-      "Assistance that draws on your project's own knowledge — not generic answers detached from your work.",
+      "Assistance that draws on your project's own knowledge - not generic answers detached from your work.",
     icon: "cpu",
   },
   {
@@ -44,7 +44,7 @@ export default function StudioPage() {
       <PageHeader
         eyebrow="In Development"
         title="LynxDock Studio"
-        description="An AI-assisted development workspace. Plan, document, and connect engineering knowledge into a single graph — with AI that understands your context."
+        description="An AI-assisted development workspace. Plan, document, and connect engineering knowledge into a single graph - with AI that understands your context."
       >
         <GlowButton href="/roadmap/" variant="primary">
           Track on the Roadmap
@@ -60,7 +60,7 @@ export default function StudioPage() {
               <span className="h-2.5 w-2.5 rounded-full bg-signal-cyan/50" />
             </span>
             <span className="ml-2 hud-label text-[#7f939b]">
-              LynxDock Studio · Knowledge Graph
+              LynxDock Studio - Knowledge Graph
             </span>
           </div>
           <Image
@@ -72,7 +72,7 @@ export default function StudioPage() {
             className="h-auto w-full"
           />
           <figcaption className="border-t border-line/60 px-4 py-3 text-sm text-[#9fb2ba]">
-            A living graph of everything your project knows — dashboards,
+            A living graph of everything your project knows - dashboards,
             architecture, research, and decisions, all connected.
           </figcaption>
         </figure>

@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How LynxDock LLC approaches privacy — privacy-first by default, with no surveillance or data harvesting.",
+    "How LynxDock LLC approaches privacy - privacy-first by default, with no surveillance or data harvesting.",
 };
 
 export default function PrivacyPage() {

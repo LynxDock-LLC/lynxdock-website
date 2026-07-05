@@ -8,8 +8,8 @@ const siteUrl = "https://lynxdock.app";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "LynxDock — Built for People. Not Platforms.",
-    template: "%s — LynxDock",
+    default: "LynxDock - Built for People. Not Platforms.",
+    template: "%s - LynxDock",
   },
   description:
     "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities. LynxDock, LynxDock Studio, and LynxDock Bootstrap.",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "LynxDock",
-    title: "LynxDock — Built for People. Not Platforms.",
+    title: "LynxDock - Built for People. Not Platforms.",
     description:
       "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
     images: [
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "LynxDock — Built for People. Not Platforms.",
+        alt: "LynxDock - Built for People. Not Platforms.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LynxDock — Built for People. Not Platforms.",
+    title: "LynxDock - Built for People. Not Platforms.",
     description:
       "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
     images: ["/og.png"],

@@ -13,7 +13,7 @@ export const products: Product[] = [
     name: "LynxDock",
     tagline: "Calls and communities, without the weight",
     summary:
-      "A lightweight communication platform for voice, chat, and screen sharing. Start a quick P2P call or settle into a self-hosted, persistent community — your accounts and data stay with the server you choose.",
+      "A lightweight communication platform for voice, chat, and screen sharing. Start a quick P2P call or settle into a self-hosted, persistent community - your accounts and data stay with the server you choose.",
     stage: "Core Product",
     href: "/products/lynxdock/",
   },
@@ -22,7 +22,7 @@ export const products: Product[] = [
     name: "LynxDock Studio",
     tagline: "An AI-assisted development workspace",
     summary:
-      "A connected workspace for planning, documentation, and engineering knowledge. Link ideas, sprints, architecture, and research into one navigable graph — with AI assistance that respects your context.",
+      "A connected workspace for planning, documentation, and engineering knowledge. Link ideas, sprints, architecture, and research into one navigable graph - with AI assistance that respects your context.",
     stage: "In Development",
     href: "/products/studio/",
   },
@@ -31,7 +31,7 @@ export const products: Product[] = [
     name: "LynxDock Bootstrap",
     tagline: "Automation engine for product foundations",
     summary:
-      "The engine that scaffolds repositories, documentation, and product foundations automatically — turning a blank slate into a structured, ready-to-build project in minutes.",
+      "The engine that scaffolds repositories, documentation, and product foundations automatically - turning a blank slate into a structured, ready-to-build project in minutes.",
     stage: "In Development",
     href: "/products/bootstrap/",
   },

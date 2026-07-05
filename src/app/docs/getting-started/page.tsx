@@ -38,7 +38,7 @@ export default function GettingStarted() {
           <li>Share the room code with anyone you want to invite.</li>
         </ol>
         <p>
-          Quick Call rooms are ephemeral — they disappear after a period of
+          Quick Call rooms are ephemeral - they disappear after a period of
           inactivity, and nothing is stored on a central platform.
         </p>
 
@@ -50,12 +50,12 @@ export default function GettingStarted() {
         </p>
         <ul>
           <li>
-            <strong>Add Persistent Server</strong> — connect to an existing
+            <strong>Add Persistent Server</strong> - connect to an existing
             server using its address (for example{" "}
             <code>http://localhost:8080</code>).
           </li>
           <li>
-            <strong>Host a New Server</strong> — spin up your own with the Guided
+            <strong>Host a New Server</strong> - spin up your own with the Guided
             Setup wizard. See{" "}
             <Link href="/docs/self-hosting/">Self-hosting a server</Link>.
           </li>

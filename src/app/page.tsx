@@ -16,16 +16,16 @@ const shots: Shot[] = [
   {
     src: "/screenshots/mission-control.png",
     alt: "LynxDock squadron view showing a mission-active commander dashboard with wing readiness, a command tree, and a live member roster",
-    label: "LynxDock · Squadron / Mission Control",
+    label: "LynxDock - Squadron / Mission Control",
     caption:
-      "Mission control — organize people into wings and squadrons with a live command tree.",
+      "Mission control - organize people into wings and squadrons with a live command tree.",
     width: 2330,
     height: 1521,
   },
   {
     src: "/screenshots/server-setup.png",
     alt: "LynxDock Guided Server Setup wizard for creating a local server without touching config files",
-    label: "LynxDock · Guided Server Setup",
+    label: "LynxDock - Guided Server Setup",
     caption: "Self-host in minutes with a calm, guided setup wizard.",
     width: 1124,
     height: 805,
@@ -33,7 +33,7 @@ const shots: Shot[] = [
   {
     src: "/screenshots/community-connect.png",
     alt: "LynxDock connect screen offering a Quick Call or a persistent self-hosted server",
-    label: "LynxDock · Connect",
+    label: "LynxDock - Connect",
     caption: "Talk now, or settle into a persistent community server.",
     width: 1341,
     height: 916,
@@ -67,7 +67,7 @@ export default function Home() {
           align="center"
           eyebrow="Proof, not promises"
           title="An interface that feels like a command center"
-          description="Dark, quiet, and precise. LynxDock is designed to get out of your way — so hosting, calling, and organizing feel calm instead of chaotic."
+          description="Dark, quiet, and precise. LynxDock is designed to get out of your way - so hosting, calling, and organizing feel calm instead of chaotic."
           className="mb-10"
         />
         <ScreenshotShowcase shots={shots} />
@@ -78,7 +78,7 @@ export default function Home() {
         <SectionHeader
           eyebrow="The ecosystem"
           title="Three products. One philosophy."
-          description="Everything LynxDock builds shares a single design language and a single principle — software that serves the people using it."
+          description="Everything LynxDock builds shares a single design language and a single principle - software that serves the people using it."
           className="mb-10"
         />
         <div className="grid gap-5 md:grid-cols-3">
@@ -106,7 +106,7 @@ export default function Home() {
             </div>
             <div className="space-y-4 text-[15px] leading-relaxed text-[#9fb2ba]">
               <p>
-                The modern software stack treats people as metrics — engagement
+                The modern software stack treats people as metrics - engagement
                 to optimize, data to harvest, attention to sell. LynxDock takes
                 the opposite stance.
               </p>

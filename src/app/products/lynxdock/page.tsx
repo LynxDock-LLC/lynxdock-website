@@ -8,7 +8,7 @@ import { lynxdockFeatures } from "@/data/features";
 export const metadata: Metadata = {
   title: "LynxDock",
   description:
-    "A lightweight communication platform for voice, chat, and screen sharing — with quick P2P calls and self-hosted, persistent community servers.",
+    "A lightweight communication platform for voice, chat, and screen sharing - with quick P2P calls and self-hosted, persistent community servers.",
 };
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
@@ -17,7 +17,7 @@ const shots: Shot[] = [
   {
     src: "/screenshots/community-connect.png",
     alt: "LynxDock connect screen offering a Quick Call or a persistent self-hosted server",
-    label: "LynxDock · Connect",
+    label: "LynxDock - Connect",
     caption: "Start a Quick Call, or connect to a persistent community server.",
     width: 1341,
     height: 916,
@@ -25,15 +25,15 @@ const shots: Shot[] = [
   {
     src: "/screenshots/server-setup.png",
     alt: "LynxDock Guided Server Setup wizard with server basics, network, and storage settings",
-    label: "LynxDock · Guided Server Setup",
-    caption: "Generate a real config with safe self-hosting defaults — no terminal required.",
+    label: "LynxDock - Guided Server Setup",
+    caption: "Generate a real config with safe self-hosting defaults - no terminal required.",
     width: 1124,
     height: 805,
   },
   {
     src: "/screenshots/mission-control.png",
     alt: "LynxDock squadron command view with wing readiness and a live command tree",
-    label: "LynxDock · Squadron / Mission Control",
+    label: "LynxDock - Squadron / Mission Control",
     caption: "Organize communities into wings and squadrons with a live command tree.",
     width: 2330,
     height: 1521,
@@ -46,7 +46,7 @@ export default function LynxDockPage() {
       <PageHeader
         eyebrow="Core Product"
         title="LynxDock"
-        description="Calls and communities, without the weight. A lightweight platform for voice, chat, and screen sharing — from spontaneous P2P calls to fully self-hosted communities you own."
+        description="Calls and communities, without the weight. A lightweight platform for voice, chat, and screen sharing - from spontaneous P2P calls to fully self-hosted communities you own."
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <GlowButton href={GITHUB_ORG} external variant="primary">

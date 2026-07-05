@@ -24,7 +24,7 @@ export default function Hero() {
         <div className="animate-fade-up">
           <Image
             src="/logo/lynxdock-icon.png"
-            alt="LynxDock logo — a glowing isometric cube"
+            alt="LynxDock logo - a glowing isometric cube"
             width={132}
             height={132}
             priority

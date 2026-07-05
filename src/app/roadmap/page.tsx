@@ -20,7 +20,7 @@ export default function RoadmapPage() {
       <PageHeader
         eyebrow="Where we're headed"
         title="Roadmap"
-        description="LynxDock is early and built in the open. This is the honest state of the ecosystem — what's active, and what's planned next."
+        description="LynxDock is early and built in the open. This is the honest state of the ecosystem - what's active, and what's planned next."
       />
 
       <section className="mx-auto max-w-3xl px-5 py-16">

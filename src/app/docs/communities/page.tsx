@@ -18,7 +18,7 @@ export default function Communities() {
       <div className="doc-prose mt-6">
         <p>
           LynxDock scales from a one-off conversation to a large, organized
-          community — without changing tools. Here&rsquo;s how the pieces fit
+          community - without changing tools. Here&rsquo;s how the pieces fit
           together.
         </p>
 
@@ -41,7 +41,7 @@ export default function Communities() {
 
         <h2 id="channels">Channels</h2>
         <p>
-          Inside a server, organize conversation into text and voice channels —
+          Inside a server, organize conversation into text and voice channels -
           for example a <code>general</code> text channel alongside{" "}
           <code>Voice</code> rooms. Members move between channels freely, and
           admins control who can see and post where.
@@ -49,30 +49,30 @@ export default function Communities() {
 
         <h2 id="squadrons">Squadrons &amp; mission control</h2>
         <p>
-          For larger groups, LynxDock offers a squadron-style command view — a
+          For larger groups, LynxDock offers a squadron-style command view - a
           mission-control dashboard for organizing people at scale. It brings
           together:
         </p>
         <ul>
           <li>
-            <strong>Wings and squadrons</strong> — group members into structured
+            <strong>Wings and squadrons</strong> - group members into structured
             units with readiness at a glance.
           </li>
           <li>
-            <strong>Command tree</strong> — a live view of who reports to whom and
+            <strong>Command tree</strong> - a live view of who reports to whom and
             how a group is organized.
           </li>
           <li>
-            <strong>Roster</strong> — see who&rsquo;s online, assigned, and
+            <strong>Roster</strong> - see who&rsquo;s online, assigned, and
             available across the community.
           </li>
           <li>
-            <strong>Objectives &amp; operations feed</strong> — track active
+            <strong>Objectives &amp; operations feed</strong> - track active
             objectives and activity in real time.
           </li>
         </ul>
         <p>
-          It&rsquo;s the same lightweight platform — just with the structure a big
+          It&rsquo;s the same lightweight platform - just with the structure a big
           community needs, presented as a calm command center rather than clutter.
         </p>
 

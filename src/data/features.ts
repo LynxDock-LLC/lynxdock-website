@@ -4,24 +4,24 @@ export type Feature = {
   icon: string;
 };
 
-// Core principles — the "why LynxDock exists" pillars
+// Core principles - the "why LynxDock exists" pillars
 export const principles: Feature[] = [
   {
     title: "Privacy by default",
     description:
-      "No surveillance, no data harvesting, no dark patterns. Your accounts and data stay with the server you choose — not ours.",
+      "No surveillance, no data harvesting, no dark patterns. Your accounts and data stay with the server you choose - not ours.",
     icon: "shield",
   },
   {
     title: "Performance first",
     description:
-      "Lightweight by design. Fast to launch, light on resources, and calm to use — even on modest hardware.",
+      "Lightweight by design. Fast to launch, light on resources, and calm to use - even on modest hardware.",
     icon: "bolt",
   },
   {
     title: "Self-hosting, made simple",
     description:
-      "A guided setup wizard generates a real config with sensible defaults — no config files or terminal commands required.",
+      "A guided setup wizard generates a real config with sensible defaults - no config files or terminal commands required.",
     icon: "server",
   },
   {
@@ -33,7 +33,7 @@ export const principles: Feature[] = [
   {
     title: "Built for builders",
     description:
-      "Developer-grade tooling across the ecosystem — from mission-control dashboards to an AI-assisted knowledge workspace.",
+      "Developer-grade tooling across the ecosystem - from mission-control dashboards to an AI-assisted knowledge workspace.",
     icon: "cpu",
   },
   {

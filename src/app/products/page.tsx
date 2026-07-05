@@ -6,7 +6,7 @@ import { products } from "@/data/products";
 export const metadata: Metadata = {
   title: "Products",
   description:
-    "LynxDock, LynxDock Studio, and LynxDock Bootstrap — a privacy-first ecosystem for communication, development, and automation.",
+    "LynxDock, LynxDock Studio, and LynxDock Bootstrap - a privacy-first ecosystem for communication, development, and automation.",
 };
 
 export default function ProductsPage() {

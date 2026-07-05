@@ -30,7 +30,7 @@ export default function CompanyPage() {
             </p>
             <p>
               LynxDock builds lightweight, privacy-first tools you can self-host
-              and truly own — communication, development, and automation software
+              and truly own - communication, development, and automation software
               that stays fast, quiet, and respectful of the people using it.
             </p>
             <p className="font-medium text-signal-cyan/90">

@@ -14,7 +14,7 @@ export const roadmap: RoadmapPhase[] = [
       "The core LynxDock communication experience and self-hosting story.",
     status: "active",
     items: [
-      "Quick Calls — temporary P2P voice, chat, and screen share",
+      "Quick Calls - temporary P2P voice, chat, and screen share",
       "Persistent, self-hosted servers with accounts and history",
       "Guided Server Setup wizard with safe defaults",
       "Squadron / mission-control community view",

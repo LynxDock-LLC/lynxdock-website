@@ -5,7 +5,7 @@ import GlassPanel from "@/components/GlassPanel";
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for the LynxDock ecosystem — quickstart, self-hosting, and guides.",
+    "Documentation for the LynxDock ecosystem - quickstart, self-hosting, and guides.",
 };
 
 const cards = [

@@ -8,7 +8,7 @@ import type { Feature } from "@/data/features";
 export const metadata: Metadata = {
   title: "LynxDock Bootstrap",
   description:
-    "An automation engine that scaffolds repositories, documentation, and product foundations — turning a blank slate into a structured project in minutes.",
+    "An automation engine that scaffolds repositories, documentation, and product foundations - turning a blank slate into a structured project in minutes.",
 };
 
 const features: Feature[] = [
@@ -33,7 +33,7 @@ const features: Feature[] = [
   {
     title: "One-command genesis",
     description:
-      "Go from a blank slate to a working foundation in minutes — the engine that started this very website.",
+      "Go from a blank slate to a working foundation in minutes - the engine that started this very website.",
     icon: "bolt",
   },
 ];
@@ -42,7 +42,7 @@ const steps = [
   {
     n: "01",
     title: "Describe",
-    text: "Point Bootstrap at a goal — a product, a site, a service.",
+    text: "Point Bootstrap at a goal - a product, a site, a service.",
   },
   {
     n: "02",
@@ -62,7 +62,7 @@ export default function BootstrapPage() {
       <PageHeader
         eyebrow="In Development"
         title="LynxDock Bootstrap"
-        description="The automation engine for product foundations. Bootstrap creates repositories, documentation, and product scaffolding automatically — so building starts from structure, not a blank page."
+        description="The automation engine for product foundations. Bootstrap creates repositories, documentation, and product scaffolding automatically - so building starts from structure, not a blank page."
       >
         <GlowButton href="/roadmap/" variant="primary">
           Track on the Roadmap
