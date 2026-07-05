@@ -20,6 +20,7 @@ const columns = [
       { href: "/docs/", label: "Documentation" },
       { href: "/roadmap/", label: "Roadmap" },
       { href: "/blog/", label: "Blog" },
+      { href: "/community/", label: "Community" },
       { href: "/support/", label: "Support" },
     ],
   },

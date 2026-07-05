@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs/communities",
     "/docs/bootstrap",
     "/docs/faq",
+    "/community",
     "/blog",
     "/company",
     "/support",
