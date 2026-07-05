@@ -1,71 +1,63 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/PageHeader";
+import Link from "next/link";
 import GlassPanel from "@/components/GlassPanel";
-import GlowButton from "@/components/GlowButton";
 
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for LynxDock products — self-hosting guides, product references, and developer resources.",
+    "Documentation for the LynxDock ecosystem — quickstart, self-hosting, and guides.",
 };
 
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
-
-const sections = [
+const cards = [
   {
-    title: "Getting started",
-    text: "Install, launch, and host your first LynxDock server with the guided setup wizard.",
+    href: "/docs/getting-started/",
+    title: "Quickstart",
+    text: "Launch LynxDock and start your first call or server in a couple of minutes.",
   },
   {
-    title: "Self-hosting guide",
-    text: "Network, storage, relay, and admin configuration for persistent, self-owned servers.",
+    href: "/docs/self-hosting/",
+    title: "Self-hosting a server",
+    text: "Use the Guided Setup wizard to run a persistent server you fully own.",
   },
   {
-    title: "LynxDock Studio",
-    text: "Organize a connected knowledge graph and work alongside context-aware AI.",
-  },
-  {
-    title: "Bootstrap reference",
-    text: "Scaffold repositories, docs, and product foundations with the automation engine.",
+    href: "/docs/communities/",
+    title: "Calls & communities",
+    text: "Quick Calls, persistent servers, channels, and squadron mission control.",
   },
 ];
 
-export default function DocsPage() {
+export default function DocsOverview() {
   return (
-    <>
-      <PageHeader
-        eyebrow="Resources"
-        title="Documentation"
-        description="Guides and references for the LynxDock ecosystem. Full documentation is being written alongside the products — here's what's coming."
-      />
+    <div>
+      <span className="hud-label">Documentation</span>
+      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+        Overview
+      </h1>
+      <div className="doc-prose mt-5">
+        <p>
+          Welcome to the LynxDock documentation. LynxDock is a lightweight,
+          privacy-first communication platform: start a quick peer-to-peer call,
+          or self-host a persistent community server that you and your members
+          fully own.
+        </p>
+        <p>
+          These guides are growing alongside the products. Start with the
+          quickstart, then dig into self-hosting and communities.
+        </p>
+      </div>
 
-      <section className="mx-auto max-w-4xl px-5 py-16">
-        <div className="grid gap-5 sm:grid-cols-2">
-          {sections.map((s) => (
-            <GlassPanel key={s.title} className="p-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-semibold text-white">{s.title}</h2>
-                <span className="hud-label text-[#7f939b]">Soon</span>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
-                {s.text}
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {cards.map((c) => (
+          <Link key={c.href} href={c.href} className="block">
+            <GlassPanel hover className="h-full p-5">
+              <h2 className="text-base font-semibold text-white">{c.title}</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#9fb2ba]">
+                {c.text}
               </p>
             </GlassPanel>
-          ))}
-        </div>
-
-        <GlassPanel className="mt-10 p-8 text-center">
-          <p className="text-sm text-[#9fb2ba]">
-            Documentation is published as products ship. In the meantime, the
-            code and progress live on GitHub.
-          </p>
-          <div className="mt-5 flex justify-center">
-            <GlowButton href={GITHUB_ORG} external variant="secondary">
-              Browse the GitHub organization
-            </GlowButton>
-          </div>
-        </GlassPanel>
-      </section>
-    </>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }

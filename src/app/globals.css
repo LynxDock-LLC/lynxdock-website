@@ -78,30 +78,44 @@
   .hairline {
     border-color: rgba(94, 242, 242, 0.12);
   }
-}
 
-@layer utilities {
-  /* Subtle animated background grid used behind hero + sections */
-  .bg-hud-grid {
-    background-image:
-      linear-gradient(rgba(94, 242, 242, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(94, 242, 242, 0.045) 1px, transparent 1px);
-    background-size: 56px 56px;
+  /* Documentation prose */
+  .doc-prose {
+    color: #b7c5cb;
+    font-size: 15px;
+    line-height: 1.75;
   }
-
-  .mask-fade-b {
-    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  .doc-prose h2 {
+    color: #ffffff;
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    scroll-margin-top: 6rem;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+  .doc-prose h3 {
+    color: #eef6f8;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
   }
-}
+  .doc-prose p {
+    margin-bottom: 1rem;
+  }
+  .doc-prose ul,
+  .doc-prose ol {
+    margin: 0 0 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .doc-prose ul {
+    list-style: none;
+    margin-left: 0;
+  }
+  .doc-prose ul > li {
+    position: relative;
+    padding-left: 1.2rem;
+  }
+  .d
