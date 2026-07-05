@@ -1,0 +1,9 @@
+# Security contact for LynxDock (lynxdock.app)
+# If you believe you have found a security vulnerability, please report it
+# responsibly via the GitHub security advisory link below.
+
+Contact: https://github.com/LynxDock-LLC/lynxdock-website/security/advisories/new
+Contact: https://github.com/LynxDock-LLC
+Expires: 2027-07-04T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://lynxdock.app/.well-known/security.txt

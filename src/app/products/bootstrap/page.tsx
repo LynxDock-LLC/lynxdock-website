@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import FeatureCard from "@/components/FeatureCard";
 import GlassPanel from "@/components/GlassPanel";
+import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
 import type { Feature } from "@/data/features";
 
@@ -56,6 +57,25 @@ const steps = [
   },
 ];
 
+const audiences: Audience[] = [
+  {
+    title: "Founders",
+    text: "Turn an idea into a real, structured project foundation in minutes instead of days of setup.",
+  },
+  {
+    title: "Developers",
+    text: "Skip the boilerplate. Start every project with consistent structure, config, and docs in place.",
+  },
+  {
+    title: "Teams",
+    text: "Standardize how new repositories and docs are created so everything starts the same, clean way.",
+  },
+  {
+    title: "Tinkerers",
+    text: "Go from zero to a working scaffold fast, so you spend your time building - not configuring.",
+  },
+];
+
 export default function BootstrapPage() {
   return (
     <>
@@ -90,6 +110,8 @@ export default function BootstrapPage() {
           ))}
         </div>
       </section>
+
+      <AudienceGrid title="From blank slate to foundation" items={audiences} />
     </>
   );
 }

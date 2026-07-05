@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import FeatureCard from "@/components/FeatureCard";
+import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
 import type { Feature } from "@/data/features";
 
@@ -35,6 +36,25 @@ const features: Feature[] = [
     description:
       "Your workspace, your data. Studio follows the same privacy-first principles as the rest of LynxDock.",
     icon: "shield",
+  },
+];
+
+const audiences: Audience[] = [
+  {
+    title: "Solo builders",
+    text: "Keep every decision, note, and doc connected so your project stays legible as it grows.",
+  },
+  {
+    title: "Small teams",
+    text: "Share one living knowledge base across engineering, design, and research - no more scattered wikis.",
+  },
+  {
+    title: "Open-source maintainers",
+    text: "Give contributors a navigable map of architecture and decisions instead of tribal knowledge.",
+  },
+  {
+    title: "Researchers",
+    text: "Link ideas, sources, and findings into a graph you can actually traverse and reason over.",
   },
 ];
 
@@ -83,6 +103,8 @@ export default function StudioPage() {
           ))}
         </div>
       </section>
+
+      <AudienceGrid title="For everyone who builds with knowledge" items={audiences} />
     </>
   );
 }

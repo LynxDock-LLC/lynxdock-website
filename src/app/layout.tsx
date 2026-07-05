@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Analytics from "@/components/Analytics";
 
 const siteUrl = "https://lynxdock.app";
 
@@ -80,6 +81,7 @@ export default function RootLayout({
         <Navigation />
         <main id="main">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

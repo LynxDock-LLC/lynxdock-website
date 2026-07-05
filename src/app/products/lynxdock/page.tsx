@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import FeatureCard from "@/components/FeatureCard";
 import ScreenshotShowcase, { type Shot } from "@/components/ScreenshotShowcase";
+import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
 import { lynxdockFeatures } from "@/data/features";
 
@@ -26,7 +27,8 @@ const shots: Shot[] = [
     src: "/screenshots/server-setup.png",
     alt: "LynxDock Guided Server Setup wizard with server basics, network, and storage settings",
     label: "LynxDock - Guided Server Setup",
-    caption: "Generate a real config with safe self-hosting defaults - no terminal required.",
+    caption:
+      "Generate a real config with safe self-hosting defaults - no terminal required.",
     width: 1124,
     height: 805,
   },
@@ -34,9 +36,29 @@ const shots: Shot[] = [
     src: "/screenshots/mission-control.png",
     alt: "LynxDock squadron command view with wing readiness and a live command tree",
     label: "LynxDock - Squadron / Mission Control",
-    caption: "Organize communities into wings and squadrons with a live command tree.",
+    caption:
+      "Organize communities into wings and squadrons with a live command tree.",
     width: 2330,
     height: 1521,
+  },
+];
+
+const audiences: Audience[] = [
+  {
+    title: "Creators",
+    text: "Host a private community for your audience without handing it to a platform that owns your reach.",
+  },
+  {
+    title: "Gamers",
+    text: "Spin up a quick call for a session, or run a persistent squadron server with roles and voice channels.",
+  },
+  {
+    title: "Developers",
+    text: "Self-host a lightweight, no-nonsense comms server for your team, with data that stays on your infrastructure.",
+  },
+  {
+    title: "Communities",
+    text: "Give members a calm home with accounts, history, and admin controls - owned by you, not rented.",
   },
 ];
 
@@ -65,6 +87,8 @@ export default function LynxDockPage() {
           ))}
         </div>
       </section>
+
+      <AudienceGrid title="Built for the way you connect" items={audiences} />
 
       <section className="mx-auto max-w-6xl px-5 pb-20">
         <ScreenshotShowcase shots={shots} />

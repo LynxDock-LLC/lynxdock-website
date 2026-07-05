@@ -9,6 +9,17 @@ project aims to follow semantic versioning once it reaches a stable release.
 
 ### Added
 
+- **SEO** - `sitemap.xml` and `robots.txt` generated at build time, plus an
+  on-brand mission-control 404 page.
+- **Blog** - two more posts: "Why privacy-first, and why now" and
+  "Self-hosting without the headache".
+- **Product pages** - a "Who it's for" audience section on the LynxDock, Studio,
+  and Bootstrap pages (reusable `AudienceGrid` component).
+- **security.txt** - RFC 9116 security contact at `/.well-known/security.txt`.
+- **Analytics** - optional, privacy-first Cloudflare Web Analytics via
+  `NEXT_PUBLIC_CF_BEACON_TOKEN` (cookieless; inert when unset).
+- **Security** - bumped Next.js to 15.1.9 (CVE-2025-66478 patch).
+
 - **Blog** — `/blog` index plus statically-generated post pages (`/blog/[slug]`)
   driven by `src/data/posts.ts`, with two starter posts. Added to nav and footer.
 - **Early-access form** — accessible email-capture component (`EarlyAccessForm`)
