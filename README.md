@@ -1,18 +1,8 @@
-﻿# LynxDock Website
+# LynxDock Website
 
-Source code for https://lynxdock.app
+Source code for the public website at **https://lynxdock.app**.
 
-## Purpose
+Built for People. Not Platforms.
 
-Public website for LynxDock LLC, LynxDock, LynxDock Studio, and future LynxDock products.
-
-## Initial Pages
-
-- Home
-- Products
-- Documentation
-- Blog
-- Support
-- Privacy
-- Terms
-- Contact
+The marketing site for LynxDock LLC and its products: **LynxDock** (lightweight
+communication platform), **LynxDock Studio** (AI-assisted development workspace)
