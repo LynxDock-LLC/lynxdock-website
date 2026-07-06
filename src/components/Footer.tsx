@@ -93,7 +93,15 @@ export default function Footer() {
       <div className="border-t border-line/60">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-xs text-[#6f838b] sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright &copy; 2026&ndash;Present LynxDock LLC. All rights reserved.</p>
-          <p className="hud-label text-[#5b6f77]">Built for People. Not Platforms.</p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/design-system/"
+              className="transition-colors hover:text-[#9fb2ba]"
+            >
+              Design System
+            </Link>
+            <p className="hud-label text-[#5b6f77]">Built for People. Not Platforms.</p>
+          </div>
         </div>
       </div>
     </footer>
