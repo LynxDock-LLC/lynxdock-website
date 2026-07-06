@@ -6,54 +6,46 @@ export type RoadmapPhase = {
   items?: string[];
 };
 
+// Canonical roadmap - shared by the homepage roadmap section and the
+// /roadmap page so both always tell the same story.
 export const roadmap: RoadmapPhase[] = [
   {
-    phase: "Phase 01",
-    title: "Foundations",
+    phase: "2026",
+    title: "Genesis",
     description:
-      "The core LynxDock communication experience and self-hosting story.",
+      "The foundation: LynxDock communication, self-hosting, and Mission Control.",
     status: "active",
-    items: [
-      "Quick Calls - temporary P2P voice, chat, and screen share",
-      "Persistent, self-hosted servers with accounts and history",
-      "Guided Server Setup wizard with safe defaults",
-      "Squadron / mission-control community view",
-    ],
   },
   {
-    phase: "Phase 02",
-    title: "Studio",
-    description:
-      "The AI-assisted development workspace for planning and knowledge.",
+    phase: "2026",
+    title: "LynxDock Studio",
+    description: "The AI-assisted knowledge workspace comes online.",
     status: "active",
-    items: [
-      "Connected knowledge graph across docs, sprints, and research",
-      "AI assistance grounded in your own project context",
-      "Architecture, engineering, and design hubs",
-    ],
   },
   {
-    phase: "Phase 03",
-    title: "Bootstrap",
-    description:
-      "Automation that turns a blank slate into a structured foundation.",
+    phase: "2026",
+    title: "Public beta",
+    description: "Open desktop builds for Windows, Linux, and macOS.",
     status: "planned",
-    items: [
-      "Automated repository and documentation scaffolding",
-      "Product foundation templates",
-      "One-command project genesis",
-    ],
   },
   {
-    phase: "Phase 04",
-    title: "Ecosystem",
+    phase: "2026",
+    title: "Plugins",
     description:
-      "Deeper integration across LynxDock, Studio, and Bootstrap.",
+      "An extension surface so the community can build on LynxDock.",
     status: "planned",
-    items: [
-      "Shared identity and cross-product workflows",
-      "Public documentation and developer guides",
-      "Community-driven extensions",
-    ],
+  },
+  {
+    phase: "2026",
+    title: "Marketplace",
+    description: "A home for community plugins, themes, and templates.",
+    status: "planned",
+  },
+  {
+    phase: "2026",
+    title: "Mobile",
+    description:
+      "LynxDock on the devices you carry, with the same ownership guarantees.",
+    status: "planned",
   },
 ];

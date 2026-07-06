@@ -5,7 +5,7 @@ import GlowButton from "@/components/GlowButton";
 import SectionHeader from "@/components/SectionHeader";
 import FeatureCard from "@/components/FeatureCard";
 import RoadmapTimeline from "@/components/RoadmapTimeline";
-import type { RoadmapPhase } from "@/data/roadmap";
+import { roadmap } from "@/data/roadmap";
 import { principles } from "@/data/features";
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
@@ -107,45 +107,6 @@ const trustItems = [
 ];
 
 const platforms = ["Windows", "Linux", "macOS", "Self hosted"];
-
-const homeRoadmap: RoadmapPhase[] = [
-  {
-    phase: "2026",
-    title: "Genesis",
-    description: "The foundation: LynxDock communication, self-hosting, and Mission Control.",
-    status: "active",
-  },
-  {
-    phase: "2026",
-    title: "LynxDock Studio",
-    description: "The AI-assisted knowledge workspace comes online.",
-    status: "active",
-  },
-  {
-    phase: "2026",
-    title: "Public beta",
-    description: "Open desktop builds for Windows, Linux, and macOS.",
-    status: "planned",
-  },
-  {
-    phase: "2026",
-    title: "Plugins",
-    description: "An extension surface so the community can build on LynxDock.",
-    status: "planned",
-  },
-  {
-    phase: "2026",
-    title: "Marketplace",
-    description: "A home for community plugins, themes, and templates.",
-    status: "planned",
-  },
-  {
-    phase: "2026",
-    title: "Mobile",
-    description: "LynxDock on the devices you carry, with the same ownership guarantees.",
-    status: "planned",
-  },
-];
 
 function Section({
   children,
@@ -480,7 +441,7 @@ export default function Home() {
             title="The road ahead"
             description="LynxDock is early and building in the open. Here is the honest sequence of what is active and what is next."
           />
-          <RoadmapTimeline phases={homeRoadmap} />
+          <RoadmapTimeline phases={roadmap} />
         </div>
       </Section>
 
