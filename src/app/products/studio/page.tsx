@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import FeatureCard from "@/components/FeatureCard";
 import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
-import type { Feature } from "@/data/features";
+import { productDetails } from "@/data/productDetails";
 
 export const metadata: Metadata = {
   title: "LynxDock Studio",
@@ -12,32 +12,8 @@ export const metadata: Metadata = {
     "An AI-assisted development workspace that links docs, sprints, architecture, and research into one navigable knowledge graph.",
 };
 
-const features: Feature[] = [
-  {
-    title: "Connected knowledge graph",
-    description:
-      "Docs, sprints, architecture, research, and decisions linked into one navigable map instead of scattered files.",
-    icon: "layers",
-  },
-  {
-    title: "AI grounded in your context",
-    description:
-      "Assistance that draws on your project's own knowledge - not generic answers detached from your work.",
-    icon: "cpu",
-  },
-  {
-    title: "Engineering hubs",
-    description:
-      "Dedicated spaces for architecture, design, QA, and technical debt keep the whole project legible.",
-    icon: "code",
-  },
-  {
-    title: "Private by design",
-    description:
-      "Your workspace, your data. Studio follows the same privacy-first principles as the rest of LynxDock.",
-    icon: "shield",
-  },
-];
+const d = productDetails.studio;
+const shot = d.screenshots[0];
 
 const audiences: Audience[] = [
   {
@@ -61,14 +37,14 @@ const audiences: Audience[] = [
 export default function StudioPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="In Development"
-        title="LynxDock Studio"
-        description="An AI-assisted development workspace. Plan, document, and connect engineering knowledge into a single graph - with AI that understands your context."
-      >
-        <GlowButton href="/roadmap/" variant="primary">
-          Track on the Roadmap
-        </GlowButton>
+      <PageHeader eyebrow={d.stage} title={d.name} description={d.intro}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {d.ctas.map((c) => (
+            <GlowButton key={c.label} href={c.href} external={c.external} variant={c.variant}>
+              {c.label}
+            </GlowButton>
+          ))}
+        </div>
       </PageHeader>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
@@ -79,26 +55,23 @@ export default function StudioPage() {
               <span className="h-2.5 w-2.5 rounded-full bg-graphite-600" />
               <span className="h-2.5 w-2.5 rounded-full bg-signal-cyan/50" />
             </span>
-            <span className="ml-2 hud-label text-[#7f939b]">
-              LynxDock Studio - Knowledge Graph
-            </span>
+            <span className="ml-2 hud-label text-[#7f939b]">{shot.label}</span>
           </div>
           <Image
-            src="/screenshots/studio-graph.webp"
-            alt="LynxDock Studio knowledge graph view showing hundreds of linked notes across dashboards, engineering, research, and documentation"
-            width={1600}
-            height={1310}
+            src={shot.src}
+            alt={shot.alt}
+            width={shot.width}
+            height={shot.height}
             sizes="(max-width: 1024px) 100vw, 1024px"
             className="h-auto w-full"
           />
           <figcaption className="border-t border-line/60 px-4 py-3 text-sm text-[#9fb2ba]">
-            A living graph of everything your project knows - dashboards,
-            architecture, research, and decisions, all connected.
+            {shot.caption}
           </figcaption>
         </figure>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          {features.map((f) => (
+          {d.features.map((f) => (
             <FeatureCard key={f.title} feature={f} />
           ))}
         </div>

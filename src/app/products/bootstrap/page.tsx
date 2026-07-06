@@ -4,7 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import GlassPanel from "@/components/GlassPanel";
 import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
-import type { Feature } from "@/data/features";
+import { productDetails } from "@/data/productDetails";
 
 export const metadata: Metadata = {
   title: "LynxDock Bootstrap",
@@ -12,32 +12,7 @@ export const metadata: Metadata = {
     "An automation engine that scaffolds repositories, documentation, and product foundations - turning a blank slate into a structured project in minutes.",
 };
 
-const features: Feature[] = [
-  {
-    title: "Repository scaffolding",
-    description:
-      "Generate clean, consistent repositories with sensible structure and configuration from the start.",
-    icon: "server",
-  },
-  {
-    title: "Documentation foundations",
-    description:
-      "Bootstrap READMEs, guides, and knowledge bases so projects start documented, not empty.",
-    icon: "layers",
-  },
-  {
-    title: "Product foundations",
-    description:
-      "Templates and automation that turn an idea into a structured, ready-to-build product foundation.",
-    icon: "cpu",
-  },
-  {
-    title: "One-command genesis",
-    description:
-      "Go from a blank slate to a working foundation in minutes - the engine that started this very website.",
-    icon: "bolt",
-  },
-];
+const d = productDetails.bootstrap;
 
 const steps = [
   {
@@ -79,14 +54,14 @@ const audiences: Audience[] = [
 export default function BootstrapPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="In Development"
-        title="LynxDock Bootstrap"
-        description="The automation engine for product foundations. Bootstrap creates repositories, documentation, and product scaffolding automatically - so building starts from structure, not a blank page."
-      >
-        <GlowButton href="/roadmap/" variant="primary">
-          Track on the Roadmap
-        </GlowButton>
+      <PageHeader eyebrow={d.stage} title={d.name} description={d.intro}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {d.ctas.map((c) => (
+            <GlowButton key={c.label} href={c.href} external={c.external} variant={c.variant}>
+              {c.label}
+            </GlowButton>
+          ))}
+        </div>
       </PageHeader>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
@@ -105,7 +80,7 @@ export default function BootstrapPage() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          {features.map((f) => (
+          {d.features.map((f) => (
             <FeatureCard key={f.title} feature={f} />
           ))}
         </div>
