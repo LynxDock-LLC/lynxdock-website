@@ -11,6 +11,7 @@ const links = [
   { href: "/roadmap/", label: "Roadmap" },
   { href: "/docs/", label: "Docs" },
   { href: "/blog/", label: "Blog" },
+  { href: "/community/", label: "Community" },
 ];
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
