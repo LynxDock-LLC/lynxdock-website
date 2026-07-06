@@ -3,17 +3,17 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
+import siteMetadata from "@/data/siteMetadata";
 
-const siteUrl = "https://lynxdock.app";
+const og = siteMetadata.openGraph;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(siteMetadata.url),
   title: {
-    default: "LynxDock - Built for People. Not Platforms.",
-    template: "%s - LynxDock",
+    default: siteMetadata.title,
+    template: `%s - ${siteMetadata.name}`,
   },
-  description:
-    "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities. LynxDock, LynxDock Studio, and LynxDock Bootstrap.",
+  description: siteMetadata.description,
   keywords: [
     "LynxDock",
     "privacy-first",
@@ -34,26 +34,24 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: siteUrl,
-    siteName: "LynxDock",
-    title: "LynxDock - Built for People. Not Platforms.",
-    description:
-      "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
+    url: og.url,
+    siteName: og.siteName,
+    title: og.title,
+    description: og.description,
     images: [
       {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "LynxDock - Built for People. Not Platforms.",
+        url: og.image,
+        width: og.imageWidth,
+        height: og.imageHeight,
+        alt: og.imageAlt,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LynxDock - Built for People. Not Platforms.",
-    description:
-      "Privacy-first, performance-focused software for creators, gamers, developers, and self-hosted communities.",
-    images: ["/og.png"],
+    title: og.title,
+    description: og.description,
+    images: [og.image],
   },
   robots: { index: true, follow: true },
 };
