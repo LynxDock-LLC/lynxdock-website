@@ -2,10 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Genesis Design System tokens (see src/styles/tokens.css for the portable
+ * copy and docs/GENESIS-DESIGN-SYSTEM.md for the spec). The website consumes
+ * these CSS variables directly and via tailwind.config.ts utilities.
+ */
 :root {
-  --bg: #05090c;
-  --fg: #dbe6ea;
-  --muted: #8da3ad;
+  --ld-bg: #05090c;
+  --ld-bg-elevated: #080d11;
+  --ld-panel: #0d141a;
+  --ld-panel-strong: #141d25;
+  --ld-border: rgba(94, 242, 242, 0.14);
+  --ld-border-strong: rgba(94, 242, 242, 0.35);
+  --ld-text: #cdd9de;
+  --ld-text-strong: #ffffff;
+  --ld-muted: #9fb2ba;
+  --ld-muted-2: #7f939b;
+  --ld-cyan: #35e0e0;
+  --ld-cyan-bright: #5ef2f2;
+  --ld-blue: #3b82f6;
+  --ld-blue-deep: #1d4ed8;
+  --ld-warning: #f5b544;
+  --ld-success: #34d399;
+  --ld-danger: #f87171;
+  --ld-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --ld-radius-lg: 1rem;
+  --ld-glow: 0 0 24px rgba(53, 224, 224, 0.25);
+  --ld-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 20px 50px -20px rgba(0, 0, 0, 0.8);
+  /* alias kept for existing var(--font-mono) references */
+  --font-mono: var(--ld-font-mono);
 }
 
 @layer base {
@@ -14,8 +41,8 @@
   }
 
   body {
-    background-color: #05090c;
-    color: #cdd9de;
+    background-color: var(--ld-bg);
+    color: var(--ld-text);
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -27,7 +54,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid rgba(94, 242, 242, 0.7);
+    outline: 2px solid var(--ld-cyan-bright);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -46,7 +73,7 @@
       rgba(20, 29, 37, 0.55),
       rgba(10, 16, 21, 0.55)
     );
-    border: 1px solid rgba(94, 242, 242, 0.12);
+    border: 1px solid var(--ld-border);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -56,16 +83,16 @@
       transform 0.25s ease;
   }
   .glass-hover:hover {
-    border-color: rgba(94, 242, 242, 0.35);
+    border-color: var(--ld-border-strong);
     box-shadow: 0 0 40px -10px rgba(53, 224, 224, 0.25);
   }
 
   .hud-label {
-    font-family: var(--font-mono, ui-monospace, monospace);
+    font-family: var(--ld-font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #5ef2f2;
+    color: var(--ld-cyan-bright);
   }
 
   .text-gradient {
@@ -76,7 +103,7 @@
   }
 
   .hairline {
-    border-color: rgba(94, 242, 242, 0.12);
+    border-color: var(--ld-border);
   }
 
   /* Documentation prose */
@@ -86,7 +113,7 @@
     line-height: 1.75;
   }
   .doc-prose h2 {
-    color: #ffffff;
+    color: var(--ld-text-strong);
     font-size: 1.35rem;
     font-weight: 600;
     margin-top: 2.5rem;
@@ -132,12 +159,12 @@
     list-style: decimal;
   }
   .doc-prose a {
-    color: #5ef2f2;
+    color: var(--ld-cyan-bright);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
   .doc-prose code {
-    font-family: var(--font-mono, ui-monospace, monospace);
+    font-family: var(--ld-font-mono);
     font-size: 0.85em;
     background: rgba(94, 242, 242, 0.08);
     border: 1px solid rgba(94, 242, 242, 0.15);

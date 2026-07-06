@@ -1,0 +1,79 @@
+/*
+ * LynxDock Genesis Design System - Design Tokens
+ * The portable source of truth for the LynxDock visual language.
+ * Import this file into any product (website, desktop app, server host,
+ * Studio, Bootstrap) to inherit the same look. Values mirror
+ * src/data/designSystem.ts and tailwind.config.ts.
+ *
+ * Built for People. Not Platforms.
+ */
+
+:root {
+  /* ---- Color: foundation ---- */
+  --ld-bg: #05090c;            /* page background - near-black graphite */
+  --ld-bg-elevated: #080d11;   /* slightly raised surfaces */
+  --ld-panel: #0d141a;         /* glass panel base */
+  --ld-panel-strong: #141d25;  /* denser panel / chips */
+
+  /* ---- Color: borders ---- */
+  --ld-border: rgba(94, 242, 242, 0.14); /* thin cyan hairline */
+  --ld-border-strong: rgba(94, 242, 242, 0.35);
+
+  /* ---- Color: text ---- */
+  --ld-text: #cdd9de;          /* primary body text */
+  --ld-text-strong: #ffffff;   /* headings / emphasis */
+  --ld-muted: #9fb2ba;         /* secondary text */
+  --ld-muted-2: #7f939b;       /* tertiary / captions */
+
+  /* ---- Color: accents ---- */
+  --ld-cyan: #35e0e0;          /* primary accent */
+  --ld-cyan-bright: #5ef2f2;   /* hover / labels / links */
+  --ld-blue: #3b82f6;          /* secondary accent */
+  --ld-blue-deep: #1d4ed8;
+
+  /* ---- Color: status ---- */
+  --ld-warning: #f5b544;
+  --ld-success: #34d399;
+  --ld-danger: #f87171;
+
+  /* ---- Typography ---- */
+  --ld-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --ld-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --ld-text-h1: 3.5rem;   /* 56px - clamp down on mobile in components */
+  --ld-text-h2: 2.25rem;  /* 36px */
+  --ld-text-h3: 1.35rem;  /* ~22px */
+  --ld-text-body: 1rem;   /* 16px */
+  --ld-text-small: 0.8rem;/* ~13px */
+  --ld-leading-body: 1.7;
+  --ld-tracking-tight: -0.02em; /* headings */
+  --ld-tracking-hud: 0.22em;    /* uppercase HUD labels */
+
+  /* ---- Layout ---- */
+  --ld-max-width: 72rem;   /* 1152px content column */
+  --ld-section-y: 4rem;    /* vertical rhythm (5rem on >= sm) */
+  --ld-gutter: 1.25rem;    /* horizontal page padding */
+
+  /* ---- Radii ---- */
+  --ld-radius-sm: 0.5rem;
+  --ld-radius: 0.75rem;
+  --ld-radius-lg: 1rem;
+  --ld-radius-pill: 9999px;
+
+  /* ---- Shadows / glow ---- */
+  --ld-glow: 0 0 24px rgba(53, 224, 224, 0.25);
+  --ld-glow-lg: 0 0 60px rgba(53, 224, 224, 0.18);
+  --ld-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 20px 50px -20px rgba(0, 0, 0, 0.8);
+
+  /* ---- Motion ---- */
+  --ld-dur-fast: 0.2s;
+  --ld-dur: 0.25s;
+  --ld-dur-slow: 0.6s;
+  --ld-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Breakpoints (for reference; consumed via media queries / Tailwind):
+   sm 640px  md 768px  lg 1024px  xl 1280px */
