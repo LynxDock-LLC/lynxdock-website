@@ -7,8 +7,7 @@ import FeatureCard from "@/components/FeatureCard";
 import RoadmapTimeline from "@/components/RoadmapTimeline";
 import { roadmap } from "@/data/roadmap";
 import { lynxdockFeatures, type Feature } from "@/data/features";
-
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
+import { launch } from "@/data/launch";
 
 const trustItems = [
   { label: "Voice", icon: "voice" },
@@ -275,14 +274,14 @@ export default function Home() {
           </p>
 
           <div className="mt-9 flex flex-col items-center gap-3 animate-fade-up sm:flex-row">
-            <GlowButton href="/download/" variant="primary">
-              Download (Coming Soon)
+            <GlowButton href={launch.primaryCTA.href} variant="primary">
+              {launch.primaryCTA.label}
             </GlowButton>
-            <GlowButton href="/roadmap/" variant="secondary">
-              View Roadmap
+            <GlowButton href={launch.secondaryCTA.href} variant="secondary">
+              {launch.secondaryCTA.label}
             </GlowButton>
-            <GlowButton href={GITHUB_ORG} external variant="ghost">
-              GitHub
+            <GlowButton href={launch.githubCTA.href} external variant="ghost">
+              {launch.githubCTA.label}
             </GlowButton>
           </div>
         </div>
@@ -416,7 +415,7 @@ export default function Home() {
             className="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-signal-cyan/10 blur-[100px]"
           />
           <div className="relative mx-auto flex max-w-xl flex-col items-center">
-            <span className="hud-label">Get LynxDock</span>
+            <span className="hud-label">Get started</span>
             <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">
               Run communication you actually own.
             </h2>
@@ -425,14 +424,14 @@ export default function Home() {
               the roadmap and the GitHub org to be first in line.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-              <GlowButton href="/download/" variant="primary">
-                Download (Coming Soon)
+              <GlowButton href={launch.primaryCTA.href} variant="primary">
+                {launch.primaryCTA.label}
               </GlowButton>
-              <GlowButton href="/roadmap/" variant="secondary">
-                View Roadmap
+              <GlowButton href={launch.secondaryCTA.href} variant="secondary">
+                {launch.secondaryCTA.label}
               </GlowButton>
-              <GlowButton href={GITHUB_ORG} external variant="ghost">
-                GitHub
+              <GlowButton href={launch.githubCTA.href} external variant="ghost">
+                {launch.githubCTA.label}
               </GlowButton>
             </div>
           </div>

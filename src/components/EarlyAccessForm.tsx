@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { launch } from "@/data/launch";
 
 // Configure this to enable real submissions. Set NEXT_PUBLIC_FORM_ENDPOINT in
 // your environment (e.g. a Formspree endpoint like https://formspree.io/f/xxxx).
 // When empty, the form falls back to a mailto link so nothing is ever lost.
 const ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
 const FALLBACK_EMAIL = "hello@lynxdock.app";
+const ea = launch.earlyAccess;
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -32,7 +34,7 @@ export default function EarlyAccessForm() {
         `Please add me to the LynxDock early-access list: ${value}`
       )}`;
       setStatus("success");
-      setMessage("Opening your email client to complete the request.");
+      setMessage(ea.successMessage);
       return;
     }
 
@@ -46,7 +48,7 @@ export default function EarlyAccessForm() {
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("success");
-      setMessage("You're on the list. We'll be in touch as early access opens.");
+      setMessage(ea.successMessage);
       setEmail("");
     } catch {
       setStatus("error");
@@ -82,7 +84,7 @@ export default function EarlyAccessForm() {
           inputMode="email"
           autoComplete="email"
           required
-          placeholder="you@example.com"
+          placeholder={ea.placeholderEmail}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -97,7 +99,7 @@ export default function EarlyAccessForm() {
           disabled={status === "submitting"}
           className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-signal-cyan/40 bg-signal-cyan/15 px-5 py-2.5 text-sm font-medium text-signal-bright shadow-[0_0_24px_-6px_rgba(53,224,224,0.5)] transition-all hover:bg-signal-cyan/25 hover:border-signal-cyan/70 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "submitting" ? "Submitting..." : "Request access"}
+          {status === "submitting" ? "Submitting..." : ea.buttonLabel}
         </button>
       </form>
       {status === "error" && (

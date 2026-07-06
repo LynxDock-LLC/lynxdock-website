@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import { launch, type DownloadState } from "@/data/launch";
 
 export const metadata: Metadata = {
   title: "Download",
@@ -9,7 +10,17 @@ export const metadata: Metadata = {
     "The download center for LynxDock. Desktop builds for Windows, Linux, macOS, and self-hosted servers are in active development - follow the roadmap and GitHub to know the moment they land.",
 };
 
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
+const status = launch.downloadStatus;
+
+// Per-state availability label for the platform cards (presentational).
+const STATE_CHIP: Record<DownloadState, string> = {
+  "coming-soon": "Coming soon",
+  alpha: "Alpha",
+  beta: "Beta",
+  released: "Available",
+};
+const chipLabel = STATE_CHIP[status.state];
+const isReleased = status.state === "released";
 
 type Platform = {
   name: string;
@@ -168,22 +179,20 @@ export default function DownloadPage() {
         {/* CURRENT STATUS */}
         <GlassPanel glow className="p-8 sm:p-10">
           <span className="hud-label flex items-center gap-2 text-signal-bright">
-            <span aria-hidden>🚧</span> Development preview
+            <span aria-hidden>🚧</span> {status.title}
           </span>
           <h2 className="mt-4 text-2xl font-semibold text-white">
-            Public downloads aren&rsquo;t available yet
+            {status.heading}
           </h2>
           <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-            LynxDock is currently under active development. Public downloads are
-            not yet available. Follow development on GitHub or explore the
-            roadmap to see what&rsquo;s coming.
+            {status.message}
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <GlowButton href="/roadmap/" variant="primary">
-              Roadmap
+            <GlowButton href={launch.secondaryCTA.href} variant="primary">
+              {launch.secondaryCTA.label}
             </GlowButton>
-            <GlowButton href={GITHUB_ORG} external variant="secondary">
-              GitHub
+            <GlowButton href={launch.githubCTA.href} external variant="secondary">
+              {launch.githubCTA.label}
             </GlowButton>
           </div>
         </GlassPanel>
@@ -203,17 +212,23 @@ export default function DownloadPage() {
                 {p.name}
               </h3>
               <span className="mt-1 w-fit rounded-full border border-line bg-graphite-800/40 px-2.5 py-0.5 text-[11px] font-medium text-[#9fb2ba]">
-                Coming soon
+                {chipLabel}
               </span>
               <p className="mt-3 flex-1 text-xs leading-relaxed text-[#7f939b]">
                 {p.requirement}
               </p>
-              <span
-                aria-disabled="true"
-                className="mt-5 inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-4 py-2 text-sm text-[#6f838b]"
-              >
-                Not yet available
-              </span>
+              {isReleased ? (
+                <GlowButton href={launch.primaryCTA.href} variant="primary" className="mt-5">
+                  {launch.primaryCTA.label}
+                </GlowButton>
+              ) : (
+                <span
+                  aria-disabled="true"
+                  className="mt-5 inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-4 py-2 text-sm text-[#6f838b]"
+                >
+                  Not yet available
+                </span>
+              )}
             </GlassPanel>
           ))}
         </div>
@@ -351,19 +366,15 @@ export default function DownloadPage() {
               you&rsquo;re first in line when builds open up.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-              <GlowButton href={GITHUB_ORG} external variant="primary">
-                GitHub
+              <GlowButton href={launch.githubCTA.href} external variant="primary">
+                {launch.githubCTA.label}
               </GlowButton>
-              <GlowButton href="/roadmap/" variant="secondary">
-                Roadmap
+              <GlowButton href={launch.secondaryCTA.href} variant="secondary">
+                {launch.secondaryCTA.label}
               </GlowButton>
-              <span
-                aria-disabled="true"
-                title="Coming soon"
-                className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-transparent px-5 py-2.5 text-sm font-medium tracking-tight text-[#5b6f77]"
-              >
-                Early Access (Coming Soon)
-              </span>
+              <GlowButton href={launch.earlyAccessCTA.href} variant="ghost">
+                {launch.earlyAccessCTA.label}
+              </GlowButton>
             </div>
           </div>
         </GlassPanel>

@@ -6,21 +6,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import GlowButton from "./GlowButton";
 import { siteNavigation } from "@/data/siteNavigation";
+import { launch } from "@/data/launch";
 
 const links = siteNavigation.primary;
-const github =
-  siteNavigation.cta.find((c) => c.id === "github") ?? {
-    id: "github",
-    label: "GitHub",
-    href: "https://github.com/LynxDock-LLC",
-    external: true,
-  };
-const download =
-  siteNavigation.cta.find((c) => c.id === "download") ?? {
-    id: "download",
-    label: "Get LynxDock",
-    href: "/download/",
-  };
+const github = launch.githubCTA;
+const download = launch.primaryCTA;
 
 function normalize(path: string): string {
   return path !== "/" ? path.replace(/\/$/, "") : path;
@@ -74,7 +64,7 @@ export default function Navigation() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <GlowButton href={github.href} external={github.external} variant="ghost">
+          <GlowButton href={github.href} external variant="ghost">
             {github.label}
           </GlowButton>
           <GlowButton
@@ -129,7 +119,7 @@ export default function Navigation() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2">
-              <GlowButton href={github.href} external={github.external} variant="secondary">
+              <GlowButton href={github.href} external variant="secondary">
                 {github.label}
               </GlowButton>
               <GlowButton

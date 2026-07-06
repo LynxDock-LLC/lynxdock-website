@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
 import EarlyAccessForm from "@/components/EarlyAccessForm";
+import { launch } from "@/data/launch";
 
 export const metadata: Metadata = {
   title: "Support",
@@ -10,8 +11,7 @@ export const metadata: Metadata = {
     "Get help with LynxDock, report issues, or request early access to LynxDock products.",
 };
 
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
-const GITHUB_ISSUES = "https://github.com/LynxDock-LLC";
+const ea = launch.earlyAccess;
 
 export default function SupportPage() {
   return (
@@ -33,8 +33,8 @@ export default function SupportPage() {
               GitHub organization.
             </p>
             <div className="mt-4">
-              <GlowButton href={GITHUB_ISSUES} external variant="secondary">
-                Open on GitHub
+              <GlowButton href={launch.githubCTA.href} external variant="secondary">
+                {launch.githubCTA.label}
               </GlowButton>
             </div>
           </GlassPanel>
@@ -48,8 +48,8 @@ export default function SupportPage() {
               across the ecosystem.
             </p>
             <div className="mt-4">
-              <GlowButton href={GITHUB_ORG} external variant="secondary">
-                Visit the GitHub org
+              <GlowButton href={launch.githubCTA.href} external variant="secondary">
+                {launch.githubCTA.label}
               </GlowButton>
             </div>
           </GlassPanel>
@@ -61,19 +61,16 @@ export default function SupportPage() {
           className="mt-8 scroll-mt-24 p-8 text-center sm:p-10"
         >
           <span className="hud-label">Early access</span>
-          <h2 className="mt-3 text-2xl font-semibold text-white">
-            Request early access
-          </h2>
+          <h2 className="mt-3 text-2xl font-semibold text-white">{ea.title}</h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#9fb2ba]">
-            Early access is opening in phases. Drop your email to join the list,
-            or follow the GitHub organization for updates.
+            {ea.description}
           </p>
           <div className="mt-6">
             <EarlyAccessForm />
           </div>
           <div className="mt-4 flex justify-center">
-            <GlowButton href={GITHUB_ORG} external variant="ghost">
-              Or follow on GitHub
+            <GlowButton href={launch.githubCTA.href} external variant="ghost">
+              {launch.githubCTA.label}
             </GlowButton>
           </div>
         </GlassPanel>
