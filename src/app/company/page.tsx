@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import { principles } from "@/data/features";
 import FeatureCard from "@/components/FeatureCard";
+import { about } from "@/data/about";
 
 export const metadata: Metadata = {
   title: "Company",
@@ -14,27 +15,22 @@ export default function CompanyPage() {
   return (
     <>
       <PageHeader
-        eyebrow="About"
-        title="Company"
-        description="LynxDock LLC is an independent, founder-led software company building a privacy-first ecosystem for the people who actually use software."
+        eyebrow={about.eyebrow}
+        title={about.title}
+        description={about.intro}
       />
 
       <section className="mx-auto max-w-4xl px-5 py-16">
         <GlassPanel className="p-8 sm:p-10">
-          <h2 className="text-xl font-semibold text-white">Our mission</h2>
+          <h2 className="text-xl font-semibold text-white">
+            {about.mission.heading}
+          </h2>
           <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-[#9fb2ba]">
-            <p>
-              Software should serve the people who use it. Too much of today's
-              technology is designed to capture attention, harvest data, and lock
-              users in. We think that's backwards.
-            </p>
-            <p>
-              LynxDock builds lightweight, privacy-first tools you can self-host
-              and truly own - communication, development, and automation software
-              that stays fast, quiet, and respectful of the people using it.
-            </p>
+            {about.mission.paragraphs.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
             <p className="font-medium text-signal-cyan/90">
-              Built for People. Not Platforms.
+              {about.mission.motto}
             </p>
           </div>
         </GlassPanel>

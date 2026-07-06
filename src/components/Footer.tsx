@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
+import { companyInfo } from "@/data/companyInfo";
 
 const columns = [
   {
@@ -55,11 +54,10 @@ export default function Footer() {
             </span>
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-[#7f939b]">
-            Built for People. Not Platforms. The communication platform with a
-            tactical operations center - private, lightweight, and yours.
+            {companyInfo.footerBlurb}
           </p>
           <a
-            href={GITHUB_ORG}
+            href={companyInfo.github}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex w-fit items-center gap-2 text-sm text-[#9fb2ba] transition-colors hover:text-signal-bright"
@@ -67,7 +65,7 @@ export default function Footer() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M12 .5C5.7.5.5 5.7.5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.5 18.3 4.8 18.3 4.8c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z" />
             </svg>
-            LynxDock-LLC
+            {companyInfo.githubLabel}
           </a>
         </div>
 
@@ -92,7 +90,7 @@ export default function Footer() {
 
       <div className="border-t border-line/60">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-xs text-[#6f838b] sm:flex-row sm:items-center sm:justify-between">
-          <p>Copyright &copy; 2026&ndash;Present LynxDock LLC. All rights reserved.</p>
+          <p>{companyInfo.copyright}</p>
           <div className="flex items-center gap-4">
             <Link
               href="/design-system/"
@@ -100,7 +98,7 @@ export default function Footer() {
             >
               Design System
             </Link>
-            <p className="hud-label text-[#5b6f77]">Built for People. Not Platforms.</p>
+            <p className="hud-label text-[#5b6f77]">{companyInfo.motto}</p>
           </div>
         </div>
       </div>
