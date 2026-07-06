@@ -40,6 +40,7 @@ export const siteNavigation: SiteNavigation = {
       links: [
         { label: "Documentation", href: "/docs/" },
         { label: "Roadmap", href: "/roadmap/" },
+        { label: "Releases", href: "/releases/" },
         { label: "Future Features", href: "/features/" },
         { label: "Blog", href: "/blog/" },
         { label: "Community", href: "/community/" },

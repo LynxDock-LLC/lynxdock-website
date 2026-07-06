@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
-import { launch, type DownloadState } from "@/data/launch";
+import { launch } from "@/data/launch";
+import { releases } from "@/data/releases";
 
 export const metadata: Metadata = {
   title: "Download",
@@ -10,48 +12,19 @@ export const metadata: Metadata = {
     "The download center for LynxDock. Desktop builds for Windows, Linux, macOS, and self-hosted servers are in active development - follow the roadmap and GitHub to know the moment they land.",
 };
 
-const status = launch.downloadStatus;
+const preview = launch.downloadStatus;
+const current = releases.current;
+const released = current.released;
 
-// Per-state availability label for the platform cards (presentational).
-const STATE_CHIP: Record<DownloadState, string> = {
-  "coming-soon": "Coming soon",
-  alpha: "Alpha",
-  beta: "Beta",
-  released: "Available",
+type IconName = "windows" | "linux" | "apple" | "server";
+const PLATFORM_META: Record<string, { icon: IconName; requirement: string }> = {
+  windows: { icon: "windows", requirement: "Windows 10 / 11, 64-bit" },
+  linux: { icon: "linux", requirement: "Modern 64-bit distribution" },
+  macos: { icon: "apple", requirement: "Apple silicon & Intel" },
+  server: { icon: "server", requirement: "Linux host or container" },
 };
-const chipLabel = STATE_CHIP[status.state];
-const isReleased = status.state === "released";
-
-type Platform = {
-  name: string;
-  icon: "windows" | "linux" | "apple" | "server";
-  requirement: string;
-};
-
-const platforms: Platform[] = [
-  { name: "Windows", icon: "windows", requirement: "Windows 10 / 11, 64-bit" },
-  { name: "Linux", icon: "linux", requirement: "Modern 64-bit distribution" },
-  { name: "macOS", icon: "apple", requirement: "Apple silicon & Intel" },
-  {
-    name: "Self-hosted server",
-    icon: "server",
-    requirement: "Linux host or container",
-  },
-];
-
-type Release = {
-  version: string;
-  channel: string;
-  status: string;
-  notes: string;
-};
-
-const releases: Release[] = [
-  { version: "Genesis", channel: "Internal", status: "Alpha", notes: "Foundation in progress" },
-  { version: "Private Beta", channel: "Beta", status: "Planned", notes: "Invite-only testing" },
-  { version: "Public Beta", channel: "Beta", status: "Planned", notes: "Open desktop builds" },
-  { version: "Release 1.0", channel: "Stable", status: "Future", notes: "First stable release" },
-];
+const platformLabel = (id: string) =>
+  releases.platforms.find((p) => p.id === id)?.label ?? id;
 
 const releasePhilosophy = [
   {
@@ -122,7 +95,7 @@ const faqs = [
   },
 ];
 
-function PlatformIcon({ name }: { name: Platform["icon"] }) {
+function PlatformIcon({ name }: { name: IconName }) {
   const common = {
     width: 28,
     height: 28,
@@ -176,17 +149,34 @@ export default function DownloadPage() {
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* CURRENT STATUS */}
+        {/* CURRENT STATUS - driven by releases.current.released */}
         <GlassPanel glow className="p-8 sm:p-10">
-          <span className="hud-label flex items-center gap-2 text-signal-bright">
-            <span aria-hidden>🚧</span> {status.title}
-          </span>
-          <h2 className="mt-4 text-2xl font-semibold text-white">
-            {status.heading}
-          </h2>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-            {status.message}
-          </p>
+          {released ? (
+            <>
+              <span className="hud-label flex items-center gap-2 text-signal-bright">
+                {current.channel} - {current.version}
+              </span>
+              <h2 className="mt-4 text-2xl font-semibold text-white">
+                LynxDock {current.version} is available
+              </h2>
+              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
+                Download LynxDock for your platform below. Prefer the source?
+                Find the release on GitHub.
+              </p>
+            </>
+          ) : (
+            <>
+              <span className="hud-label flex items-center gap-2 text-signal-bright">
+                <span aria-hidden>🚧</span> {preview.title}
+              </span>
+              <h2 className="mt-4 text-2xl font-semibold text-white">
+                {preview.heading}
+              </h2>
+              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
+                {preview.message}
+              </p>
+            </>
+          )}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <GlowButton href={launch.secondaryCTA.href} variant="primary">
               {launch.secondaryCTA.label}
@@ -197,75 +187,53 @@ export default function DownloadPage() {
           </div>
         </GlassPanel>
 
-        {/* PLATFORMS */}
+        {/* PLATFORMS - driven by releases.downloads */}
         <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Platforms</h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {platforms.map((p) => (
-            <GlassPanel key={p.name} className="flex h-full flex-col p-6">
-              <div
-                aria-hidden
-                className="flex h-12 w-12 items-center justify-center rounded-xl border border-signal-cyan/25 bg-signal-cyan/10 text-signal-bright"
-              >
-                <PlatformIcon name={p.icon} />
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-white">
-                {p.name}
-              </h3>
-              <span className="mt-1 w-fit rounded-full border border-line bg-graphite-800/40 px-2.5 py-0.5 text-[11px] font-medium text-[#9fb2ba]">
-                {chipLabel}
-              </span>
-              <p className="mt-3 flex-1 text-xs leading-relaxed text-[#7f939b]">
-                {p.requirement}
-              </p>
-              {isReleased ? (
-                <GlowButton href={launch.primaryCTA.href} variant="primary" className="mt-5">
-                  {launch.primaryCTA.label}
-                </GlowButton>
-              ) : (
-                <span
-                  aria-disabled="true"
-                  className="mt-5 inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-4 py-2 text-sm text-[#6f838b]"
+          {releases.downloads.map((d) => {
+            const meta = PLATFORM_META[d.platform];
+            const canDownload = released && d.available && d.url !== "";
+            return (
+              <GlassPanel key={d.platform} className="flex h-full flex-col p-6">
+                <div
+                  aria-hidden
+                  className="flex h-12 w-12 items-center justify-center rounded-xl border border-signal-cyan/25 bg-signal-cyan/10 text-signal-bright"
                 >
-                  Not yet available
+                  <PlatformIcon name={meta?.icon ?? "server"} />
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-white">
+                  {platformLabel(d.platform)}
+                </h3>
+                <span className="mt-1 w-fit rounded-full border border-line bg-graphite-800/40 px-2.5 py-0.5 text-[11px] font-medium text-[#9fb2ba]">
+                  {canDownload ? (d.size ? `Available - ${d.size}` : "Available") : "Coming soon"}
                 </span>
-              )}
-            </GlassPanel>
-          ))}
+                <p className="mt-3 flex-1 text-xs leading-relaxed text-[#7f939b]">
+                  {meta?.requirement ?? d.filename}
+                </p>
+                {canDownload ? (
+                  <GlowButton href={d.url} variant="primary" className="mt-5">
+                    {launch.primaryCTA.label}
+                  </GlowButton>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className="mt-5 inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-4 py-2 text-sm text-[#6f838b]"
+                  >
+                    Not yet available
+                  </span>
+                )}
+              </GlassPanel>
+            );
+          })}
         </div>
 
-        {/* FUTURE RELEASES */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">
-          Future releases
-        </h2>
-        <GlassPanel className="overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] text-left text-sm">
-              <caption className="sr-only">
-                Planned LynxDock releases and their status
-              </caption>
-              <thead>
-                <tr className="border-b border-line/70 text-[#7f939b]">
-                  <th scope="col" className="px-5 py-3 font-medium">Version</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Channel</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Status</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {releases.map((r) => (
-                  <tr key={r.version} className="border-b border-line/40 last:border-b-0">
-                    <th scope="row" className="px-5 py-3 font-medium text-white">
-                      {r.version}
-                    </th>
-                    <td className="px-5 py-3 text-[#c3d0d6]">{r.channel}</td>
-                    <td className="px-5 py-3 text-[#c3d0d6]">{r.status}</td>
-                    <td className="px-5 py-3 text-[#9fb2ba]">{r.notes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </GlassPanel>
+        <p className="mt-6 text-sm text-[#7f939b]">
+          Looking for older builds?{" "}
+          <Link href="/releases/" className="text-signal-bright hover:underline">
+            See the full release history
+          </Link>
+          .
+        </p>
 
         {/* RELEASE PHILOSOPHY */}
         <h2 className="mb-6 mt-16 text-xl font-semibold text-white">

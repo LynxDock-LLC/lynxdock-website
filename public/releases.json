@@ -1,0 +1,41 @@
+{
+  "current": {
+    "version": "0.1.0-alpha",
+    "channel": "alpha",
+    "released": false
+  },
+  "downloads": [
+    {
+      "platform": "windows",
+      "filename": "LynxDockSetup.exe",
+      "url": "",
+      "sha256": "",
+      "size": "",
+      "available": false
+    },
+    {
+      "platform": "linux",
+      "filename": "LynxDock.AppImage",
+      "url": "",
+      "sha256": "",
+      "size": "",
+      "available": false
+    },
+    {
+      "platform": "macos",
+      "filename": "LynxDock.dmg",
+      "url": "",
+      "sha256": "",
+      "size": "",
+      "available": false
+    },
+    {
+      "platform": "server",
+      "filename": "lynxdock-server.tar.gz",
+      "url": "",
+      "sha256": "",
+      "size": "",
+      "available": false
+    }
+  ]
+}
