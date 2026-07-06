@@ -57,7 +57,7 @@ type FeatureRow = {
 
 const featureRows: FeatureRow[] = [
   {
-    src: "/screenshots/server-setup.png",
+    src: "/screenshots/server-setup.webp",
     alt: "LynxDock Guided Server Setup wizard with server basics, network, and storage settings",
     chrome: "LynxDock - Guided Server Setup",
     eyebrow: "Guided Server Setup",
@@ -67,7 +67,7 @@ const featureRows: FeatureRow[] = [
     height: 805,
   },
   {
-    src: "/screenshots/community-connect.png",
+    src: "/screenshots/community-connect.webp",
     alt: "LynxDock connect screen offering a Quick Call or a persistent self-hosted server",
     chrome: "LynxDock - Communication",
     eyebrow: "Communication",
@@ -77,24 +77,24 @@ const featureRows: FeatureRow[] = [
     height: 916,
   },
   {
-    src: "/screenshots/mission-control.png",
+    src: "/screenshots/mission-control.webp",
     alt: "LynxDock squadron command view with wing readiness and a live command tree",
     chrome: "LynxDock - Mission Control",
     eyebrow: "Mission Control",
     title: "Mission Control for communities.",
     body: "A tactical command view for organizing people at scale: a live command tree, wings and squadrons, rosters, objectives, and ready checks. The structure a large group needs, presented as a calm command center rather than clutter.",
-    width: 2330,
-    height: 1521,
+    width: 1600,
+    height: 1044,
   },
   {
-    src: "/screenshots/studio-graph.png",
+    src: "/screenshots/studio-graph.webp",
     alt: "LynxDock Studio knowledge graph linking documents, sprints, and research",
     chrome: "LynxDock Studio - Knowledge Graph",
     eyebrow: "LynxDock Studio",
     title: "Your second brain.",
     body: "An AI-assisted workspace that links docs, sprints, architecture, and research into one navigable graph. Plan, write, and build with assistance that is grounded in your own context - not a generic chatbot.",
-    width: 2114,
-    height: 1731,
+    width: 1600,
+    height: 1310,
   },
 ];
 
