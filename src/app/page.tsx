@@ -67,8 +67,8 @@ const ecosystem = [
   },
   {
     name: "LynxDock Genesis",
-    text: "The design system and shared foundation behind every surface.",
-    href: "/design-system/",
+    text: "The reusable foundation behind our design, docs, and workflow.",
+    href: "/genesis/",
   },
   {
     name: "LynxDock Bootstrap",
