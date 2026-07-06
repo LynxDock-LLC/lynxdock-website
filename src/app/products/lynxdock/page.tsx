@@ -16,7 +16,7 @@ const GITHUB_ORG = "https://github.com/LynxDock-LLC";
 
 const shots: Shot[] = [
   {
-    src: "/screenshots/community-connect.png",
+    src: "/screenshots/community-connect.webp",
     alt: "LynxDock connect screen offering a Quick Call or a persistent self-hosted server",
     label: "LynxDock - Connect",
     caption: "Start a Quick Call, or connect to a persistent community server.",
@@ -24,7 +24,7 @@ const shots: Shot[] = [
     height: 916,
   },
   {
-    src: "/screenshots/server-setup.png",
+    src: "/screenshots/server-setup.webp",
     alt: "LynxDock Guided Server Setup wizard with server basics, network, and storage settings",
     label: "LynxDock - Guided Server Setup",
     caption:
@@ -33,13 +33,13 @@ const shots: Shot[] = [
     height: 805,
   },
   {
-    src: "/screenshots/mission-control.png",
+    src: "/screenshots/mission-control.webp",
     alt: "LynxDock squadron command view with wing readiness and a live command tree",
     label: "LynxDock - Squadron / Mission Control",
     caption:
       "Organize communities into wings and squadrons with a live command tree.",
-    width: 2330,
-    height: 1521,
+    width: 1600,
+    height: 1044,
   },
 ];
 

@@ -84,10 +84,10 @@ export default function StudioPage() {
             </span>
           </div>
           <Image
-            src="/screenshots/studio-graph.png"
+            src="/screenshots/studio-graph.webp"
             alt="LynxDock Studio knowledge graph view showing hundreds of linked notes across dashboards, engineering, research, and documentation"
-            width={2114}
-            height={1731}
+            width={1600}
+            height={1310}
             sizes="(max-width: 1024px) 100vw, 1024px"
             className="h-auto w-full"
           />

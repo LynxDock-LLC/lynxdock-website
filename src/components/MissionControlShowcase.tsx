@@ -41,10 +41,10 @@ export default function MissionControlShowcase({
         {/* screenshot */}
         <div className="relative bg-graphite-950">
           <Image
-            src="/screenshots/mission-control.png"
+            src="/screenshots/mission-control.webp"
             alt="LynxDock Mission Control: a commander dashboard with wing readiness, a live command tree, and a member roster"
-            width={2330}
-            height={1521}
+            width={1600}
+            height={1044}
             priority={priority}
             sizes="(max-width: 1024px) 100vw, 1024px"
             className="h-auto w-full"

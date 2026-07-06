@@ -102,12 +102,12 @@ const typeScale = [
 ];
 
 const shot: Shot = {
-  src: "/screenshots/mission-control.png",
+  src: "/screenshots/mission-control.webp",
   alt: "LynxDock squadron command view with wing readiness and a live command tree",
   label: "LynxDock - Mission Control",
   caption: "The screenshot frame: window chrome, glass border, and a caption rail.",
-  width: 2330,
-  height: 1521,
+  width: 1600,
+  height: 1044,
 };
 
 function Block({
