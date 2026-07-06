@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import siteMetadata from "@/data/siteMetadata";
+import { companyInfo } from "@/data/companyInfo";
 
 const og = siteMetadata.openGraph;
 
@@ -62,6 +63,30 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Structured data (schema.org) built from GSpec-generated metadata.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteMetadata.url}/#organization`,
+      name: companyInfo.name,
+      url: siteMetadata.url,
+      logo: `${siteMetadata.url}/logo/lynxdock-icon.png`,
+      slogan: companyInfo.motto,
+      sameAs: [companyInfo.github],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteMetadata.url}/#website`,
+      name: siteMetadata.name,
+      url: siteMetadata.url,
+      description: siteMetadata.description,
+      publisher: { "@id": `${siteMetadata.url}/#organization` },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -70,6 +95,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-graphite-950 text-[#cdd9de] antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-graphite-800 focus:px-4 focus:py-2 focus:text-signal-bright"

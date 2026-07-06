@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = {
@@ -53,6 +54,22 @@ export default function TermsPage() {
             </p>
           </div>
         </div>
+
+        <p className="mt-12 border-t border-line/60 pt-8 text-sm text-[#7f939b]">
+          Keep exploring:{" "}
+          <Link href="/" className="text-signal-bright hover:underline">
+            Home
+          </Link>
+          ,{" "}
+          <Link href="/products/" className="text-signal-bright hover:underline">
+            Products
+          </Link>
+          , and the{" "}
+          <Link href="/roadmap/" className="text-signal-bright hover:underline">
+            Roadmap
+          </Link>
+          .
+        </p>
       </section>
     </>
   );
