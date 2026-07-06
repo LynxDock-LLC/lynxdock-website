@@ -1,0 +1,6 @@
+# Generated from GSpec. Do not edit manually.
+# Source: gspec/modules/website.yaml
+User-agent: *
+Allow: /
+
+Sitemap: https://lynxdock.app/sitemap.xml

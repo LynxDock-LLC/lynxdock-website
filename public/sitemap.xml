@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated from GSpec. Do not edit manually. Source: gspec/modules/website.yaml -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://lynxdock.app/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/download/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/products/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/products/lynxdock/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/products/studio/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/products/bootstrap/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/genesis/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/docs/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/roadmap/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/blog/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/support/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/company/</loc>
+  </url>
+  <url>
+    <loc>https://lynxdock.app/community/</loc>
+  </url>
+</urlset>

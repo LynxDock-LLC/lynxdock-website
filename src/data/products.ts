@@ -1,3 +1,7 @@
+// Generated from GSpec. Do not edit manually.
+// Source: gspec/modules/products.yaml
+// Regenerate with: lynxdock-bootstrap  ->  npm run generate
+
 export type Product = {
   slug: string;
   name: string;

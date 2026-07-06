@@ -1,3 +1,7 @@
+// Generated from GSpec. Do not edit manually.
+// Source: gspec/modules/roadmap.yaml
+// Regenerate with: lynxdock-bootstrap  ->  npm run generate
+
 export type RoadmapPhase = {
   phase: string;
   title: string;
@@ -6,9 +10,6 @@ export type RoadmapPhase = {
   items?: string[];
 };
 
-// Canonical roadmap - shared by the homepage roadmap section and the
-// /roadmap page so both always tell the same story. Focused on the road
-// to the LynxDock communication app.
 export const roadmap: RoadmapPhase[] = [
   {
     phase: "2026",
@@ -41,7 +42,8 @@ export const roadmap: RoadmapPhase[] = [
   {
     phase: "2026",
     title: "Public beta",
-    description: "Open desktop builds for Windows, Linux, and macOS.",
+    description:
+      "Open desktop builds for Windows, Linux, and macOS.",
     status: "planned",
   },
   {
