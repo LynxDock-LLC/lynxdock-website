@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
 import { releases } from "@/data/releases";
+import { releaseManifest } from "@/lib/releaseManifest";
 
 export const metadata: Metadata = {
   title: "Releases",
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "LynxDock release history - the current build, release channels, and past versions.",
 };
 
-const current = releases.current;
+const current = releaseManifest.current;
+const githubUrl = current.githubUrl || releases.current.githubUrl;
+const docsUrl = current.docsUrl || releases.current.docsUrl;
 
 function formatDate(iso: string | null): string {
   if (!iso) return "Unreleased";
@@ -60,10 +63,10 @@ export default function ReleasesPage() {
             <GlowButton href="/download/" variant="primary">
               Download
             </GlowButton>
-            <GlowButton href={current.githubUrl} external variant="secondary">
+            <GlowButton href={githubUrl} external variant="secondary">
               GitHub
             </GlowButton>
-            <GlowButton href={current.docsUrl} variant="ghost">
+            <GlowButton href={docsUrl} variant="ghost">
               Documentation
             </GlowButton>
           </div>

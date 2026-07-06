@@ -4,7 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
 import { launch } from "@/data/launch";
-import { releases } from "@/data/releases";
+import { releaseManifest } from "@/lib/releaseManifest";
 
 export const metadata: Metadata = {
   title: "Download",
@@ -13,18 +13,17 @@ export const metadata: Metadata = {
 };
 
 const preview = launch.downloadStatus;
-const current = releases.current;
+const current = releaseManifest.current;
 const released = current.released;
 
 type IconName = "windows" | "linux" | "apple" | "server";
-const PLATFORM_META: Record<string, { icon: IconName; requirement: string }> = {
-  windows: { icon: "windows", requirement: "Windows 10 / 11, 64-bit" },
-  linux: { icon: "linux", requirement: "Modern 64-bit distribution" },
-  macos: { icon: "apple", requirement: "Apple silicon & Intel" },
-  server: { icon: "server", requirement: "Linux host or container" },
+const PLATFORM_META: Record<string, { label: string; icon: IconName; requirement: string }> = {
+  windows: { label: "Windows", icon: "windows", requirement: "Windows 10 / 11, 64-bit" },
+  linux: { label: "Linux", icon: "linux", requirement: "Modern 64-bit distribution" },
+  macos: { label: "macOS", icon: "apple", requirement: "Apple silicon & Intel" },
+  server: { label: "Self-hosted server", icon: "server", requirement: "Linux host or container" },
 };
-const platformLabel = (id: string) =>
-  releases.platforms.find((p) => p.id === id)?.label ?? id;
+const platformLabel = (id: string) => PLATFORM_META[id]?.label ?? id;
 
 const releasePhilosophy = [
   {
@@ -149,7 +148,7 @@ export default function DownloadPage() {
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* CURRENT STATUS - driven by releases.current.released */}
+        {/* CURRENT STATUS - driven by public/releases.json (authoritative) */}
         <GlassPanel glow className="p-8 sm:p-10">
           {released ? (
             <>
@@ -187,10 +186,10 @@ export default function DownloadPage() {
           </div>
         </GlassPanel>
 
-        {/* PLATFORMS - driven by releases.downloads */}
+        {/* PLATFORMS - driven by public/releases.json downloads */}
         <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Platforms</h2>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {releases.downloads.map((d) => {
+          {releaseManifest.downloads.map((d) => {
             const meta = PLATFORM_META[d.platform];
             const canDownload = released && d.available && d.url !== "";
             return (
