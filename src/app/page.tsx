@@ -274,23 +274,20 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 7b. Join the community */}
+      {/* 7b. Community */}
       <Section className="py-16 sm:py-20">
         <SectionHeader
           align="center"
           eyebrow="Community"
-          title="Join the community"
-          description="LynxDock is built in the open, with the people who use it. Report bugs, shape the roadmap, and share what you make."
+          title="Built in the open"
+          description="LynxDock is developed in public, with the people who use it. Follow along, weigh in, and help shape where it goes."
           className="mb-10"
         />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-3">
           {[
-            { title: "Share missions", text: "Publish operations, briefings, and after-action reports in the Operation Library." },
-            { title: "Vote on features", text: "Propose ideas and help decide what lands on the roadmap." },
-            { title: "Follow development", text: "Weekly dev logs - what shipped, what broke, what's next." },
-            { title: "Build plugins", text: "Share plugins, scripts, and integrations built on LynxDock." },
-            { title: "Download themes", text: "Grab skins, icon packs, and Mission Control visual packs." },
-            { title: "Report bugs", text: "A friendly front door for problems, routed to the tracker." },
+            { title: "Follow development", text: "Watch the roadmap and read weekly notes on what's shipping and what's next." },
+            { title: "Weigh in on GitHub", text: "Open issues, request features, and star the repos as we build in the open." },
+            { title: "Get early access", text: "Register interest and be first in line as builds open up in phases." },
           ].map((c) => (
             <GlassPanel key={c.title} hover className="flex h-full flex-col p-6">
               <h3 className="text-base font-semibold text-white">{c.title}</h3>
