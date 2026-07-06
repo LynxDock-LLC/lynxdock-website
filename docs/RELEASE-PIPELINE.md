@@ -4,31 +4,36 @@ How a LynxDock build becomes a live download. **Not yet implemented** - this
 documents the intended flow so the pieces are ready.
 
 ```
-GitHub Release ──▶ GitHub Action ──▶ releases.json ──▶ Website ──▶ Download Center ──▶ Users
+GitHub Release ──▶ release-tools ──▶ releases.json ──▶ Bootstrap ──▶ Website ──▶ Users
 ```
 
-## Source of truth
+## Repository responsibilities (kept intentionally modular)
 
-- **GSpec** (`gspec/modules/releases.yaml`) declares channels, platforms, the
-  current version, and per-platform artifact placeholders.
-- **Bootstrap** (`website-releases` generator) compiles that into:
-  - `src/data/releases.ts` - typed, build-time source the site renders.
-  - `public/releases.json` - the runtime manifest (placeholder today).
+- **gspec** - describes products and **release policy** (channels, platforms,
+  the current version, artifact placeholders) in `modules/releases.yaml`.
+- **bootstrap** - the **compiler**. Turns specifications into website/app
+  assets. It does *not* talk to CI or GitHub. Its `website-releases` generator
+  emits `src/data/releases.ts` (build-time source) and a placeholder
+  `public/releases.json`.
+- **release-tools** *(planned, not built)* - the only component that touches
+  **CI, GitHub Releases, checksums, installers, signing, and manifests**. It
+  produces the real `releases.json`. Keeping this separate stops Bootstrap from
+  becoming a "do everything" project.
+- **website** - **renders** whatever release data exists. No assumptions.
 
-## Intended CI flow (to build later)
+## Intended flow (to build later)
 
 1. A maintainer publishes a **GitHub Release** (e.g. `v0.1.0-alpha`) with the
    platform artifacts attached (`LynxDockSetup.exe`, `LynxDock.AppImage`,
    `LynxDock.dmg`, `lynxdock-server.tar.gz`).
-2. A **GitHub Action** triggers on `release: published`:
-   - reads the release's assets (name, size, browser_download_url);
-   - computes/collects each `sha256`;
-   - writes an updated `public/releases.json` with `released: true`,
-     `releaseDate`, and each download's `url`/`sha256`/`size`/`available: true`;
-   - optionally opens a PR (or commits) to the website repo, or publishes the
-     manifest to a stable URL.
-3. Cloudflare Pages rebuilds; the **Download Center** now renders real,
-   enabled download buttons - no code change required.
+2. **release-tools** runs in CI on `release: published`:
+   - reads the release assets (name, size, `browser_download_url`);
+   - computes/collects each `sha256`; handles signing where applicable;
+   - writes an updated `releases.json` with `released: true`, `releaseDate`,
+     and each download's `url`/`sha256`/`size`/`available: true`;
+   - publishes that manifest to a stable URL and/or commits it to the website.
+3. **Bootstrap** consumes GSpec + the manifest; Cloudflare Pages rebuilds; the
+   **Download Center** renders real, enabled download buttons - no code change.
 
 ## Why a manifest as well as `releases.ts`
 
@@ -48,4 +53,5 @@ GitHub Release ──▶ GitHub Action ──▶ releases.json ──▶ Website
 }
 ```
 
-CI will fill `url`, `sha256`, `size`, and flip `available`/`released`.
+Bootstrap emits this placeholder today; **release-tools** will fill `url`,
+`sha256`, `size`, and flip `available`/`released` from real GitHub Releases.
