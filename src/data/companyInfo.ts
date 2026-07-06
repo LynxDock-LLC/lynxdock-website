@@ -24,7 +24,7 @@ export const companyInfo: CompanyInfo = {
   githubLabel: "LynxDock-LLC",
   motto: "Built for People. Not Platforms.",
   founded: 2026,
-  footerBlurb: "Built for People. Not Platforms. The communication platform with a tactical operations center - private, lightweight, and yours.",
+  footerBlurb: "Built for People. Not Platforms. A lightweight, private communication platform you can self-host and truly own.",
   copyright: "Copyright © 2026–Present LynxDock LLC. All rights reserved.",
 };
 

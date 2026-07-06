@@ -15,27 +15,27 @@ export const products: Product[] = [
   {
     slug: "lynxdock",
     name: "LynxDock",
-    tagline: "Calls and communities, without the weight",
+    tagline: "The flagship communication app",
     summary:
-      "A lightweight communication platform for voice, chat, and screen sharing. Start a quick P2P call or settle into a self-hosted, persistent community - your accounts and data stay with the server you choose.",
+      "LynxDock is the flagship: a lightweight communication app for voice, chat, and screen sharing. Start a quick P2P call or run a self-hosted, persistent community - your accounts and data stay with the server you choose.",
     stage: "Core Product",
     href: "/products/lynxdock/",
   },
   {
     slug: "studio",
     name: "LynxDock Studio",
-    tagline: "An AI-assisted development workspace",
+    tagline: "The ecosystem IDE",
     summary:
-      "A connected workspace for planning, documentation, and engineering knowledge. Link ideas, sprints, architecture, and research into one navigable graph - with AI assistance that respects your context.",
+      "The IDE for the LynxDock ecosystem - an AI-assisted workspace that links docs, sprints, architecture, and research into one navigable knowledge graph.",
     stage: "In Development",
     href: "/products/studio/",
   },
   {
     slug: "bootstrap",
     name: "LynxDock Bootstrap",
-    tagline: "Automation engine for product foundations",
+    tagline: "The GSpec compiler",
     summary:
-      "The engine that scaffolds repositories, documentation, and product foundations automatically - turning a blank slate into a structured, ready-to-build project in minutes.",
+      "The compiler for the ecosystem - it reads the Genesis Specification and generates the website, docs, and project scaffolding automatically, from a single source of truth.",
     stage: "In Development",
     href: "/products/bootstrap/",
   },

@@ -22,7 +22,7 @@ export const siteNavigation: SiteNavigation = {
   ],
   cta: [
   { id: "github", label: "GitHub", href: "https://github.com/LynxDock-LLC", external: true },
-  { id: "download", label: "Get LynxDock", href: "/download/" },
+  { id: "download", label: "Download", href: "/download/" },
   ],
   footer: {
     columns: [
