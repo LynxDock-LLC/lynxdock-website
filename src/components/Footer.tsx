@@ -1,40 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { companyInfo } from "@/data/companyInfo";
+import { siteNavigation } from "@/data/siteNavigation";
 
-const columns = [
-  {
-    title: "Product",
-    links: [
-      { href: "/products/lynxdock/", label: "LynxDock" },
-      { href: "/mission-control/", label: "Mission Control" },
-      { href: "/products/studio/", label: "LynxDock Studio" },
-      { href: "/products/bootstrap/", label: "LynxDock Bootstrap" },
-      { href: "/download/", label: "Download" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { href: "/docs/", label: "Documentation" },
-      { href: "/roadmap/", label: "Roadmap" },
-      { href: "/features/", label: "Future Features" },
-      { href: "/blog/", label: "Blog" },
-      { href: "/community/", label: "Community" },
-      { href: "/compare/", label: "vs Discord" },
-      { href: "/support/", label: "Support" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { href: "/company/", label: "About" },
-      { href: "/vision/", label: "Vision" },
-      { href: "/privacy/", label: "Privacy" },
-      { href: "/terms/", label: "Terms" },
-    ],
-  },
-];
+const columns = siteNavigation.footer.columns;
 
 export default function Footer() {
   return (
@@ -92,12 +61,15 @@ export default function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-6 text-xs text-[#6f838b] sm:flex-row sm:items-center sm:justify-between">
           <p>{companyInfo.copyright}</p>
           <div className="flex items-center gap-4">
-            <Link
-              href="/design-system/"
-              className="transition-colors hover:text-[#9fb2ba]"
-            >
-              Design System
-            </Link>
+            {siteNavigation.footer.utility.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="transition-colors hover:text-[#9fb2ba]"
+              >
+                {l.label}
+              </Link>
+            ))}
             <p className="hud-label text-[#5b6f77]">{companyInfo.motto}</p>
           </div>
         </div>

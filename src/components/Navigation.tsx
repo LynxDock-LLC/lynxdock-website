@@ -5,17 +5,22 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import GlowButton from "./GlowButton";
+import { siteNavigation } from "@/data/siteNavigation";
 
-const links = [
-  { href: "/mission-control/", label: "Mission Control" },
-  { href: "/products/", label: "Products" },
-  { href: "/roadmap/", label: "Roadmap" },
-  { href: "/docs/", label: "Docs" },
-  { href: "/blog/", label: "Blog" },
-  { href: "/community/", label: "Community" },
-];
-
-const GITHUB_ORG = "https://github.com/LynxDock-LLC";
+const links = siteNavigation.primary;
+const github =
+  siteNavigation.cta.find((c) => c.id === "github") ?? {
+    id: "github",
+    label: "GitHub",
+    href: "https://github.com/LynxDock-LLC",
+    external: true,
+  };
+const download =
+  siteNavigation.cta.find((c) => c.id === "download") ?? {
+    id: "download",
+    label: "Get LynxDock",
+    href: "/download/",
+  };
 
 function normalize(path: string): string {
   return path !== "/" ? path.replace(/\/$/, "") : path;
@@ -25,7 +30,7 @@ export default function Navigation() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isActive = (href: string) => normalize(pathname) === normalize(href);
-  const downloadActive = isActive("/download/");
+  const downloadActive = isActive(download.href);
 
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-graphite-950/80 backdrop-blur-md">
@@ -69,16 +74,16 @@ export default function Navigation() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <GlowButton href={GITHUB_ORG} external variant="ghost">
-            GitHub
+          <GlowButton href={github.href} external={github.external} variant="ghost">
+            {github.label}
           </GlowButton>
           <GlowButton
-            href="/download/"
+            href={download.href}
             variant="primary"
             className={downloadActive ? "ring-1 ring-signal-cyan/60" : ""}
             ariaLabel={downloadActive ? "Download (current page)" : undefined}
           >
-            Get LynxDock
+            {download.label}
           </GlowButton>
         </div>
 
@@ -124,15 +129,15 @@ export default function Navigation() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2">
-              <GlowButton href={GITHUB_ORG} external variant="secondary">
-                GitHub
+              <GlowButton href={github.href} external={github.external} variant="secondary">
+                {github.label}
               </GlowButton>
               <GlowButton
-                href="/download/"
+                href={download.href}
                 variant="primary"
                 className={downloadActive ? "ring-1 ring-signal-cyan/60" : ""}
               >
-                Get LynxDock
+                {download.label}
               </GlowButton>
             </div>
           </div>
