@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import GlowButton from "./GlowButton";
 
@@ -16,8 +17,15 @@ const links = [
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
 
+function normalize(path: string): string {
+  return path !== "/" ? path.replace(/\/$/, "") : path;
+}
+
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href: string) => normalize(pathname) === normalize(href);
+  const downloadActive = isActive("/download/");
 
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-graphite-950/80 backdrop-blur-md">
@@ -48,7 +56,12 @@ export default function Navigation() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm text-[#9fb2ba] transition-colors hover:text-white"
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={`text-sm transition-colors ${
+                isActive(l.href)
+                  ? "text-white"
+                  : "text-[#9fb2ba] hover:text-white"
+              }`}
             >
               {l.label}
             </Link>
@@ -59,7 +72,12 @@ export default function Navigation() {
           <GlowButton href={GITHUB_ORG} external variant="ghost">
             GitHub
           </GlowButton>
-          <GlowButton href="/download/" variant="primary">
+          <GlowButton
+            href="/download/"
+            variant="primary"
+            className={downloadActive ? "ring-1 ring-signal-cyan/60" : ""}
+            ariaLabel={downloadActive ? "Download (current page)" : undefined}
+          >
             Get LynxDock
           </GlowButton>
         </div>
@@ -96,7 +114,10 @@ export default function Navigation() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="rounded-lg px-3 py-2.5 text-sm text-[#c3d0d6] hover:bg-graphite-700/50 hover:text-white"
+                aria-current={isActive(l.href) ? "page" : undefined}
+                className={`rounded-lg px-3 py-2.5 text-sm hover:bg-graphite-700/50 hover:text-white ${
+                  isActive(l.href) ? "bg-graphite-700/40 text-white" : "text-[#c3d0d6]"
+                }`}
                 onClick={() => setOpen(false)}
               >
                 {l.label}
@@ -106,7 +127,11 @@ export default function Navigation() {
               <GlowButton href={GITHUB_ORG} external variant="secondary">
                 GitHub
               </GlowButton>
-              <GlowButton href="/download/" variant="primary">
+              <GlowButton
+                href="/download/"
+                variant="primary"
+                className={downloadActive ? "ring-1 ring-signal-cyan/60" : ""}
+              >
                 Get LynxDock
               </GlowButton>
             </div>
