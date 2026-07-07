@@ -7,6 +7,7 @@ export const docsNav: DocSection[] = [
     links: [
       { href: "/docs/", label: "Overview" },
       { href: "/docs/getting-started/", label: "Quickstart" },
+      { href: "/docs/architecture/", label: "Architecture" },
     ],
   },
   {
@@ -19,6 +20,9 @@ export const docsNav: DocSection[] = [
   },
   {
     title: "Reference",
-    links: [{ href: "/docs/faq/", label: "FAQ" }],
+    links: [
+      { href: "/docs/developers/", label: "Developers" },
+      { href: "/docs/faq/", label: "FAQ" },
+    ],
   },
 ];

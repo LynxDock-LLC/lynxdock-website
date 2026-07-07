@@ -85,6 +85,32 @@ function Icon({ name }: { name: string }) {
           <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13 6l-2 12" />
         </svg>
       );
+    case "message":
+      return (
+        <svg {...common}>
+          <path d="M4 5h16v11H8l-4 3V5z" />
+        </svg>
+      );
+    case "cog":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" />
+        </svg>
+      );
+    case "sparkles":
+      return (
+        <svg {...common}>
+          <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3zM18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8L18 15z" />
+        </svg>
+      );
+    case "palette":
+      return (
+        <svg {...common}>
+          <path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-1 .8-1.5 1.8-1.5H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7z" />
+          <path d="M7.5 11h.01M10 7.5h.01M14 7.5h.01M16.5 11h.01" />
+        </svg>
+      );
     default:
       return (
         <svg {...common}>

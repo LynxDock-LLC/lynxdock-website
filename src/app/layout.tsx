@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import DevelopmentBanner from "@/components/DevelopmentBanner";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import siteMetadata from "@/data/siteMetadata";
@@ -106,6 +107,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <Navigation />
+        <DevelopmentBanner />
         <main id="main">{children}</main>
         <Footer />
         <Analytics />

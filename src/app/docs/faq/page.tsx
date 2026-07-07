@@ -9,6 +9,18 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
+    q: "What works in the alpha today?",
+    a: "The desktop app currently runs a local workspace with your profile and settings, a live theme engine, and a local-only chat client: channels and messages you can compose, edit, delete, and search - all stored on your machine. Networking, voice, and communities are on the roadmap.",
+  },
+  {
+    q: "Is LynxDock written in Rust?",
+    a: "The core is. The desktop app is built on Tauri - a Rust core with a web front-end - and the protocol's wire types are authored in Rust and generated to TypeScript. A future server will be Rust too.",
+  },
+  {
+    q: "Do I need an account or the cloud to use it?",
+    a: "No. The app is local-first: there's no account to create and nothing is sent to us. Telemetry is off by default, and the app shows a visible privacy status so you can confirm it.",
+  },
+  {
     q: "Do I have to self-host to use LynxDock?",
     a: "No. A Quick Call is a temporary peer-to-peer room that needs no server at all. Self-hosting is for when you want a persistent community with accounts, history, and admin controls that you fully own.",
   },

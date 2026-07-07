@@ -16,6 +16,7 @@ export const siteNavigation: SiteNavigation = {
   { label: "Mission Control", href: "/mission-control/" },
   { label: "Products", href: "/products/" },
   { label: "Roadmap", href: "/roadmap/" },
+  { label: "Architecture", href: "/architecture/" },
   { label: "Docs", href: "/docs/" },
   { label: "Blog", href: "/blog/" },
   { label: "Community", href: "/community/" },
@@ -39,6 +40,7 @@ export const siteNavigation: SiteNavigation = {
       title: "Resources",
       links: [
         { label: "Documentation", href: "/docs/" },
+        { label: "Architecture", href: "/architecture/" },
         { label: "Roadmap", href: "/roadmap/" },
         { label: "Releases", href: "/releases/" },
         { label: "Future Features", href: "/features/" },
