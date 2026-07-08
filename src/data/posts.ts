@@ -10,6 +10,24 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: "version-2-comes-to-life",
+    title: "Version 2 comes to life: messaging, voice, and sync",
+    date: "2026-07-08",
+    readingTime: "5 min read",
+    tag: "Progress",
+    excerpt:
+      "The local-first foundation is now a connected app. In the last few days LynxDock gained networked messaging, offline sync, real-time voice and screen sharing, and instant full-text search.",
+    body: [
+      "A few days ago the desktop app was deliberately local-only - a solid foundation with workspace, identity, settings, and a full messaging client that kept everything on your machine. That foundation is now coming online. Here is what landed.",
+      "Messaging went networked. Read state is server-backed and syncs live across devices, so opening a channel on one machine clears the unread badge on another. Messages carry real display names resolved over the wire, and desktop notifications are mention-aware, with the unread count shown in the window title.",
+      "The app now holds up on a bad connection. An offline outbox queues messages while you are disconnected, de-duplicates them, and drains automatically on reconnect - with a small 'N queued' indicator so you always know where things stand. Losing Wi-Fi mid-sentence no longer loses the sentence.",
+      "Voice and screen sharing are real. We settled the call architecture on an SFU (LiveKit) with a clean two-plane split between control and media, then built the media plane itself: joining audio, device selection, deafen, and screen share, with hardening along the way. It is the start of Epic 5, arriving earlier than the roadmap promised.",
+      "Search got fast. Message search is backed by SQLite's FTS5 full-text index, with a safe fallback, and you can scope a search to one channel or all of them and filter to messages that carry attachments.",
+      "Underneath, reliability improved in ways you will never see: a versioned migration framework with automatic backup and restore means upgrades never lose data, and the server gained backup / export / import maintenance commands. A new System Status board surfaces live health inside the app's mission-control view.",
+      "All of this is still pre-release - we are at 0.1.0-alpha and building in the open. But the shape of the product is now visible: private by default, local-first, and increasingly connected on your terms. Follow along on the roadmap and on GitHub.",
+    ],
+  },
+  {
     slug: "infrastructure-complete",
     title: "Infrastructure complete: what Version 2 changes",
     date: "2026-07-06",
