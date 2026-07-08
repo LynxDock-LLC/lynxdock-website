@@ -4,6 +4,8 @@ import MissionControlShowcase from "@/components/MissionControlShowcase";
 import SectionHeader from "@/components/SectionHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import SystemStatusBoard from "@/components/SystemStatusBoard";
+import { systemStatus } from "@/data/status";
 
 export const metadata: Metadata = {
   title: "Mission Control",
@@ -109,6 +111,15 @@ export default function MissionControlPage() {
             </GlassPanel>
           ))}
         </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 pb-4">
+        <SectionHeader
+          eyebrow="One source of truth"
+          title="System status"
+          className="mb-10"
+        />
+        <SystemStatusBoard status={systemStatus} />
       </section>
 
       <section className="mx-auto max-w-6xl px-5 pb-24">
