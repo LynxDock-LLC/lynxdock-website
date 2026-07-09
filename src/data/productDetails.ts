@@ -42,10 +42,12 @@ export const productDetails: Record<string, ProductDetail> = {
     href: "/products/lynxdock/",
     intro: "The flagship LynxDock app. Voice, chat, and screen sharing - from a spontaneous P2P call to a fully self-hosted community you own.",
     features: [
-      { title: "Quick Calls", description: "Temporary P2P rooms for voice, chat, and screen sharing. Start now, share a code, and disappear after inactivity.", icon: "bolt" },
-      { title: "Persistent Servers", description: "A self-hosted home with accounts, rooms, history, and admin controls. Accounts and data stay with the server you choose.", icon: "server" },
-      { title: "Guided Server Setup", description: "A calm first-run wizard creates a local server with SQLite, safe self-hosting defaults, and a random session secret.", icon: "shield" },
-      { title: "Communities & Squadrons", description: "Text and voice channels, member rosters, and a mission-control command view for organizing people at any scale.", icon: "users" },
+      { title: "Messaging that's yours", description: "Channels with edits, reactions, @-mentions, and file attachments - stored locally first and synced to the server you choose.", icon: "message" },
+      { title: "Voice & screen share", description: "Real-time audio and screen sharing over an SFU media plane, with device selection and deafen. Talk and show, not just type.", icon: "bolt" },
+      { title: "Works offline", description: "An outbox queues messages while you're disconnected and drains automatically on reconnect - a flaky network never costs you a message.", icon: "shield" },
+      { title: "Instant full-text search", description: "Find any message in a moment with a full-text index - scope to one channel or all of them, and filter to messages with files.", icon: "cpu" },
+      { title: "Persistent self-hosted servers", description: "Accounts, rooms, history, and admin controls on infrastructure you run, with live cross-device read sync. Your space, your data.", icon: "server" },
+      { title: "Guided Server Setup", description: "A calm first-run wizard creates a real server with SQLite, safe self-hosting defaults, and a random session secret - no terminal.", icon: "lock" },
     ],
     ctas: [
       { label: "Download", href: "/download/", variant: "primary" },

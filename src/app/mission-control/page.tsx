@@ -117,8 +117,12 @@ export default function MissionControlPage() {
         <SectionHeader
           eyebrow="One source of truth"
           title="System status"
-          className="mb-10"
+          className="mb-4"
         />
+        <p className="mb-10 max-w-2xl text-sm leading-relaxed text-[#9fb2ba]">
+          Not a mockup - this board is generated straight from the LynxDock repositories,
+          reporting the live health and versions of the server, desktop app, protocol, and website.
+        </p>
         <SystemStatusBoard status={systemStatus} />
       </section>
 
