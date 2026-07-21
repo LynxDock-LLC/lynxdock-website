@@ -276,7 +276,7 @@ export const posts: Post[] = [
     title: "Version 2 comes to life: messaging, voice, and sync",
     date: "2026-07-08",
     readingTime: "5 min read",
-    tag: "Progress",
+    tag: "Milestone",
     excerpt:
       "The local-first foundation is now a connected app. In the last few days LynxDock gained networked messaging, offline sync, real-time voice and screen sharing, and instant full-text search.",
     body: [
@@ -326,7 +326,8 @@ export const posts: Post[] = [
     title: "Genesis UI: building our own component framework",
     date: "2026-07-05",
     readingTime: "4 min read",
-    tag: "Design",
+    tag: "Engineering",
+    topics: ["Engineering", "Architecture"],
     excerpt:
       "One design language across the website, the desktop app, and Studio - powered by tokens, a theme engine, and a Tailwind preset.",
     body: [
@@ -342,7 +343,9 @@ export const posts: Post[] = [
     title: "Building a privacy-first platform",
     date: "2026-07-04",
     readingTime: "4 min read",
-    tag: "Perspective",
+    tag: "Founder Update",
+    kind: "founder",
+    topics: ["Founder Update", "Architecture"],
     excerpt:
       "Privacy isn't a setting you toggle at the end. It's the constraint that shapes the architecture from the first commit.",
     body: [
@@ -358,7 +361,8 @@ export const posts: Post[] = [
     title: "Why self-hosting matters",
     date: "2026-07-03",
     readingTime: "3 min read",
-    tag: "Perspective",
+    tag: "Founder Update",
+    kind: "founder",
     excerpt:
       "The communities people rely on shouldn't be one policy change away from disappearing. Self-hosting is how you keep control.",
     body: [
@@ -374,7 +378,8 @@ export const posts: Post[] = [
     title: "The road ahead: our epic roadmap",
     date: "2026-07-02",
     readingTime: "3 min read",
-    tag: "Roadmap",
+    tag: "Founder Update",
+    kind: "founder",
     excerpt:
       "We've moved from milestones to epics. Here's the honest sequence from a local app to a full communication platform.",
     body: [
@@ -390,7 +395,8 @@ export const posts: Post[] = [
     title: "Introducing LynxDock",
     date: "2026-07-04",
     readingTime: "3 min read",
-    tag: "Announcement",
+    tag: "Founder Update",
+    kind: "founder",
     excerpt:
       "Why we're building a privacy-first ecosystem for communication, development, and automation - and what comes next.",
     body: [
@@ -406,7 +412,8 @@ export const posts: Post[] = [
     title: "Why privacy-first, and why now",
     date: "2026-07-03",
     readingTime: "4 min read",
-    tag: "Perspective",
+    tag: "Founder Update",
+    kind: "founder",
     excerpt:
       "Privacy isn't a feature we bolt on at the end. It's the constraint we design everything around from the start.",
     body: [
@@ -422,7 +429,7 @@ export const posts: Post[] = [
     title: "Self-hosting without the headache",
     date: "2026-07-02",
     readingTime: "4 min read",
-    tag: "Guide",
+    tag: "Engineering",
     excerpt:
       "Running your own server used to mean config files and terminal commands. The Guided Setup wizard makes it a few clicks.",
     body: [
@@ -438,7 +445,8 @@ export const posts: Post[] = [
     title: "The Genesis of lynxdock.app",
     date: "2026-07-04",
     readingTime: "2 min read",
-    tag: "Behind the scenes",
+    tag: "Engineering",
+    topics: ["Engineering", "Architecture"],
     excerpt:
       "How this website came together - a lightweight, static, mission-control design that feels like an extension of the app.",
     body: [
