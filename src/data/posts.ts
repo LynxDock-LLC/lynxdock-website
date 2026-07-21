@@ -10,6 +10,56 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: "voice-and-screen-sharing-end-to-end",
+    title: "Voice and screen sharing, end to end",
+    date: "2026-07-11",
+    readingTime: "5 min read",
+    tag: "Engineering",
+    excerpt:
+      "Real-time audio and screen sharing are done, delivered in five phases - from the call roster all the way through connection-quality indicators.",
+    body: [
+      "Voice is the feature most likely to feel broken. It fails in ways text never does: a device that will not switch, a browser that silently blocks audio, a network that drops one person and not the others. So we built it in five deliberate phases rather than one push, and the last of those has now landed.",
+      "The first phase was the control plane - who is in the call, who is muted, who is sharing. That state travels over the same WebSocket connection the app already maintains, and it is kept deliberately separate from the media itself. Knowing who is in a room should never depend on the audio pipeline being healthy.",
+      "Then the media plane. We settled on an SFU rather than mesh, so a call with six people does not ask every laptop to encode five outbound streams. The server mints short-lived, room-scoped access tokens along with relay credentials, which means clients never hold long-lived secrets and calls still connect from behind restrictive networks.",
+      "Phase three made it real on the desktop: publishing your microphone, hearing everyone else, an active-speaker ring so you can see who is talking, deafen, and proper input and output device pickers. We also handled the browser autoplay problem explicitly - if audio is blocked, the app tells you and offers a single click to unblock, instead of appearing to work while you hear nothing.",
+      "Phase four added screen sharing on the same foundation, with a multi-tile viewer so more than one person can share at a time. Phase five was hardening, which is the part that usually gets skipped: media connection state is surfaced in the UI, failures are classified into real causes with a retry path, and each participant carries a small connection-quality indicator so a bad call is diagnosable instead of mysterious.",
+      "That closes Epic 5, and it arrived ahead of its position in the original roadmap order. File transfer runs over the same media plane and is the next thing up.",
+    ],
+  },
+  {
+    slug: "mission-control-one-honest-view",
+    title: "Mission Control: one honest view of the system",
+    date: "2026-07-10",
+    readingTime: "5 min read",
+    tag: "Milestone",
+    excerpt:
+      "A shared status contract, a hub every module reports into, and an event timeline - so the state of the system is observable instead of guessed at.",
+    body: [
+      "At some point a project stops being one program. We now have a desktop app, a server, a Studio surface, a website, and a layer of tooling around all of it. Past that point there is a question nobody can answer quickly: is everything actually fine, and what just happened?",
+      "We started with the boring part - a status contract. Every component describes its health in exactly one shape, and the overall state is a worst-wins roll-up, so one degraded piece cannot be averaged away into a comfortable green. That status is generated into a single artifact which both the desktop app and this website read. One source, no drift between what we tell ourselves and what we tell you.",
+      "On top of that sits the hub. Modules report metrics and entities, and those are aggregated into a single state. It works in two tiers with an identical shape: a generated static snapshot, and a live feed over the WebSocket hub. The static tier means the board is never blank; the live tier means it is current when a server is actually running.",
+      "The live feed is where it gets useful. The server reports its open connections, active voice rooms and participant counts, and host CPU and memory. Commander reports squadrons and operations, and those can be created directly from the desktop app. An event bus retains recent history and replays it into a live timeline, so you can see the last several dozen things that happened rather than only the current instant.",
+      "The design rule we kept coming back to is that it should degrade honestly. If a source is not connected, the board says so plainly rather than inventing a healthy-looking number. That is why you may currently see components reporting as unknown - the generator has not been re-run against real release data yet. We would rather show an honest unknown than a false green.",
+      "Dashboards, an integration layer, and a view of the AI workforce are designed and queued next.",
+    ],
+  },
+  {
+    slug: "session-observability-in-studio",
+    title: "Watching the work: session observability in Studio",
+    date: "2026-07-09",
+    readingTime: "4 min read",
+    tag: "Engineering",
+    excerpt:
+      "Development sessions used to disappear into chat history. Now they report into the same hub as the server and the desktop app.",
+    body: [
+      "A lot of LynxDock is built with AI assistance, across many sessions. The recurring problem was not the work itself - it was that the work evaporated. Decisions, dead ends, and what changed all vanished into scrollback, and every new session started by reconstructing context from scratch.",
+      "So we built a collector. It tracks reported sessions in a short-lived store, de-duplicates them with a clear precedence rule when the same session is seen twice, and assembles the result into a module snapshot in the same shape every other part of the system uses.",
+      "It runs behind a small localhost HTTP service with two endpoints - one to report a session, one to read the snapshot - verified end to end. Alongside it there is a reference reporter for wiring up your own tooling, a deliberately conservative process-scan fallback for when nothing reports itself, and a one-shot snapshot command suitable for a scheduled job.",
+      "The output flows into the same hub file Mission Control already reads. That is the part that matters: development activity becomes a first-class module sitting next to the server and the desktop app, rather than a separate dashboard nobody opens. There are reference adapters too, including a local model runner and a generic subprocess wrapper, plus a health adapter that pulls in the state of an external repository.",
+      "The whole collector has zero runtime dependencies and is covered by its own test suite. It is a small piece of infrastructure, but it turns a stream of disposable sessions into something with a memory.",
+    ],
+  },
+  {
     slug: "version-2-comes-to-life",
     title: "Version 2 comes to life: messaging, voice, and sync",
     date: "2026-07-08",

@@ -1,5 +1,17 @@
 // Epic-level roadmap for LynxDock V2. Hand-maintained on the website.
 // Mirrors docs/EPICS.md in the product monorepo.
+//
+// NOTE (2026-07-13): this file is AHEAD of docs/EPICS.md, and that was verified
+// against the CODE, not the docs. docs/EPICS.md, docs/VERSIONS.md and the
+// monorepo CHANGELOG are all STALE — they understate what has shipped:
+//   Epic 3 (Networking): crates/auth + crates/presence exist (EPICS.md lists
+//     both as planned); outbox.ts (+test) implements the offline queue;
+//     server-connection.ts resolves display names and calls markRead over the
+//     wire; crates/migrate has backup/restore; messaging has export/import and
+//     FTS5; docker-compose.yml + docs/SELF-HOSTING.md exist.
+//   Epic 5 (Voice): all five phases shipped, incl. hardening.
+//   Epic 9 (Mission Control): ADR-0015..0020, absent from EPICS.md entirely.
+// Do NOT "correct" this file down to match EPICS.md. Fix EPICS.md instead.
 
 export type EpicStatus = "completed" | "in-progress" | "planned";
 
@@ -79,15 +91,18 @@ export const epics: Epic[] = [
   {
     n: "Epic 5",
     title: "Voice & Screen Sharing",
-    status: "in-progress",
+    status: "completed",
     description:
-      "Real-time voice and screen sharing over an SFU (LiveKit), with a clean two-plane split between control and media.",
+      "Real-time voice and screen sharing over an SFU (LiveKit), with a clean two-plane split between control and media — delivered across five phases, hardening included.",
     highlights: [
-      "Audio media plane: join, device selection, deafen",
-      "Screen sharing",
-      "SFU via LiveKit; control and media planes separated",
+      "Control plane: call roster with join / leave / mute / screen-share state broadcast live",
+      "Room-scoped access tokens and TURN credentials issued server-side",
+      "Audio media: microphone publish, remote audio, active-speaker ring, deafen",
+      "Input and output device pickers, with autoplay unblocking handled",
+      "Screen sharing: publish, subscribe, and a multi-tile viewer",
+      "Hardening: connection state, classified errors with retry, per-participant quality dots",
     ],
-    future: "Arriving ahead of the original roadmap order.",
+    future: "File transfer over the same media plane is next (Version 2.3).",
   },
   {
     n: "Epic 6",
@@ -113,6 +128,23 @@ export const epics: Epic[] = [
     description:
       "The engineering environment, including GSpec Studio, matured into a real tool for building on the platform.",
     highlights: ["GSpec Studio", "In-browser spec validation"],
+  },
+  {
+    n: "Epic 9",
+    title: "Mission Control & Observability",
+    status: "in-progress",
+    description:
+      "One honest view of the whole system: a shared status contract, a live hub every module reports into, and an event timeline — so health, activity and progress are observable rather than guessed at.",
+    highlights: [
+      "System status contract with a worst-wins health roll-up, generated to a single artifact",
+      "Mission Control hub: modules, metrics and entities aggregated into one state",
+      "Live server feed over the WebSocket hub — connections, active voice rooms, host CPU/RAM",
+      "Commander reporting: squadrons and operations, created from the desktop app",
+      "Event bus and timeline: retained event history replayed into a live activity log",
+      "Studio session observer: development sessions reported into the same hub",
+    ],
+    future:
+      "Dashboards, an integration layer, and AI Workforce views are designed and next.",
   },
 ];
 

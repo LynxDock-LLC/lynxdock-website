@@ -2,8 +2,8 @@
 import type { SystemStatus } from "@/lib/status";
 
 export const systemStatus: SystemStatus = {
-  "generatedAt": "2026-07-08T08:00:37.592Z",
-  "overall": "unknown",
+  "generatedAt": "2026-07-21T04:12:22.795Z",
+  "overall": "operational",
   "components": [
     {
       "id": "server",
@@ -44,11 +44,11 @@ export const systemStatus: SystemStatus = {
     {
       "id": "vault",
       "name": "Vault",
-      "health": "unknown",
+      "health": "operational",
       "version": null,
       "lastRelease": null,
       "repo": "LynxDock-Vault",
-      "notes": "External repo; set LYNXDOCK_VAULT_DIR to source version/health, else stays unknown."
+      "notes": "Knowledge vault + Mission Control web app. Git-backed, syncing to GitHub."
     }
   ]
 };

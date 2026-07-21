@@ -70,6 +70,10 @@ export default function Footer() {
                 {l.label}
               </Link>
             ))}
+            {/* Plain anchor: /rss.xml is a static file, not a Next route. */}
+            <a href="/rss.xml" className="transition-colors hover:text-[#9fb2ba]">
+              RSS
+            </a>
             <p className="hud-label text-[#5b6f77]">{companyInfo.motto}</p>
           </div>
         </div>

@@ -27,6 +27,15 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "LynxDock LLC" }],
   creator: "LynxDock LLC",
+  // Feed autodiscovery - emits <link rel="alternate" type="application/rss+xml">
+  // so readers find the feed from any page on the site.
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: "/rss.xml", title: `${siteMetadata.name} Blog` },
+      ],
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
