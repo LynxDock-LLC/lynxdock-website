@@ -17,14 +17,18 @@ const kindLabel = (p: Post) => (postKind(p) === "founder" ? "Founder" : "Dev Log
 
 function Meta({ post }: { post: Post }) {
   return (
-    <div className="flex flex-wrap items-center gap-2.5 text-xs text-[#7f939b]">
+    // Date and reading time are kept in one non-wrapping unit. Laying them out
+    // as separate flex children lets the line break after a separator, which
+    // leaves a dangling middot and orphans the reading time on its own row.
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#7f939b]">
       <span className="hud-label text-signal-cyan">{post.tag}</span>
       <span aria-hidden className="text-[#41525a]">|</span>
       <span>{kindLabel(post)}</span>
-      <span aria-hidden className="text-[#41525a]">&middot;</span>
-      <time dateTime={post.date}>{formatDate(post.date)}</time>
-      <span aria-hidden className="text-[#41525a]">&middot;</span>
-      <span>{post.readingTime}</span>
+      <span className="whitespace-nowrap">
+        <time dateTime={post.date}>{formatDate(post.date)}</time>
+        <span aria-hidden className="mx-1.5 text-[#41525a]">&middot;</span>
+        {post.readingTime}
+      </span>
     </div>
   );
 }
