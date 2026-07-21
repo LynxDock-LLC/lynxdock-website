@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { latestPosts, formatDate, postKind } from "@/data/posts";
+import PostCover, { CategoryChip } from "@/components/PostCover";
+import { PostMeta, SeriesBadge } from "@/components/PostMeta";
+import { latestPosts } from "@/data/posts";
 
 /**
  * Homepage surface for the three newest journal entries. Server-rendered from
@@ -37,24 +39,20 @@ export default function LatestUpdates() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}/`}
-              className="group flex flex-col rounded-xl border border-line bg-graphite-800/40 p-6 transition-colors hover:border-signal-cyan/40"
+              className="group flex flex-col overflow-hidden rounded-xl border border-line bg-graphite-800/40 transition-colors hover:border-signal-cyan/40"
             >
-              <div className="flex flex-wrap items-center gap-2.5 text-xs text-[#7f939b]">
-                <span className="hud-label text-signal-cyan">{post.tag}</span>
-                <span aria-hidden className="text-[#41525a]">|</span>
-                <span>{postKind(post) === "founder" ? "Founder" : "Dev Log"}</span>
+              <PostCover post={post} className="h-14 w-full" />
+              <div className="flex flex-1 flex-col p-6">
+                <CategoryChip post={post} />
+                <SeriesBadge post={post} className="mt-3" />
+                <h3 className="mt-3 text-base font-semibold leading-snug text-white transition-colors group-hover:text-signal-bright">
+                  {post.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-[#9fb2ba]">
+                  {post.excerpt}
+                </p>
+                <PostMeta post={post} className="mt-4" />
               </div>
-              <h3 className="mt-3 text-base font-semibold leading-snug text-white transition-colors group-hover:text-signal-bright">
-                {post.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-[#9fb2ba]">
-                {post.excerpt}
-              </p>
-              <span className="mt-4 text-xs text-[#6f838b]">
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
-                {" · "}
-                {post.readingTime}
-              </span>
             </Link>
           ))}
         </div>

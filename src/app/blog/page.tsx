@@ -13,7 +13,7 @@ export default function BlogPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Notes from the build"
+        eyebrow="Building LynxDock"
         title="Engineering Journal"
         description="What we built, what problem it solved, and what we learned. Dev logs from the codebase, founder updates on where the company is going, and research notes from the bench."
       />

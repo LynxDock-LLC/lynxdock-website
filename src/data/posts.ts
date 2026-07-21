@@ -17,10 +17,84 @@ export type Post = {
   kind?: PostKind; // defaults to "devlog"
   topics?: string[];
   featured?: boolean;
+  author?: string; // defaults to DEFAULT_AUTHOR
+  /**
+   * Series name, e.g. "LynxBench Research". Part numbers are DERIVED from
+   * publication order (see seriesInfo) rather than stored - hand-numbered parts
+   * go stale the moment a post is inserted, reordered, or unpublished.
+   */
+  series?: string;
   body: string[]; // paragraphs
 };
 
+/**
+ * Founder Journal entries carry a personal byline; engineering, security,
+ * release, architecture, AI, research and LynxBench posts are attributed to the
+ * team. Keeps the journal's voice clear without making every technical article
+ * read as a personal essay. An explicit `author` on a post always wins.
+ */
+export const FOUNDER_AUTHOR = "Jared Haga";
+export const TEAM_AUTHOR = "The LynxDock Team";
+
+export const postAuthor = (p: Post): string =>
+  p.author ?? (postKind(p) === "founder" ? FOUNDER_AUTHOR : TEAM_AUTHOR);
+
+/** Shown in the article footer block. Unknown authors get no role line. */
+const AUTHOR_ROLES: Record<string, string> = {
+  [FOUNDER_AUTHOR]: "Founder, LynxDock",
+  [TEAM_AUTHOR]: "Engineering, LynxDock",
+};
+export const postAuthorRole = (p: Post): string | null =>
+  AUTHOR_ROLES[postAuthor(p)] ?? null;
+
 export const postKind = (p: Post): PostKind => p.kind ?? "devlog";
+
+/* ---------------------------------------------------------------- series -- */
+
+export type SeriesInfo = {
+  name: string;
+  part: number; // 1-based, oldest first
+  total: number;
+  /** The next entry chronologically, if one exists. */
+  next: Post | null;
+};
+
+/** Every post in a series, oldest first - that is the reading order. */
+export function seriesPosts(name: string): Post[] {
+  return posts
+    .filter((p) => p.series === name)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** Every series currently in use, with its length. */
+export function allSeries(): { name: string; total: number }[] {
+  const counts = new Map<string, number>();
+  for (const p of posts) {
+    if (p.series) counts.set(p.series, (counts.get(p.series) ?? 0) + 1);
+  }
+  return [...counts]
+    .map(([name, total]) => ({ name, total }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Returns null for a post with no series, and also for a "series" of one -
+ * "Part 1 of 1" is noise. The badge appears on its own once a second entry
+ * ships, which is the point at which it starts meaning something.
+ */
+export function seriesInfo(post: Post): SeriesInfo | null {
+  if (!post.series) return null;
+  const entries = seriesPosts(post.series);
+  if (entries.length < 2) return null;
+  const idx = entries.findIndex((p) => p.slug === post.slug);
+  if (idx === -1) return null;
+  return {
+    name: post.series,
+    part: idx + 1,
+    total: entries.length,
+    next: entries[idx + 1] ?? null,
+  };
+}
 
 /** Every topic in use, for filter chips. Primary tag counts as a topic. */
 export function allTopics(list: Post[] = posts): string[] {
@@ -64,7 +138,7 @@ export function latestPosts(limit = 3): Post[] {
 export const posts: Post[] = [
   {
     slug: "when-your-own-roadmap-is-wrong",
-    title: "When your own roadmap is wrong",
+    title: "Our roadmap was wrong. The code proved it.",
     date: "2026-07-21",
     readingTime: "5 min read",
     tag: "Founder Update",
@@ -72,7 +146,7 @@ export const posts: Post[] = [
     topics: ["Engineering", "Architecture"],
     featured: true,
     excerpt:
-      "Our roadmap said networking and voice hadn't started. The code said otherwise. What we found when we measured instead of trusting the document.",
+      "Our public roadmap said networking and voice hadn't started yet. The repository contained working, tested implementations of both. We nearly corrected the wrong side - deleting real shipped work from the record because an official-looking document said it didn't exist. Here's the rule we adopted instead.",
     body: [
       "Our system status board runs on a rule we care about: degrade honestly. If it cannot reach a source, it reports unknown rather than inventing a healthy-looking green. This week we held our own planning documents to that standard, and they failed it.",
       "The roadmap said networking was 'design accepted, implementation next'. It listed authentication, presence, the offline queue and self-hosting as planned work. Meanwhile the repository contained an authentication crate, a presence crate, an offline outbox with its own test suite, a migration system with backup and restore, and a compose file for self-hosting. Voice and screen sharing were listed as not started - they had shipped across five phases, hardening included.",
@@ -84,14 +158,15 @@ export const posts: Post[] = [
   },
   {
     slug: "lynxbench-repair-knowledge-graph",
-    title: "LynxBench: turning repair expertise into structured knowledge",
+    title: "Repair knowledge dies with the people who hold it",
     date: "2026-07-19",
     readingTime: "6 min read",
     tag: "LynxBench",
     kind: "founder",
     topics: ["LynxBench", "Architecture", "AI"],
+    series: "LynxBench Research",
     excerpt:
-      "Repair knowledge is tribal, undocumented, and disappears with the people who hold it. We're building the opposite: a hardware knowledge graph with evidence-based diagnostics, PCB mapping, and a repeatable troubleshooting process.",
+      "Almost everything known about repairing a given board lives in a few people's heads and a scattering of forum posts. When they go, it's gone. LynxBench is our attempt at the opposite: a hardware knowledge graph, evidence-based diagnostics, PCB mapping, and a troubleshooting process that actually repeats.",
     body: [
       "Almost everything known about repairing a given piece of hardware lives in three places: a handful of people's heads, a scattering of forum posts written by someone who solved it once at 2am, and nowhere. When the technician retires or the forum goes offline, that knowledge is simply gone. Every subsequent person rediscovers it from scratch, badly.",
       "LynxBench is our attempt at the opposite. It is a hardware diagnostics and repair-knowledge effort running alongside the communication platform, and the goal is genuinely ambitious: build the most comprehensive structured repair knowledge repository we can, in a form that both people and machines can reason over.",
@@ -107,14 +182,14 @@ export const posts: Post[] = [
   },
   {
     slug: "preventing-silent-corruption-ai-assisted-codebase",
-    title: "Preventing silent corruption in an AI-assisted codebase",
+    title: "The failure your code review cannot catch",
     date: "2026-07-13",
     readingTime: "5 min read",
     tag: "AI",
     kind: "devlog",
     topics: ["AI", "Engineering"],
     excerpt:
-      "The dangerous failures in AI-assisted development aren't bad suggestions you can see - they're environmental faults you can't. Here's the process we built so they can't reach production.",
+      "Our tooling reported changes to files nobody had touched. The cause wasn't a bad AI suggestion - it was an environment quietly serving truncated files, so every tool downstream measured the wrong thing. Review can't catch that, because review reads the same corrupted input. Here's the process we built instead.",
     body: [
       "Most discussion of AI-assisted development focuses on output quality: is the suggestion correct, is the code idiomatic, does it compile. Those failures are visible, and visible failures get caught in review.",
       "The failures worth engineering against are the invisible ones - where the tooling reports something confidently false and every downstream decision inherits the error. We hit one of those, and the process we built in response is the part worth sharing.",
@@ -130,14 +205,14 @@ export const posts: Post[] = [
   },
   {
     slug: "a-file-extension-is-not-a-fact",
-    title: "A file extension is not a fact",
+    title: "We stopped trusting filenames",
     date: "2026-07-12",
     readingTime: "3 min read",
     tag: "Security",
     kind: "devlog",
     topics: ["Security", "Engineering"],
     excerpt:
-      "Attachments are now verified by their actual content signature rather than the name they arrive with, so a renamed executable cannot pass itself off as an image.",
+      "Rename an executable to holiday.png and most systems will happily treat it as a picture. LynxDock now reads the file's actual content signature and refuses anything whose bytes disagree with its claimed type - enforced at the storage layer, with a test that proves it says no.",
     body: [
       "The simplest way to get something unpleasant into a chat application is to rename it. An executable becomes holiday.png, the interface shows a picture icon, and everything downstream that trusts the extension is now confidently working with a lie.",
       "LynxDock now checks the file instead of the filename. Every attachment is read at the front, and its leading bytes - its signature, or magic number - are compared against the type it claims to be. All eight permitted types carry a real signature check.",

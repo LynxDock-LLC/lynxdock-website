@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { posts, getPost, formatDate, relatedPosts } from "@/data/posts";
+import { CategoryChip } from "@/components/PostCover";
+import {
+  AuthorBlock,
+  SeriesBadge,
+  SeriesFooter,
+} from "@/components/PostMeta";
+import {
+  posts,
+  getPost,
+  formatDate,
+  relatedPosts,
+  postAuthor,
+  postAuthorRole,
+} from "@/data/posts";
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -47,24 +60,36 @@ export default async function PostPage({
         <span aria-hidden>&larr;</span> All posts
       </Link>
 
-      <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-[#7f939b]">
-        <span className="hud-label text-signal-cyan">{post.tag}</span>
-        <span>{formatDate(post.date)}</span>
-        <span aria-hidden>&middot;</span>
-        <span>{post.readingTime}</span>
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <CategoryChip post={post} size="md" />
+        <span className="text-xs text-[#7f939b]">
+          {formatDate(post.date)}
+          <span aria-hidden className="mx-1.5 text-[#41525a]">
+            &middot;
+          </span>
+          {post.readingTime}
+        </span>
       </div>
 
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+      <SeriesBadge post={post} className="mt-4" />
+
+      <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
         {post.title}
       </h1>
 
-      <div className="mt-8 flex flex-col gap-5">
+      {/* Attribution lives here rather than on the archive cards - one place,
+          where the reader has actually committed to the piece. */}
+      <AuthorBlock author={postAuthor(post)} role={postAuthorRole(post)} />
+
+      <div className="mt-10 flex flex-col gap-5">
         {post.body.map((para, i) => (
           <p key={i} className="text-[16px] leading-relaxed text-[#b7c5cb]">
             {para}
           </p>
         ))}
       </div>
+
+      <SeriesFooter post={post} />
 
       {related.length > 0 && (
         <section className="mt-14 border-t border-line/60 pt-8">
