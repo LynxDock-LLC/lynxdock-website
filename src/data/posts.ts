@@ -137,6 +137,26 @@ export function latestPosts(limit = 3): Post[] {
 
 export const posts: Post[] = [
   {
+    slug: "we-killed-the-server-mid-send",
+    title: "We killed the server mid-send. Nothing was lost.",
+    date: "2026-07-21",
+    readingTime: "4 min read",
+    tag: "Release",
+    topics: ["Milestone", "Engineering"],
+    featured: true,
+    excerpt:
+      "Version 2.2's networking was built and tested but had never been watched working end to end. So we watched: three live clients, a cross-device read-state test with a human witness, and a server killed mid-conversation. Seven of seven cases passed - and we're publishing the four bugs we found alongside the wins. This is day one of the internal alpha.",
+    body: [
+      "Last week we wrote about the marker we added to our roadmap: built, tested, but not yet exercised end-to-end. It was an honest asterisk, and an uncomfortable one - a networking stack nobody has watched work is a hypothesis with good unit tests. Today we removed the asterisk the only way you legitimately can.",
+      "The setup: one server, three live clients logged in as three different users, plus a second window per account so every user was connected from two devices at once. Then a checklist of nine cases, each mapped to a method the server actually registers - message delivery, channel creation, server-backed read state, presence, typing indicators, the offline queue, reconnection, reactions, deletion, and full-text search across networked messages.",
+      "The headline test is the one in the title. With a conversation in flight, we killed the server process. The clients noticed within seconds and switched to a reconnecting state. We sent three more messages into the void - they queued locally under a 'messages waiting to send' indicator instead of erroring. Then we brought the server back. Every client reconnected on its own in about six seconds, no re-login, and the queued messages drained to the other users in order, exactly once. No losses, no duplicates. A reaction added before the outage survived it. Unread counts survived the full server restart, because read state persists to disk.",
+      "The test we're proudest of needed a human witness: with the same account signed in on two devices, we read a channel on one and watched the unread badge clear on the other, untouched. Server-backed read state is the kind of feature every chat product claims and few people ever actually verify across devices. Ours is now verified, with a date.",
+      "Seven of seven executed cases passed. And in the same run we found four real problems, which we are publishing rather than sitting on. The one that matters: during the outage, the client blanked its entire view - channel list and message history gone until reconnect. Everything came back, but for a product built on a local-first foundation, going blind while offline is the gap between the claim and the experience, and it is now the top item on our board. The other three are smaller: message editing exists on the server but has no UI yet, deleting the newest message leaves its text stranded in the sidebar preview, and one loading placeholder never resolves.",
+      "Two cases were deferred, not failed - the containerized self-host parity run and the voice smoke test, which needs human ears. Voice gates the v2.3 tag; the code shipped months of phases ago, and it will get the same treatment: watched, not assumed.",
+      "As of this run, version 2.2 is tagged and the roadmap says 'e2e verified' with a date next to it. That phrase is the whole point. A month ago our documents described intent and called it status. Now a claim gets a checkmark when someone watches it be true - and the internal alpha starts today, with us living in the product we just verified.",
+    ],
+  },
+  {
     slug: "when-your-own-roadmap-is-wrong",
     title: "Our roadmap was wrong. The code proved it.",
     date: "2026-07-21",
@@ -144,7 +164,6 @@ export const posts: Post[] = [
     tag: "Founder Update",
     kind: "founder",
     topics: ["Engineering", "Architecture"],
-    featured: true,
     excerpt:
       "Our public roadmap said networking and voice hadn't started yet. The repository contained working, tested implementations of both. We nearly corrected the wrong side - deleting real shipped work from the record because an official-looking document said it didn't exist. Here's the rule we adopted instead.",
     body: [
