@@ -1,3 +1,12 @@
+/**
+ * Two content types, deliberately kept separate:
+ *   devlog  - technical updates from the build
+ *   founder - company progress, direction, milestones
+ * `tag` is the primary topic shown on the card; `topics` drives filtering.
+ * Both new fields are optional so existing posts stay valid untouched.
+ */
+export type PostKind = "devlog" | "founder";
+
 export type Post = {
   slug: string;
   title: string;
@@ -5,10 +14,138 @@ export type Post = {
   readingTime: string;
   excerpt: string;
   tag: string;
+  kind?: PostKind; // defaults to "devlog"
+  topics?: string[];
+  featured?: boolean;
   body: string[]; // paragraphs
 };
 
+export const postKind = (p: Post): PostKind => p.kind ?? "devlog";
+
+/** Every topic in use, for filter chips. Primary tag counts as a topic. */
+export function allTopics(list: Post[] = posts): string[] {
+  const seen = new Set<string>();
+  for (const p of list) {
+    seen.add(p.tag);
+    for (const t of p.topics ?? []) seen.add(t);
+  }
+  return [...seen].sort();
+}
+
+export const postTopics = (p: Post): string[] =>
+  [...new Set([p.tag, ...(p.topics ?? [])])];
+
+/**
+ * Related articles, ranked by shared topics then recency. Falls back to the
+ * newest posts when nothing overlaps, so the section is never empty.
+ */
+export function relatedPosts(slug: string, limit = 3): Post[] {
+  const current = posts.find((p) => p.slug === slug);
+  if (!current) return [];
+  const mine = new Set(postTopics(current));
+  return posts
+    .filter((p) => p.slug !== slug)
+    .map((p) => ({
+      post: p,
+      score: postTopics(p).filter((t) => mine.has(t)).length,
+    }))
+    .sort(
+      (a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date)
+    )
+    .slice(0, limit)
+    .map((x) => x.post);
+}
+
+/** Newest posts first - used by the homepage Latest Updates widget. */
+export function latestPosts(limit = 3): Post[] {
+  return [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
+}
+
 export const posts: Post[] = [
+  {
+    slug: "when-your-own-roadmap-is-wrong",
+    title: "When your own roadmap is wrong",
+    date: "2026-07-21",
+    readingTime: "5 min read",
+    tag: "Founder Update",
+    kind: "founder",
+    topics: ["Engineering", "Architecture"],
+    featured: true,
+    excerpt:
+      "Our roadmap said networking and voice hadn't started. The code said otherwise. What we found when we measured instead of trusting the document.",
+    body: [
+      "Our system status board runs on a rule we care about: degrade honestly. If it cannot reach a source, it reports unknown rather than inventing a healthy-looking green. This week we held our own planning documents to that standard, and they failed it.",
+      "The roadmap said networking was 'design accepted, implementation next'. It listed authentication, presence, the offline queue and self-hosting as planned work. Meanwhile the repository contained an authentication crate, a presence crate, an offline outbox with its own test suite, a migration system with backup and restore, and a compose file for self-hosting. Voice and screen sharing were listed as not started - they had shipped across five phases, hardening included.",
+      "The documents were not lying. They were written once and never re-measured, while the work kept moving underneath them.",
+      "What makes this worth writing about is how nearly we corrected the wrong side. Our website described features the roadmap said did not exist. The obvious reading is that the marketing site was overclaiming, and 'fix the site to match the roadmap' would have looked like diligence. It would have quietly deleted a large amount of genuinely shipped work from the public record - and it would have been justified by an official-looking document.",
+      "So the rule we settled on is simple: when a document and the code disagree, the code wins. A roadmap describes intent at the time of writing. It does not update itself, and age alone gives it no authority.",
+      "The roadmap now reflects what is actually built. We also added a marker for work that exists and is tested but has not yet been exercised end-to-end, because fixing a document that overstated its confidence by overstating ours would have missed the entire point.",
+    ],
+  },
+  {
+    slug: "lynxbench-repair-knowledge-graph",
+    title: "LynxBench: turning repair expertise into structured knowledge",
+    date: "2026-07-19",
+    readingTime: "6 min read",
+    tag: "LynxBench",
+    kind: "founder",
+    topics: ["LynxBench", "Architecture", "AI"],
+    excerpt:
+      "Repair knowledge is tribal, undocumented, and disappears with the people who hold it. We're building the opposite: a hardware knowledge graph with evidence-based diagnostics, PCB mapping, and a repeatable troubleshooting process.",
+    body: [
+      "Almost everything known about repairing a given piece of hardware lives in three places: a handful of people's heads, a scattering of forum posts written by someone who solved it once at 2am, and nowhere. When the technician retires or the forum goes offline, that knowledge is simply gone. Every subsequent person rediscovers it from scratch, badly.",
+      "LynxBench is our attempt at the opposite. It is a hardware diagnostics and repair-knowledge effort running alongside the communication platform, and the goal is genuinely ambitious: build the most comprehensive structured repair knowledge repository we can, in a form that both people and machines can reason over.",
+      "**The problem with how repair knowledge is stored today.** A service manual tells you the official procedure. A forum thread tells you what worked for one person on one unit. Neither tells you *why*, and neither connects to anything else. There is no structure that says this component depends on that rail, that this symptom has four plausible causes ranked by likelihood, or that this measurement rules out three of them. Without that structure you cannot reason - you can only pattern-match, which is exactly the skill that lives in someone's head and dies with them.",
+      "**What we're building instead.** At the centre is a hardware knowledge graph: components, subsystems, the relationships between them, and how failures propagate along those relationships. On top of that sits structured troubleshooting - decision paths where each step is a measurement that meaningfully narrows the space, rather than a checklist someone follows to the end and then guesses anyway.",
+      "Underneath is the physical layer: PCB mapping and component identification. A surprising amount of this starts as hand-drawn board maps - someone tracing a real board, marking what connects to what. Those get digitised and turned into structured records, which is what lets the graph reason about a physical object instead of an abstraction. It is slow, unglamorous work, and it is the foundation everything else rests on.",
+      "**Evidence is the discipline.** Every verification produces a structured evidence record: what was tested, what was observed, and whether it confirmed or contradicted the expectation - including attempts that captured nothing useful. That last part matters more than it sounds. Recording failed captures is what separates a knowledge base from a highlight reel, and it is the difference between something you can trust and something that merely sounds authoritative. A claim about hardware behaviour with no capture behind it is an opinion, and opinions do not belong in a repair record.",
+      "**Where AI fits.** Not as an oracle. We use AI-assisted research pipelines to do the part that is genuinely mechanical: reading large volumes of scattered documentation, extracting candidate relationships, and proposing structure for a human to confirm or reject. The architecture deliberately separates observation from reasoning - one layer records what actually happened on the bench without interpreting it, another reasons over those observations against the graph. Keeping them apart means a wrong conclusion never contaminates the underlying record, and you can re-reason over the same capture later and get a better answer as the graph improves.",
+      "**Documentation standards are the product.** Twelve architecture decisions are recorded so far, because a repository like this is only as durable as its conventions. If two people record the same observation in two different shapes, the graph degrades into a filing cabinet. Deciding early how things are written down is not bureaucracy - it is the thing that makes the knowledge compounding rather than merely accumulating.",
+      "**What another engineer can take from this.** If you are building any kind of knowledge system, the transferable parts are these: separate raw observation from interpretation so you can revise conclusions without losing data; record negative results, because a knowledge base that only contains successes cannot be trusted; and settle your documentation conventions before volume arrives, not after.",
+      "We are keeping specific findings, interface details and protocol parameters private for now. The methodology is the part worth sharing - and the part we would want to read.",
+    ],
+  },
+  {
+    slug: "preventing-silent-corruption-ai-assisted-codebase",
+    title: "Preventing silent corruption in an AI-assisted codebase",
+    date: "2026-07-13",
+    readingTime: "5 min read",
+    tag: "AI",
+    kind: "devlog",
+    topics: ["AI", "Engineering"],
+    excerpt:
+      "The dangerous failures in AI-assisted development aren't bad suggestions you can see - they're environmental faults you can't. Here's the process we built so they can't reach production.",
+    body: [
+      "Most discussion of AI-assisted development focuses on output quality: is the suggestion correct, is the code idiomatic, does it compile. Those failures are visible, and visible failures get caught in review.",
+      "The failures worth engineering against are the invisible ones - where the tooling reports something confidently false and every downstream decision inherits the error. We hit one of those, and the process we built in response is the part worth sharing.",
+      "**The failure mode.** A mounted filesystem served files shorter than they actually were, truncated mid-token. Every tool reading through that mount saw the short version with no indication anything was wrong. Version control then compared the truncated content against the real repository and reported modifications that did not exist. Staging those would have committed the truncation - deleting working code nobody had touched, in a diff that looked completely reasonable to a reviewer.",
+      "That is the shape of the dangerous class: not a wrong answer, but a wrong *measurement* that produces a plausible wrong answer. No amount of careful review catches it, because review operates on the same corrupted input.",
+      "**Make the rule executable, not written.** Our first instinct was to document the hazard. That instinct is wrong. A warning in a document is a warning someone skips at 1am, and the person most likely to skip it is the one moving fastest. So the rule became a program: a preflight check that runs before any session touches version control, verifies the environment, and **fails closed**. It takes about two seconds, has no dependencies, and carries its own test suite - because an unverified safety check is decoration.",
+      "The design principle: if a rule matters, it should be impossible to proceed without satisfying it. Anything less is a suggestion.",
+      "**Treat every handoff as a hypothesis.** The second half is cultural. When work spans many sessions - human or AI - each one inherits a summary of what came before, and those summaries are where errors calcify. On a single day, three inherited claims collapsed the moment anyone measured them: a file count that was wrong, a set of tests reported as deleted that were entirely present, and a batch of errors described as outstanding that had already been fixed.",
+      "The middle case is the instructive one. It began as a measurement error, got written into prose, and from there acquired the authority of a fact - propagating through two handoffs unchallenged. Prose is remarkably good at laundering uncertainty into confidence. A number in a sentence reads as established; the same number in a tool output reads as a reading you might want to re-take.",
+      "So the standing instruction is to re-derive state from the repository at the start of every session rather than trusting the summary, however authoritative it reads. State is cheap to measure and expensive to assume.",
+      "**What another engineer can take from this.** Three things generalise. First, distinguish failures your review process can catch from ones it structurally cannot, and spend your engineering effort on the second category. Second, encode critical rules as programs that fail closed, because documentation degrades into folklore. Third, in any workflow with handoffs, build in a re-measurement step - the cost of verifying inherited state is far lower than the cost of one confident, wrong inheritance reaching production.",
+    ],
+  },
+  {
+    slug: "a-file-extension-is-not-a-fact",
+    title: "A file extension is not a fact",
+    date: "2026-07-12",
+    readingTime: "3 min read",
+    tag: "Security",
+    kind: "devlog",
+    topics: ["Security", "Engineering"],
+    excerpt:
+      "Attachments are now verified by their actual content signature rather than the name they arrive with, so a renamed executable cannot pass itself off as an image.",
+    body: [
+      "The simplest way to get something unpleasant into a chat application is to rename it. An executable becomes holiday.png, the interface shows a picture icon, and everything downstream that trusts the extension is now confidently working with a lie.",
+      "LynxDock now checks the file instead of the filename. Every attachment is read at the front, and its leading bytes - its signature, or magic number - are compared against the type it claims to be. All eight permitted types carry a real signature check.",
+      "Where that check lives matters as much as the check itself. It runs inside the storage call rather than in the interface, so no alternative code path can reach the disk without passing it. If the bytes and the claimed type disagree, the write is refused with a plain error rather than quietly accepted.",
+      "The part we would point at in review is not the feature, it is the negative test. We take a genuine image, rename a binary to sit beside it wearing the same extension, and assert that the second one is rejected. A security control without a test proving it says no is a hope, not a control.",
+      "This is deliberately narrow. It is not malware scanning and it does not make arbitrary files safe. It removes one specific lie - the claim a filename makes about what it contains - which is the lie this particular door was open to.",
+    ],
+  },
   {
     slug: "voice-and-screen-sharing-end-to-end",
     title: "Voice and screen sharing, end to end",

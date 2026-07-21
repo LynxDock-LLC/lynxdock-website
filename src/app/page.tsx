@@ -7,6 +7,7 @@ import FeatureCard from "@/components/FeatureCard";
 import EpicRoadmap from "@/components/EpicRoadmap";
 import DesktopMockup from "@/components/DesktopMockup";
 import ArchitectureFlow from "@/components/ArchitectureFlow";
+import LatestUpdates from "@/components/LatestUpdates";
 import { epics } from "@/data/epics";
 import type { Feature } from "@/data/features";
 import { releases } from "@/data/releases";
@@ -211,6 +212,9 @@ export default function Home() {
           ))}
         </div>
       </Section>
+
+      {/* Latest journal entries - self-updating from posts.ts */}
+      <LatestUpdates />
 
       {/* CTA */}
       <Section className="pb-24 pt-8">
