@@ -23,14 +23,14 @@ const stack = ["Rust core", "Tauri desktop", "Local-first", "Self-hostable", "Pr
 
 // The desktop application — grounded in what is built today.
 const desktopFeatures: Feature[] = [
-  { title: "Workspace", description: "The local container everything hangs off: name, icon, and its own scoped storage.", icon: "layers" },
-  { title: "Identity", description: "A local profile with display name and accent color, validated on the Rust side.", icon: "users" },
-  { title: "Messaging", description: "Local channels and messages: compose, edit, delete, search, unread counts, and previews.", icon: "message" },
-  { title: "Settings", description: "Theme, reduced motion, and telemetry — applied live, privacy-first by default.", icon: "cog" },
+  { title: "Squadron Control", description: "A live tactical board: units, wings, routes with waypoints, zones, objectives, orders, alerts, replay, and undo — synced to every client.", icon: "layers" },
+  { title: "Messaging", description: "Server-synced channels with replies, reactions, rich formatting, search, and an offline outbox that delivers exactly once on reconnect.", icon: "message" },
+  { title: "Voice", description: "Voice rooms with mute/deafen, device selection, and screen sharing — presence-aware throughout.", icon: "users" },
+  { title: "Settings", description: "A 20-category, searchable settings system — server-persisted per account, privacy-first defaults, Basic and Advanced modes.", icon: "cog" },
   { title: "Genesis UI", description: "LynxDock's own component framework: design tokens, a theme engine, and a Tailwind preset.", icon: "palette" },
-  { title: "Rust backend", description: "A Tauri core with typed commands and on-disk storage for identity, workspace, and messages.", icon: "server" },
-  { title: "Plugin system", description: "A plugin SDK with a manifest and capability model — the future extension surface.", icon: "code" },
-  { title: "AI contracts", description: "Agent and tool contracts, ready to wire into the workspace as the platform grows.", icon: "sparkles" },
+  { title: "Rust core", description: "A protocol-first Rust server and Tauri desktop shell; TypeScript types are generated from the Rust protocol so client and server can't drift.", icon: "server" },
+  { title: "Server Host", description: "A guided setup wizard, dashboard, admin controls, and readable live logs — self-hosting without config files.", icon: "code" },
+  { title: "Tested seriously", description: "Reconnect, offline replay, multi-client convergence, undo, and permissions covered by automated tests and live multi-account verification.", icon: "sparkles" },
   { title: "Studio", description: "GSpec Studio validates a specification entirely in the browser using the shared core.", icon: "cpu" },
 ];
 
@@ -82,12 +82,13 @@ export default function Home() {
           </span>
 
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white animate-fade-up sm:text-5xl md:text-6xl">
-            Privacy-first communication built for the next generation.
+            Your comms. Your ops. Your server.
           </h1>
 
           <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba] animate-fade-up sm:text-lg">
-            LynxDock is a Rust-powered desktop application for communities that want control — local-first,
-            self-hostable, and built on an open architecture. Privacy and performance are the defaults, not add-ons.
+            LynxDock is a self-hosted communication and tactical operations platform for gaming organizations —
+            chat, voice, and a live tactical command board in one deployable unit, running on hardware your
+            community owns.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3 animate-fade-up">
@@ -112,6 +113,78 @@ export default function Home() {
         </GlassPanel>
       </Section>
 
+      {/* OPERATIONS — the flagship, paired with real product imagery */}
+      <Section className="py-16 sm:py-24">
+        <SectionHeader
+          align="center"
+          eyebrow="Squadron Control"
+          title="A live tactical operations center."
+          description="Zones, unit nodes, routes, objectives, orders, and readiness — synchronized in real time across every connected member. Fleet admirals run the op from the board; wings see orders as they're issued."
+          className="mb-10"
+        />
+        <GlassPanel glow className="overflow-hidden p-2 sm:p-3">
+          <Image
+            src="/screenshots/tactical-operations-board.png"
+            alt="LynxDock Squadron Control — live tactical operations board with units, routes, zones, and orders"
+            width={1920}
+            height={1080}
+            className="w-full rounded-lg"
+          />
+        </GlassPanel>
+
+        <div className="mt-14 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <GlassPanel className="overflow-hidden p-2 sm:p-3">
+            <Image
+              src="/screenshots/op-briefing-channel.png"
+              alt="LynxDock operation briefing channel with voice and presence"
+              width={1600}
+              height={1000}
+              className="w-full rounded-lg"
+            />
+          </GlassPanel>
+          <div>
+            <span className="hud-label flex items-center gap-2">
+              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
+              Comms built for operations
+            </span>
+            <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              Briefings, wing channels, and comms discipline.
+            </h3>
+            <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
+              Channels, multi-party voice, and presence with your command structure visible at a glance — in the
+              same app as the tactical board.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-14">
+          <span className="hud-label flex items-center gap-2">
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
+            Self-hosting without the pain
+          </span>
+          <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            One process. One file. Your hardware.
+          </h3>
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
+            A calm first-run wizard creates your server without config files or terminal commands. Dashboard, admin
+            controls, readable live logs, and plain-language connection help — for local testing, LAN parties, or
+            friends over the internet.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {[
+              ["/screenshots/server-host-setup.png", "Server Host guided setup wizard"],
+              ["/screenshots/server-host-dashboard.png", "Server Host dashboard"],
+              ["/screenshots/server-host-admin.png", "Server Host admin controls"],
+              ["/screenshots/server-host-logs.png", "Server Host live logs"],
+            ].map(([src, alt]) => (
+              <GlassPanel key={src} className="overflow-hidden p-2">
+                <Image src={src!} alt={alt!} width={1400} height={900} className="w-full rounded-lg" />
+              </GlassPanel>
+            ))}
+          </div>
+        </div>
+      </Section>
+
       {/* DESKTOP APPLICATION */}
       <Section className="py-16 sm:py-24">
         <SectionHeader
@@ -129,12 +202,13 @@ export default function Home() {
               Working today
             </span>
             <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Workspace, identity, settings, and local messaging.
+              Chat, voice, presence, and a live tactical board.
             </h3>
             <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
-              The alpha desktop app already runs a local workspace with your profile and settings, a live theme
-              engine, and a local-only chat client: channels and messages you can compose, edit, delete, and search —
-              all persisted on your machine. Networking, voice, and communities come next, on the roadmap below.
+              The desktop app now runs against a real self-hosted server: synced channels with replies and search,
+              multi-party voice, live presence with custom status, and Squadron Control — a tactical operations
+              board with routes, orders, and replay, consistent across every connected member. All of it is in
+              active development and verified end to end as it lands.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <GlowButton href="/download/" variant="primary">Download Alpha</GlowButton>

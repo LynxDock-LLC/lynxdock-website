@@ -137,6 +137,77 @@ export function latestPosts(limit = 3): Post[] {
 
 export const posts: Post[] = [
   {
+    slug: "squadron-control-operations-layer",
+    title: "Squadron Control grows an operations layer",
+    date: "2026-07-29",
+    readingTime: "7 min read",
+    tag: "Engineering",
+    topics: ["Milestone", "Engineering", "Squadron"],
+    featured: true,
+    excerpt:
+      "In one focused stretch, the tactical board went from an empty section of the new client to a full operations platform: units, wings, orders, alerts, zones, formations, snapshots, mission templates, undo, a permanent audit log with time-travel replay - and then an operations layer on top: multi-waypoint routes you can edit like vector paths, advance in real time, and command from a live roll-up. Here's what we built and the architecture that made it fast to build.",
+    body: [
+      "Squadron Control is the reason LynxDock exists: a tactical operations center in the same app as your comms, not a chat sidebar with a whiteboard bolted on. The V2 rebuild finally gave it the foundation it deserved - a protocol-first Rust server, a typed event stream, and a client that reconciles to server truth - and once that spine existed, the features came fast. This post covers the stretch that took the board from empty to operational.",
+
+      "The spine first. Every tactical entity - units, wings, objectives, orders, alerts, zones, connections, sketch strokes, routes - lives in the Rust protocol crate as a typed, versioned object with a server-authoritative revision. The TypeScript client types are generated from Rust, so the two sides cannot drift. Mutations are RPCs that persist, then broadcast on the board's own event stream; every client applies the same reducer, so duplicates are idempotent and stale updates lose by revision. When a client detects a gap in the sequence, it resyncs from a snapshot. That one pattern - persist, broadcast, reduce, resync - is behind everything below.",
+
+      "Then the operational surface. Units carry roles and readiness states; wings group them with color and a live readiness roll-up. Objectives, C2 orders with an issued-to-acked-to-done lifecycle, and categorized alerts cover the command loop. Zones paint the map; formations and a zero-dependency command-tree auto-layout arrange it. Ephemeral signals - pings, unit callouts, commander broadcasts - flash across every connected client without ever touching the database. A situation card summarizes the whole operation at a glance.",
+
+      "History became a first-class feature. Every mutation lands in a permanent per-board audit log, which bought us three things at once: sequence numbers that survive server restarts, named snapshots you can save and restore (restores flow through the normal event stream, so live clients converge without a special path), and time-travel replay - a scrubber that reconstructs the exact board state at any point in its history, read-only, with a one-click return to live. Mission templates fell out of the same machinery: stamp any snapshot into a fresh board with new identities and remapped references.",
+
+      "Undo was the hardest correctness problem. Server-side inverse mutations: every operation records its inverse group as it executes, so undoing a unit deletion restores not just the unit but the command edges and wing memberships that were cascaded away with it - as one keystroke. Redo swaps stacks symmetrically. It took a prefix-routed application engine and careful revision bumping to make every restore win last-writer-wins on every client, and it's covered by round-trip tests on both sides of the wire.",
+
+      "Then we changed what the lines mean. Connector edges were graph theory; operations think in movement. The operations layer replaces relationship lines with routes: first-class mission objects with unlimited waypoints, per-kind military styling and direction animation, and vector-style editing - drag a waypoint, click a segment to insert one, split, fork, merge, reverse. Squads advance waypoint by waypoint; completed legs go green, the current waypoint pulses, and a commander panel rolls up every route's progress without anyone asking over voice. All of it undoable, all of it in the audit log, all of it replayable.",
+
+      "One interaction framework drives it all. Every object on the canvas answers to a single action registry, surfaced three ways - right-click context menu, radial pie menu, and a command palette - with hotkeys and undo coming from the same source of truth, so the surfaces can't drift apart. A capability-based permission model evaluates authority on the server and mirrors it client-side for instant feedback, returning readable denials instead of silent failures.",
+
+      "None of this is a demo path. It went through the same discipline as the networking layer before it: workspace-wide test gates, multi-client live verification with deliberate wreck-and-restore passes, a stress harness for large boards, and a written record of what was verified and when. The board that appears in the screenshots on this site is staged demo data - but the synchronization underneath it is the real thing, watched working.",
+
+      "LynxDock is in active development. Squadron Control's operations layer is the current frontier - telemetry-driven live unit positions and multi-altitude route planning are speced next - and the whole platform remains what it set out to be: one process, one database file, on hardware your organization owns.",
+    ],
+  },
+  {
+    slug: "settings-system-and-platform-polish",
+    title: "A settings system built like a platform, and a week of polish",
+    date: "2026-07-29",
+    readingTime: "5 min read",
+    tag: "Engineering",
+    topics: ["Engineering", "Design"],
+    excerpt:
+      "Settings grew from four toggles into a 20-category, searchable system with Basic and Advanced modes - where every setting the platform will ever expose is declared, and the ones whose subsystems haven't shipped are shown honestly as planned instead of faked. Plus: replies, custom status, readable errors, and an accessibility and performance pass across the client.",
+    body: [
+      "A setting that does nothing is worse than no setting, so when we expanded the settings system we made a rule: the interface may only show two kinds of control - ones that are wired to a real, server-persisted value that takes effect live, and ones that are visibly disabled and labeled with the subsystem that will ship them. Nothing in between. The result is a declarative registry of twenty categories, from Appearance and Chat through Voice, Tactical, Privacy, Security, and Developer, where the platform's roadmap is literally readable inside the settings screen.",
+
+      "The wired set is already substantial: accent color applied live across the whole interface, text size and density scaling, high contrast and reduced motion, message display controls (timestamps and their format, avatars, grouping), composer behavior (Enter versus Ctrl+Enter, spell check), typing-indicator privacy that stops both showing and sending, unread badges, desktop notifications with do-not-disturb and midnight-wrapping quiet hours - where mentions can be allowed to pierce - and tactical board preferences. Everything persists per account on your own server, not in a browser's local storage.",
+
+      "Search treats settings as the unit, not pages: typing 'microphone' jumps to Voice and highlights every matching row, including the planned ones. Basic mode keeps the surface to what most people actually touch; Advanced mode reveals all of it. The design didn't change - it's the same calm interface, with an engine under it.",
+
+      "Messaging and presence moved too. Replies reference the original message rather than copying it, resolve their previews live, degrade gracefully when the original is deleted, and survive being composed offline. Custom status - an emoji and a short line - broadcasts to everyone, survives reconnects, and is normalized server-side. And a single shared error path now turns backend failures into readable sentences instead of cryptic banners.",
+
+      "The same stretch included a deliberate hardening pass: an audit across dead code, render performance, accessibility, and state management. Focus rings and pressed states were fixed where they'd been lost, modal overlays gained dialog semantics, member-list and message-view re-render churn was removed, and the findings were written up as internal bug, performance, and release-readiness reports that steer what comes next. Craft is release-blocking here, not optional.",
+
+      "All of it is in active development, in the open, with the same standard as always: a capability gets claimed when someone has watched it be true.",
+    ],
+  },
+  {
+    slug: "nsf-sbir-project-pitch",
+    title: "LynxDock applies for NSF research funding",
+    date: "2026-07-29",
+    readingTime: "2 min read",
+    tag: "Founder Update",
+    kind: "founder",
+    topics: ["Milestone", "Company"],
+    excerpt:
+      "We've submitted a Project Pitch to America's Seed Fund (NSF SBIR) to fund research into the hard problems under LynxDock: real-time state synchronization, large multi-party voice, and self-healing operability on affordable self-hosted hardware.",
+    body: [
+      "In July 2026, LynxDock LLC submitted its first research proposal to the National Science Foundation's SBIR program - America's Seed Fund. The pitch targets the problems that make a platform like LynxDock genuinely hard: keeping real-time operational state consistent across many clients, scaling multi-party voice, and making a self-hosted system self-healing enough that a gaming organization can run it on hardware they already own, without an ops team.",
+
+      "Those aren't marketing problems; they're the engineering problems we work on every day, and the ones this site's dev logs document. The proposal formalizes that research direction. We'll share what we can about the process as it unfolds.",
+
+      "LynxDock remains what it has been from the first commit: privacy-first, self-hosted, built for the organizations that need permanence. Built for people. Not platforms.",
+    ],
+  },
+  {
     slug: "stress-testing-the-networking-layer",
     title: "Internal Alpha: stress-testing LynxDock's networking layer",
     date: "2026-07-21",
