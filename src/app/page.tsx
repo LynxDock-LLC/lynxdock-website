@@ -125,11 +125,44 @@ export default function Home() {
         <GlassPanel glow className="overflow-hidden p-2 sm:p-3">
           <Image
             src="/screenshots/tactical-operations-board.png"
-            alt="LynxDock Squadron Control — live tactical operations board with units, routes, zones, and orders"
-            width={1920}
-            height={1080}
+            alt="LynxDock Squadron Control — live tactical operations board with a command tree, wings, zones, routes, and objectives"
+            width={3168}
+            height={1742}
             className="w-full rounded-lg"
           />
+          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
+            A staged operation on the live board: a command tree over two wings, rally / danger / attack / exfil
+            zones, and three operation routes — assault, recon, and medical — each with its own symbology.
+          </p>
+        </GlassPanel>
+
+        {/* Detail shots stay full-width on purpose: tactical UI text must remain readable at site scale. */}
+        <GlassPanel className="mt-6 overflow-hidden p-2 sm:p-3">
+          <Image
+            src="/screenshots/tactical-routes-waypoints.png"
+            alt="Operation routes up close — named waypoints, live progress, and the commander's route rollup panel"
+            width={3168}
+            height={1742}
+            className="w-full rounded-lg"
+          />
+          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
+            Routes up close: named waypoints with types and statuses, waypoint-by-waypoint progress, and the
+            commander&apos;s rollup tracking every route on the board.
+          </p>
+        </GlassPanel>
+
+        <GlassPanel className="mt-6 overflow-hidden p-2 sm:p-3">
+          <Image
+            src="/screenshots/tactical-orders.png"
+            alt="The same operation with the orders panel open — issued orders beside the live board"
+            width={3168}
+            height={1742}
+            className="w-full rounded-lg"
+          />
+          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
+            Orders are issued from the board and land beside the picture they describe — objectives, wings, and
+            routes each get their own panel on the same surface.
+          </p>
         </GlassPanel>
 
         {/* Comms screenshot pulled for now — retake with clean briefing content
