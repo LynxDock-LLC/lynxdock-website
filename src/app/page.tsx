@@ -132,29 +132,20 @@ export default function Home() {
           />
         </GlassPanel>
 
-        <div className="mt-14 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <GlassPanel className="overflow-hidden p-2 sm:p-3">
-            <Image
-              src="/screenshots/op-briefing-channel.png"
-              alt="LynxDock operation briefing channel with voice and presence"
-              width={1600}
-              height={1000}
-              className="w-full rounded-lg"
-            />
-          </GlassPanel>
-          <div>
-            <span className="hud-label flex items-center gap-2">
-              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
-              Comms built for operations
-            </span>
-            <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Briefings, wing channels, and comms discipline.
-            </h3>
-            <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
-              Channels, multi-party voice, and presence with your command structure visible at a glance — in the
-              same app as the tactical board.
-            </p>
-          </div>
+        {/* Comms screenshot pulled for now — retake with clean briefing content
+            before restoring the paired image layout. */}
+        <div className="mt-14 max-w-2xl">
+          <span className="hud-label flex items-center gap-2">
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
+            Comms built for operations
+          </span>
+          <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            Briefings, wing channels, and comms discipline.
+          </h3>
+          <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
+            Channels, multi-party voice, and presence with your command structure visible at a glance — in the
+            same app as the tactical board.
+          </p>
         </div>
 
         <div className="mt-14">
