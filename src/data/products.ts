@@ -22,6 +22,15 @@ export const products: Product[] = [
     href: "/products/lynxdock/",
   },
   {
+    slug: "lynxdock-host",
+    name: "LynxDock Host",
+    tagline: "The server owner's console",
+    summary:
+      "LynxDock Host is the companion app for running your own server. A guided setup and an owner console create and manage a self-hosted LynxDock community - members, roles, channels, invites, backups, connectivity, and voice - without config files or the terminal.",
+    stage: "Server Ownership",
+    href: "/products/lynxdock-host/",
+  },
+  {
     slug: "studio",
     name: "LynxDock Studio",
     tagline: "The ecosystem IDE",

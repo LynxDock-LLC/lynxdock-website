@@ -20,24 +20,31 @@ export const roadmap: RoadmapPhase[] = [
   },
   {
     phase: "2026",
-    title: "Core app",
+    title: "Core app & self-hosted server",
     description:
-      "The lightweight LynxDock client - accounts, servers, channels, and the app shell.",
-    status: "active",
+      "The lightweight LynxDock client and a self-hostable Rust server - accounts, channels, real-time messaging with offline sync, and backup/restore.",
+    status: "shipped",
   },
   {
     phase: "2026",
-    title: "Private alpha",
+    title: "Voice, tactical & communities",
     description:
-      "Real-time voice, chat, and screen sharing, tested with a small group before wider release.",
-    status: "active",
+      "Real-time voice and screen sharing with a self-hosted TURN relay, the Squadron Control tactical board, and server-wide roles with first-class text, voice, and tactical channels.",
+    status: "shipped",
+  },
+  {
+    phase: "2026",
+    title: "Server Host",
+    description:
+      "A dedicated owner console for running a self-hosted server - guided setup, members, roles, channels, invites, backups, connectivity, and diagnostics.",
+    status: "shipped",
   },
   {
     phase: "2026",
     title: "Private beta",
     description:
-      "Wider testing of self-hosted servers, communities, and Mission Control.",
-    status: "planned",
+      "Preparing signed installers and a trusted-squadron cohort - Windows code signing is being wired up now.",
+    status: "active",
   },
   {
     phase: "2026",
