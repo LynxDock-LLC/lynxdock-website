@@ -1,17 +1,21 @@
 // Epic-level roadmap for LynxDock V2. Hand-maintained on the website.
 // Mirrors docs/EPICS.md in the product monorepo.
 //
-// NOTE (2026-07-13): this file is AHEAD of docs/EPICS.md, and that was verified
-// against the CODE, not the docs. docs/EPICS.md, docs/VERSIONS.md and the
-// monorepo CHANGELOG are all STALE — they understate what has shipped:
-//   Epic 3 (Networking): crates/auth + crates/presence exist (EPICS.md lists
-//     both as planned); outbox.ts (+test) implements the offline queue;
-//     server-connection.ts resolves display names and calls markRead over the
-//     wire; crates/migrate has backup/restore; messaging has export/import and
-//     FTS5; docker-compose.yml + docs/SELF-HOSTING.md exist.
-//   Epic 5 (Voice): all five phases shipped, incl. hardening.
-//   Epic 9 (Mission Control): ADR-0015..0020, absent from EPICS.md entirely.
-// Do NOT "correct" this file down to match EPICS.md. Fix EPICS.md instead.
+// NOTE (2026-08-30): this file is AHEAD of docs/EPICS.md, and that was verified
+// against the CODE and the dated closeout reports, not the stale docs. The
+// authoritative current-state source is the monorepo's docs/NEXT-STEPS.md plus
+// docs/reports/* (Host V1 parity, Owner Experience P1-P9, Voice/TURN acceptance
+// #6, security hardening, ADR-0027 tactical S1-S7, Authenticode integration).
+// Do NOT "correct" this file down to match the older EPICS.md/VERSIONS.md/
+// CHANGELOG — fix those instead.
+//
+// Reconciled 2026-08-30 to reflect what actually shipped over the August work:
+//   Networking is COMPLETE; Communities/Servers/Roles is IN PROGRESS (server-wide
+//   roles + first-class channels landed; friends/DMs still to come); Voice is
+//   COMPLETE incl. self-hosted TURN proven end-to-end in real CI; Tactical
+//   Operations and the Server Host owner app are COMPLETE; Release & Distribution
+//   is IN PROGRESS (CI installers + signed component supply chain shipped;
+//   Authenticode signing integrated, owner Azure provisioning pending).
 
 export type EpicStatus = "completed" | "in-progress" | "planned";
 
@@ -63,71 +67,94 @@ export const epics: Epic[] = [
       "Full-text search (SQLite FTS5) with channel and attachment filters",
       "Unread counts, previews, day separators, relative timestamps",
     ],
-    future: "Now syncing over the network in Epic 3.",
+    future: "Now synced over the network in Epic 3.",
   },
   {
     n: "Epic 3",
     title: "Networking",
-    status: "in-progress",
+    status: "completed",
     description:
-      "Making messaging real-time over a self-hostable server: a WebSocket hub, live sync, and resilience on flaky connections.",
+      "Messaging made real-time over a self-hostable server: a WebSocket hub, live sync, and resilience on flaky connections.",
     highlights: [
-      "WebSocket hub transport + RPC",
+      "WebSocket hub transport + RPC, Argon2 auth, presence",
       "Server-backed read state with live cross-device sync",
-      "User display-name resolution over the wire",
       "Offline outbox: queues while disconnected, drains on reconnect",
-      "Self-hostable server (Rust / axum) with backup, export & import",
+      "Self-hostable Rust server with schema migrations, backup, export & import",
+      "Network posture: invite-gated registration, per-IP auth rate limits",
     ],
-    future: "Built on the protocol contracts already generated in Epic 0.",
+    future: "Hardened to the beta bar by the 2026-08 security pass (attachment-path fix, RPC rate limiting, supply-chain gate).",
   },
   {
     n: "Epic 4",
-    title: "Communities & Servers",
-    status: "planned",
+    title: "Communities, Servers & Roles",
+    status: "in-progress",
     description:
-      "Friends, servers, and shared channels over the network, with membership and roles.",
-    highlights: ["Friends & presence", "Servers & membership", "Roles & permissions"],
+      "Persistent self-hosted communities with a real permission model: server-wide roles, first-class channels, and owner-managed membership.",
+    highlights: [
+      "Server-wide roles: named, colored, ordered, with capability tokens (forward-extensible; unknown tokens round-trip)",
+      "Multiple roles per member; a protected Owner that always keeps administrator",
+      "First-class channels + categories — text, voice, and tactical kinds",
+      "Member administration + role assignment, capability-gated in the client",
+      "Invite-gated membership; the server is the single authority (client never trusted)",
+    ],
+    future: "Friends, direct messages, and cross-server presence are next.",
   },
   {
     n: "Epic 5",
     title: "Voice & Screen Sharing",
     status: "completed",
     description:
-      "Real-time voice and screen sharing over an SFU (LiveKit), with a clean two-plane split between control and media — delivered across five phases, hardening included.",
+      "Real-time voice and screen sharing over a self-hosted SFU (LiveKit), with a clean two-plane split between control and media — and NAT traversal that actually works, proven end to end.",
     highlights: [
-      "Control plane: call roster with join / leave / mute / screen-share state broadcast live",
-      "Room-scoped access tokens and TURN credentials issued server-side",
-      "Audio media: microphone publish, remote audio, active-speaker ring, deafen",
-      "Input and output device pickers, with autoplay unblocking handled",
-      "Screen sharing: publish, subscribe, and a multi-tile viewer",
-      "Hardening: connection state, classified errors with retry, per-participant quality dots",
+      "Control plane: live call roster with join / leave / mute / deafen / screen-share state",
+      "Audio media, active-speaker ring, input/output device pickers, autoplay unblocking",
+      "Screen sharing: publish, subscribe, multi-tile viewer",
+      "Self-hosted TURN (LynxDock-built coturn) with room-scoped, time-limited credentials",
+      "Real RFC 5766 relay allocation proven in CI; unauthenticated allocation denied (no open relay)",
     ],
-    future: "File transfer over the same media plane is next (Version 2.3).",
+    future: "File transfer over the same media plane is planned.",
   },
   {
     n: "Epic 6",
-    title: "AI & Automation",
-    status: "planned",
+    title: "Tactical Operations",
+    status: "completed",
     description:
-      "Agents and tools wired into the workspace, built on the @lynxdock/ai tool contracts.",
-    highlights: ["Tool contracts", "Workspace-aware agents"],
+      "Squadron Control — a live tactical operations board in the same app as your comms. A shared operating picture that stays consistent across every connected member.",
+    highlights: [
+      "Command tree, wings, unit nodes, zones, routes with waypoints, objectives, orders, alerts",
+      "Owned layered sketches, tactical graphics, on-board measurements, and temporary marks",
+      "Per-viewer visibility with label/color editing; working → Mission promotion",
+      "Commander archive/fade with a replay-visible record; Mission Log + after-action review",
+      "Real-time convergence across clients, verified end to end (ADR-0027, closed at Sprint 7)",
+    ],
   },
   {
     n: "Epic 7",
-    title: "Plugins",
-    status: "planned",
+    title: "Server Host",
+    status: "completed",
     description:
-      "Third-party extensibility via the @lynxdock/plugins SDK — a capability model and plugin host.",
-    highlights: ["Plugin SDK & manifest", "Capability model"],
-    future: "The point at which the packages begin publishing to a registry.",
+      "A dedicated owner application that makes self-hosting approachable — create and run a real LynxDock server without config files or the terminal.",
+    highlights: [
+      "Overview command center: health verdict, readiness score, one-click fixes",
+      "Members, roles, channels, and a server profile (icon, banner, rules, landing channel, join preview)",
+      "Invites, online backups & recovery points, connectivity, and diagnostics",
+      "Make Reachable with round-trip proof; honest network posture (double-NAT / CGNAT / manual)",
+      "Voice/TURN control with verified component acquisition; live health, lifecycle, and recovery",
+    ],
+    future: "V1 Server Host parity reached; owner UI/UX acceptance passed (2026-08).",
   },
   {
     n: "Epic 8",
-    title: "Studio",
-    status: "planned",
+    title: "Release & Distribution",
+    status: "in-progress",
     description:
-      "The engineering environment, including GSpec Studio, matured into a real tool for building on the platform.",
-    highlights: ["GSpec Studio", "In-browser spec validation"],
+      "Getting trustworthy builds onto machines: CI installers, a verified component supply chain, and Windows code signing.",
+    highlights: [
+      "CI-built Windows installers (MSI + NSIS) for the desktop app and the Server Host",
+      "ed25519-signed component manifest + verify-before-execute; public component origin",
+      "Windows Authenticode via Azure Artifact Signing wired into CI (fail-closed, gated)",
+    ],
+    future: "Owner Azure provisioning enables the first signed release; an auto-updater follows.",
   },
   {
     n: "Epic 9",
@@ -139,12 +166,35 @@ export const epics: Epic[] = [
       "System status contract with a worst-wins health roll-up, generated to a single artifact",
       "Mission Control hub: modules, metrics and entities aggregated into one state",
       "Live server feed over the WebSocket hub — connections, active voice rooms, host CPU/RAM",
-      "Commander reporting: squadrons and operations, created from the desktop app",
       "Event bus and timeline: retained event history replayed into a live activity log",
-      "Studio session observer: development sessions reported into the same hub",
     ],
     future:
       "Dashboards, an integration layer, and AI Workforce views are designed and next.",
+  },
+  {
+    n: "Epic 10",
+    title: "AI & Automation",
+    status: "planned",
+    description:
+      "Agents and tools wired into the workspace, built on the @lynxdock/ai tool contracts.",
+    highlights: ["Tool contracts", "Workspace-aware agents"],
+  },
+  {
+    n: "Epic 11",
+    title: "Plugins",
+    status: "planned",
+    description:
+      "Third-party extensibility via the @lynxdock/plugins SDK — a capability model and plugin host.",
+    highlights: ["Plugin SDK & manifest", "Capability model"],
+    future: "The point at which the packages begin publishing to a registry.",
+  },
+  {
+    n: "Epic 12",
+    title: "Studio",
+    status: "planned",
+    description:
+      "The engineering environment, including GSpec Studio, matured into a real tool for building on the platform.",
+    highlights: ["GSpec Studio", "In-browser spec validation"],
   },
 ];
 

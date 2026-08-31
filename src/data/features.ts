@@ -55,8 +55,14 @@ export const lynxdockFeatures: Feature[] = [
   {
     title: "Voice & screen share",
     description:
-      "Real-time audio and screen sharing over an SFU media plane, with device selection and deafen. Talk and show, not just type.",
+      "Real-time audio and screen sharing over a self-hosted SFU media plane, with device selection and deafen. NAT traversal is handled for you by a self-hosted TURN relay — no LiveKit or coturn setup required.",
     icon: "bolt",
+  },
+  {
+    title: "Roles & channels",
+    description:
+      "Server-wide roles with capability tokens, custom colors and ordering, and multiple roles per member (with a protected Owner). First-class text, voice, and tactical channels grouped into categories.",
+    icon: "users",
   },
   {
     title: "Works offline",

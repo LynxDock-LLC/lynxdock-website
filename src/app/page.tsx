@@ -25,11 +25,12 @@ const stack = ["Rust core", "Tauri desktop", "Local-first", "Self-hostable", "Pr
 const desktopFeatures: Feature[] = [
   { title: "Squadron Control", description: "A live tactical board: units, wings, routes with waypoints, zones, objectives, orders, alerts, replay, and undo — synced to every client.", icon: "layers" },
   { title: "Messaging", description: "Server-synced channels with replies, reactions, rich formatting, search, and an offline outbox that delivers exactly once on reconnect.", icon: "message" },
-  { title: "Voice", description: "Voice rooms with mute/deafen, device selection, and screen sharing — presence-aware throughout.", icon: "users" },
+  { title: "Voice", description: "Voice rooms with mute/deafen, device selection, and screen sharing over a self-hosted media plane — with NAT traversal handled for you, no LiveKit or TURN setup required.", icon: "users" },
+  { title: "Roles & channels", description: "Server-wide roles with capability tokens, custom colors and ordering, multiple roles per member, and first-class text/voice/tactical channels grouped into categories.", icon: "shield" },
   { title: "Settings", description: "A 20-category, searchable settings system — server-persisted per account, privacy-first defaults, Basic and Advanced modes.", icon: "cog" },
   { title: "Genesis UI", description: "LynxDock's own component framework: design tokens, a theme engine, and a Tailwind preset.", icon: "palette" },
   { title: "Rust core", description: "A protocol-first Rust server and Tauri desktop shell; TypeScript types are generated from the Rust protocol so client and server can't drift.", icon: "server" },
-  { title: "Server Host", description: "A guided setup wizard, dashboard, admin controls, and readable live logs — self-hosting without config files.", icon: "code" },
+  { title: "Server Host", description: "A dedicated owner console: guided setup, an Overview command center, members, roles, channels, invites, backups, connectivity, and diagnostics — self-hosting without config files.", icon: "code" },
   { title: "Tested seriously", description: "Reconnect, offline replay, multi-client convergence, undo, and permissions covered by automated tests and live multi-account verification.", icon: "sparkles" },
   { title: "Studio", description: "GSpec Studio validates a specification entirely in the browser using the shared core.", icon: "cpu" },
 ];
@@ -190,8 +191,10 @@ export default function Home() {
             One process. One file. Your hardware.
           </h3>
           <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-            A calm first-run wizard creates your server without config files or terminal commands. Dashboard, admin
-            controls, readable live logs, and plain-language connection help — for local testing, LAN parties, or
+            The Server Host is a dedicated owner console. A calm first-run wizard creates your server without config
+            files or terminal commands, then an Overview command center gives you a health verdict, a readiness score,
+            and one-click fixes. Manage members, roles, channels, invites, backups, and voice; check reachability with
+            a real round-trip proof; and read plain-language connection help — for local testing, LAN parties, or
             friends over the internet.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -284,7 +287,7 @@ export default function Home() {
           <SectionHeader
             eyebrow="The roadmap"
             title="From foundation to a full platform"
-            description="LynxDock is built in the open, tracked as epics. Foundation and identity are done; messaging is in progress; the rest is planned."
+            description="LynxDock is built in the open, tracked as epics. Foundation, messaging, networking, voice, tactical operations, and the Server Host are done; communities and roles are landing; release distribution is in progress."
           />
           <EpicRoadmap epics={epics} />
         </div>

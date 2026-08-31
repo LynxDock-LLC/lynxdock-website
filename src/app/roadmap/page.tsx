@@ -9,12 +9,13 @@ import { epics } from "@/data/epics";
 export const metadata: Metadata = {
   title: "Roadmap",
   description:
-    "The epic-level roadmap for LynxDock: Foundation and Workspace & Identity are complete, Messaging is in progress, and Networking, Communities, Voice, AI, Plugins, and Studio are planned.",
+    "The epic-level roadmap for LynxDock: foundation, messaging, networking, voice, tactical operations, and the Server Host are complete; communities/roles and release distribution are in progress; AI, plugins, and Studio are planned.",
 };
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";
 
 const done = epics.filter((e) => e.status === "completed").length;
+const active = epics.filter((e) => e.status === "in-progress").length;
 
 export default function RoadmapPage() {
   return (
@@ -31,7 +32,7 @@ export default function RoadmapPage() {
             {done} of {epics.length} epics complete
           </span>
           <span className="rounded-full border border-signal-blue/40 bg-signal-blue/10 px-3 py-1 text-xs font-medium text-[#93c5fd]">
-            Epic 2 · Messaging in progress
+            {active} in progress
           </span>
         </div>
 
