@@ -1,0 +1,322 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import PageHeader from "@/components/PageHeader";
+import GlassPanel from "@/components/GlassPanel";
+import GlowButton from "@/components/GlowButton";
+import {
+  betaDownloads,
+  betaDesktopArtifacts,
+  betaHostArtifacts,
+  betaHasDownloads,
+  type BetaArtifact,
+} from "@/data/betaDownloads";
+
+// UNLISTED trusted-tester page. noindex/nofollow keeps it out of search; it is
+// intentionally absent from src/app/sitemap.ts and from the primary navigation.
+// This is an unlisted URL the owner shares by hand — not an access-controlled page.
+export const metadata: Metadata = {
+  title: "Private Beta",
+  description:
+    "LynxDock private beta — a trusted-tester build shared directly by the LynxDock owner.",
+  robots: { index: false, follow: false },
+};
+
+const support = "admin@lynxdock.app";
+const github = "https://github.com/LynxDock-LLC";
+
+const statusRows: { label: string; value: string; tone?: "ok" | "pending" }[] = [
+  { label: "Build", value: betaDownloads.version, tone: "ok" },
+  { label: "Channel", value: betaDownloads.channelLabel, tone: "ok" },
+  { label: "Platform", value: betaDownloads.platformLabel, tone: "ok" },
+  { label: "Code signing (Authenticode)", value: "Pending", tone: "pending" },
+  { label: "Public beta", value: "Not yet open", tone: "pending" },
+];
+
+const checklist: { title: string; text: string }[] = [
+  { title: "Install", text: "Run the installer and let it finish (WebView2 is fetched automatically the first time)." },
+  { title: "Launch", text: "Open LynxDock. You should reach the connect bar at the top." },
+  { title: "Connect / join", text: "Enter the server address the owner gave you, then register a username + password for that server." },
+  { title: "Messaging", text: "Post in a text channel; try categories and channel switching." },
+  { title: "Voice", text: "Join a voice channel, allow the mic, pick devices, try mute / deafen." },
+  { title: "Tactical", text: "Open Tactical (Squadron Control) and view the live operations board." },
+  { title: "Restart / reconnect", text: "Close and reopen the app; confirm it reconnects and your state is intact." },
+  { title: "Host (only if self-hosting)", text: "Install LynxDock Host and walk the Overview command center." },
+];
+
+const expectations: string[] = [
+  "This is early testing software — expect rough edges and bugs.",
+  "Please don't redistribute the build or post the private link publicly.",
+  "Your tester feedback may be used to improve LynxDock.",
+];
+
+function ArtifactButton({
+  artifact,
+  variant,
+}: {
+  artifact: BetaArtifact;
+  variant: "primary" | "secondary";
+}) {
+  if (artifact.available && artifact.url) {
+    return (
+      <GlowButton href={artifact.url} external variant={variant}>
+        {artifact.installerLabel}
+        {artifact.size ? ` · ${artifact.size}` : ""}
+      </GlowButton>
+    );
+  }
+  return (
+    <span
+      aria-disabled="true"
+      className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
+      title="This installer is being prepared."
+    >
+      {artifact.installerLabel} · being prepared
+    </span>
+  );
+}
+
+function DownloadCard({
+  eyebrow,
+  heading,
+  blurb,
+  artifacts,
+}: {
+  eyebrow: string;
+  heading: string;
+  blurb: string;
+  artifacts: BetaArtifact[];
+}) {
+  const primary = artifacts.find((a) => a.installerType === "nsis") ?? artifacts[0];
+  const secondary = artifacts.filter((a) => a !== primary);
+  return (
+    <GlassPanel className="flex h-full flex-col p-7">
+      <span className="hud-label text-signal-bright">{eyebrow}</span>
+      <h3 className="mt-3 text-xl font-semibold text-white">{heading}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">{blurb}</p>
+      <div className="mt-6 flex flex-col gap-3">
+        {primary && <ArtifactButton artifact={primary} variant="primary" />}
+        {secondary.map((a) => (
+          <ArtifactButton key={a.filename} artifact={a} variant="secondary" />
+        ))}
+      </div>
+    </GlassPanel>
+  );
+}
+
+export default function BetaPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Private beta · Trusted tester build"
+        title="LynxDock Private Beta"
+        description="You're receiving an early LynxDock build to help test installation, communication, Voice, Tactical Mode, and self-hosting before the wider beta. Thanks for helping shape it."
+      />
+
+      <section className="mx-auto max-w-5xl px-5 py-16">
+        {/* STATUS */}
+        <GlassPanel glow className="p-8 sm:p-10">
+          <span className="hud-label text-signal-bright">Build status</span>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {statusRows.map((r) => (
+              <div
+                key={r.label}
+                className="flex items-center justify-between gap-4 rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3"
+              >
+                <span className="text-sm text-[#9fb2ba]">{r.label}</span>
+                <span
+                  className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                    r.tone === "pending"
+                      ? "border-line bg-graphite-700/40 text-[#c9b58a]"
+                      : "border-signal-blue/50 bg-signal-blue/15 text-[#93c5fd]"
+                  }`}
+                >
+                  {r.value}
+                </span>
+              </div>
+            ))}
+          </div>
+          {!betaHasDownloads && (
+            <p className="mt-6 text-sm leading-relaxed text-[#9fb2ba]">
+              The installers for this round are being prepared. If the owner sent you here and the
+              buttons below aren&rsquo;t active yet, check back shortly or ask the owner for the
+              direct file.
+            </p>
+          )}
+        </GlassPanel>
+
+        {/* DOWNLOADS */}
+        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Download</h2>
+        <div className="grid gap-5 lg:grid-cols-2">
+          <DownloadCard
+            eyebrow="Most testers"
+            heading="LynxDock"
+            blurb="The normal LynxDock client — chat, voice, and the tactical board. This is what you use to join a server. Pick the .exe installer unless you specifically need the MSI."
+            artifacts={betaDesktopArtifacts}
+          />
+          <DownloadCard
+            eyebrow="Self-hosting only"
+            heading="LynxDock Host"
+            blurb="Only install Host if you're testing running your own LynxDock server. If you're just joining someone else's server, you don't need this."
+            artifacts={betaHostArtifacts}
+          />
+        </div>
+
+        {/* INSTALLATION NOTICE */}
+        <GlassPanel className="mt-8 border-signal-cyan/20 p-7">
+          <span className="hud-label text-signal-bright">Before you install</span>
+          <h3 className="mt-3 text-lg font-semibold text-white">This build is unsigned right now</h3>
+          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+            This trusted-tester build is currently unsigned while LynxDock&rsquo;s Microsoft
+            code-signing identity completes verification. Windows SmartScreen may therefore show an
+            &ldquo;unknown publisher&rdquo; or &ldquo;Windows protected your PC&rdquo; message on
+            first launch. That is expected for a pre-release build delivered directly by the owner.
+            When SmartScreen appears you can choose <span className="text-white">More info → Run anyway</span>.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-[#7f939b]">
+            Only run a build you received directly from the LynxDock owner. Installing doesn&rsquo;t
+            require administrator rights (it&rsquo;s a per-user install). Once the code-signing
+            certificate is in place, future builds will be signed and these warnings will go away.
+          </p>
+        </GlassPanel>
+
+        {/* TEST CHECKLIST */}
+        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">What to test</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {checklist.map((c, i) => (
+            <GlassPanel key={c.title} className="flex gap-4 p-5">
+              <span
+                aria-hidden
+                className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-signal-cyan/30 bg-signal-cyan/10 text-xs font-semibold text-signal-bright"
+              >
+                {i + 1}
+              </span>
+              <div>
+                <h3 className="text-sm font-semibold text-white">{c.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-[#9fb2ba]">{c.text}</p>
+              </div>
+            </GlassPanel>
+          ))}
+        </div>
+
+        {/* REPORT A PROBLEM */}
+        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Report a problem</h2>
+        <GlassPanel className="p-7">
+          <p className="text-sm leading-relaxed text-[#9fb2ba]">
+            In the app, open <span className="text-white">Settings → About → Report a problem</span>,
+            then click <span className="text-white">Copy version &amp; system info</span> and paste it
+            into your report. Send it to{" "}
+            <a href={`mailto:${support}`} className="text-signal-bright hover:underline">
+              {support}
+            </a>{" "}
+            or open an issue on{" "}
+            <a href={github} target="_blank" rel="noopener noreferrer" className="text-signal-bright hover:underline">
+              GitHub
+            </a>
+            .
+          </p>
+          <p className="mt-4 text-sm text-[#9fb2ba]">A useful report includes:</p>
+          <ul className="mt-2 grid gap-1.5 text-sm text-[#9fb2ba] sm:grid-cols-2">
+            {[
+              "What you were doing",
+              "What you expected",
+              "What actually happened",
+              "Steps to reproduce",
+              "The copied version / system info",
+              "A screenshot, if useful",
+            ].map((x) => (
+              <li key={x} className="flex items-start gap-2">
+                <span aria-hidden className="mt-2 inline-block h-1.5 w-1.5 flex-none rounded-full bg-signal-cyan" />
+                {x}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs text-[#7f939b]">
+            We never ask for your password. Host operators can attach a support bundle (Advanced
+            page) — it&rsquo;s scrubbed of invite codes, voice secrets, and session tokens before it
+            leaves your machine.
+          </p>
+        </GlassPanel>
+
+        {/* EXPECTATIONS */}
+        <GlassPanel className="mt-8 p-7">
+          <span className="hud-label">What to expect</span>
+          <ul className="mt-4 flex flex-col gap-2 text-sm leading-relaxed text-[#9fb2ba]">
+            {expectations.map((x) => (
+              <li key={x} className="flex items-start gap-2">
+                <span aria-hidden className="mt-2 inline-block h-1.5 w-1.5 flex-none rounded-full bg-signal-cyan" />
+                {x}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs text-[#7f939b]">
+            See our{" "}
+            <Link href="/privacy/" className="text-signal-bright hover:underline">
+              Privacy
+            </Link>{" "}
+            and{" "}
+            <Link href="/terms/" className="text-signal-bright hover:underline">
+              Terms
+            </Link>{" "}
+            for the full policy.
+          </p>
+        </GlassPanel>
+
+        {/* INTEGRITY (details) */}
+        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Integrity &amp; provenance</h2>
+        <GlassPanel as="details" className="group p-0">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-[15px] font-medium text-white [&::-webkit-details-marker]:hidden marker:content-['']">
+            File names, sizes, and SHA-256 checksums
+            <span aria-hidden className="text-signal-bright transition-transform group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <div className="px-6 pb-6">
+            <p className="mb-4 text-sm leading-relaxed text-[#9fb2ba]">
+              Every published installer is hashed by the beta pipeline after it&rsquo;s built and
+              verified against the exact bytes served from the download origin. To check a download on
+              Windows:{" "}
+              <code className="rounded bg-graphite-800/60 px-1.5 py-0.5 text-xs text-[#dbe6ea]">
+                Get-FileHash .\FILE -Algorithm SHA256
+              </code>
+              .
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[560px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-line/70 text-[#7f939b]">
+                    <th scope="col" className="px-3 py-2 font-medium">File</th>
+                    <th scope="col" className="px-3 py-2 font-medium">Size</th>
+                    <th scope="col" className="px-3 py-2 font-medium">Signed</th>
+                    <th scope="col" className="px-3 py-2 font-medium">SHA-256</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {betaDownloads.artifacts.map((a) => (
+                    <tr key={a.filename} className="border-b border-line/40 align-top last:border-b-0">
+                      <th scope="row" className="px-3 py-2 font-medium text-white">
+                        {a.filename}
+                      </th>
+                      <td className="px-3 py-2 text-[#9fb2ba]">{a.size || "—"}</td>
+                      <td className="px-3 py-2 text-[#9fb2ba]">{a.signed ? "Yes" : "No"}</td>
+                      <td className="px-3 py-2 font-mono text-xs text-[#7f939b] break-all">
+                        {a.sha256 || "pending"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4 text-xs text-[#7f939b]">
+              Build {betaDownloads.version} · channel {betaDownloads.channelLabel} · Authenticode{" "}
+              {betaDownloads.authenticode}
+              {betaDownloads.artifacts.find((a) => a.sourceCommit)
+                ? ` · source ${betaDownloads.artifacts.find((a) => a.sourceCommit)?.sourceCommit}`
+                : ""}
+              .
+            </p>
+          </div>
+        </GlassPanel>
+      </section>
+    </>
+  );
+}
