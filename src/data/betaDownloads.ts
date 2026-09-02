@@ -22,9 +22,13 @@
 // than a broken link. NEVER hand-edit a sha256 or a url to a value you have not
 // verified against the actual uploaded bytes.
 //
-// WHEN AUTHENTICODE LANDS: the pipeline sets `authenticode: "signed"` and each
-// artifact's `signed: true` with the signed builds' new hashes. No redesign.
+// AUTHENTICODE (manifest-driven, 2026-09-02): the pipeline's `source=signed-run` sets
+// `authenticode: "signed"` and each artifact's `signed: true` with the signed bytes' hashes.
+// The /beta page derives ALL signed/unsigned copy from that via `betaSigning` below — it
+// never claims "signed" unless the manifest header says so AND every available artifact is
+// signed (see src/data/betaSigning.mjs + its node tests).
 import rawJson from "../../public/beta-manifest.json";
+import { deriveAuthenticodeStatus, SIGNING_PUBLISHER } from "./betaSigning.mjs";
 
 export type BetaChannel = "trusted-tester";
 export type BetaProduct = "desktop" | "host";
@@ -49,7 +53,7 @@ export type BetaArtifact = {
   sha256: string;
   /** Exact public object URL on the beta origin. Filled by the pipeline. */
   url: string;
-  /** Authenticode state of THIS artifact. Unsigned for now. */
+  /** Authenticode state of THIS artifact (true only for bytes relayed from a signed run). */
   signed: boolean;
   /** ISO-8601 publish time. Filled by the pipeline. */
   publishedAt: string;
@@ -62,7 +66,7 @@ export type BetaDownloads = {
   channelLabel: string;
   version: string;
   platformLabel: string;
-  /** "pending" until the Microsoft code-signing identity is approved + signing runs. */
+  /** "signed" only when the pipeline relayed Authenticode-verified bytes; otherwise "pending". */
   authenticode: "pending" | "signed";
   /** MUST stay false — the public beta is not open. */
   publicBetaOpen: boolean;
@@ -84,5 +88,18 @@ export const betaHostArtifacts = betaDownloads.artifacts.filter(
 export const betaHasDownloads = betaDownloads.artifacts.some(
   (a) => a.available && a.url !== "" && a.sha256 !== "",
 );
+
+/**
+ * Authenticode presentation derived from MANIFEST TRUTH (never hard-coded). `signed` is true
+ * only when `authenticode === "signed"` AND every available artifact has `signed: true`.
+ */
+export const betaAuthenticode = deriveAuthenticodeStatus(betaDownloads) as {
+  signed: boolean;
+  statusValue: string;
+  statusTone: "ok" | "pending";
+  noticeHeading: string;
+  tableAuthenticode: string;
+};
+export const betaSigningPublisher: string = SIGNING_PUBLISHER;
 
 export default betaDownloads;
