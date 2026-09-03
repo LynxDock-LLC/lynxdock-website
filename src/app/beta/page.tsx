@@ -8,6 +8,8 @@ import {
   betaDesktopArtifacts,
   betaHostArtifacts,
   betaHasDownloads,
+  betaAuthenticode,
+  betaSigningPublisher,
   type BetaArtifact,
 } from "@/data/betaDownloads";
 
@@ -28,8 +30,9 @@ const statusRows: { label: string; value: string; tone?: "ok" | "pending" }[] = 
   { label: "Build", value: betaDownloads.version, tone: "ok" },
   { label: "Channel", value: betaDownloads.channelLabel, tone: "ok" },
   { label: "Platform", value: betaDownloads.platformLabel, tone: "ok" },
-  { label: "Code signing (Authenticode)", value: "Pending", tone: "pending" },
-  { label: "Public beta", value: "Not yet open", tone: "pending" },
+  // Driven by public/beta-manifest.json (see betaSigning.mjs) — never hard-coded.
+  { label: "Code signing (Authenticode)", value: betaAuthenticode.statusValue, tone: betaAuthenticode.statusTone },
+  { label: "Public beta", value: betaDownloads.publicBetaOpen ? "Open" : "Not yet open", tone: "pending" },
 ];
 
 const checklist: { title: string; text: string }[] = [
@@ -161,22 +164,46 @@ export default function BetaPage() {
           />
         </div>
 
-        {/* INSTALLATION NOTICE */}
+        {/* INSTALLATION NOTICE — copy is chosen from manifest truth (betaAuthenticode), never hard-coded. */}
         <GlassPanel className="mt-8 border-signal-cyan/20 p-7">
           <span className="hud-label text-signal-bright">Before you install</span>
-          <h3 className="mt-3 text-lg font-semibold text-white">This build is unsigned right now</h3>
-          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
-            This trusted-tester build is currently unsigned while LynxDock&rsquo;s Microsoft
-            code-signing identity completes verification. Windows SmartScreen may therefore show an
-            &ldquo;unknown publisher&rdquo; or &ldquo;Windows protected your PC&rdquo; message on
-            first launch. That is expected for a pre-release build delivered directly by the owner.
-            When SmartScreen appears you can choose <span className="text-white">More info → Run anyway</span>.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-[#7f939b]">
-            Only run a build you received directly from the LynxDock owner. Installing doesn&rsquo;t
-            require administrator rights (it&rsquo;s a per-user install). Once the code-signing
-            certificate is in place, future builds will be signed and these warnings will go away.
-          </p>
+          <h3 className="mt-3 text-lg font-semibold text-white">{betaAuthenticode.noticeHeading}</h3>
+          {betaAuthenticode.signed ? (
+            <>
+              <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+                These installers carry a Microsoft-issued Authenticode signature from{" "}
+                <span className="text-white">{betaSigningPublisher}</span> with a trusted
+                timestamp. When Windows asks for permission, the publisher line should read{" "}
+                <span className="text-white">{betaSigningPublisher}</span> — if it says
+                &ldquo;Unknown publisher&rdquo;, stop and contact the owner, because that is not our
+                build. To check yourself: right-click the file → Properties → Digital Signatures.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-[#7f939b]">
+                SmartScreen may still show a &ldquo;Windows protected your PC&rdquo; reputation
+                notice on the very first launches of a newly signed app; that is reputation, not a
+                signature problem — confirm the publisher name, then choose{" "}
+                <span className="text-white">More info → Run anyway</span>. Only run a build you
+                received directly from the LynxDock owner. Installing doesn&rsquo;t require
+                administrator rights (it&rsquo;s a per-user install).
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+                This trusted-tester build is currently unsigned. Windows SmartScreen may therefore
+                show an &ldquo;unknown publisher&rdquo; or &ldquo;Windows protected your PC&rdquo;
+                message on first launch. That is expected for a pre-release build delivered directly
+                by the owner. When SmartScreen appears you can choose{" "}
+                <span className="text-white">More info → Run anyway</span>.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-[#7f939b]">
+                Only run a build you received directly from the LynxDock owner. Installing doesn&rsquo;t
+                require administrator rights (it&rsquo;s a per-user install). Signed builds are
+                published through the same page; when this build is replaced by a signed one, this
+                notice changes automatically.
+              </p>
+            </>
+          )}
         </GlassPanel>
 
         {/* TEST CHECKLIST */}
@@ -308,7 +335,8 @@ export default function BetaPage() {
             </div>
             <p className="mt-4 text-xs text-[#7f939b]">
               Build {betaDownloads.version} · channel {betaDownloads.channelLabel} · Authenticode{" "}
-              {betaDownloads.authenticode}
+              {betaAuthenticode.tableAuthenticode}
+              {betaAuthenticode.signed ? ` (${betaSigningPublisher})` : ""}
               {betaDownloads.artifacts.find((a) => a.sourceCommit)
                 ? ` · source ${betaDownloads.artifacts.find((a) => a.sourceCommit)?.sourceCommit}`
                 : ""}
