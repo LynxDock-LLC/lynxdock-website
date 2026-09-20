@@ -1,6 +1,8 @@
 // V5 closed-beta gallery — authentic application captures (PrintWindow of the app's own windows, no
 // desktop, no compositing tricks) taken from the qualified build 0.1.0+5a53bff running against an
-// ISOLATED demo server on 2026-09-20. Everything on screen is staged demonstration data: the
+// ISOLATED demo server on 2026-09-20. The tactical, roster, requests and debrief shots come from the
+// staged run documented step by step in /guides/operations/ (lossless WebP of the 1920×1080 originals,
+// which live under /screenshots/v5/guide/full/). Everything on screen is staged demonstration data: the
 // organisation ("Vega Reach Consortium"), its 32 members, messages, positions and statuses are
 // fictional and were seeded through the product's own RPCs. Nothing is live game telemetry. The
 // Verse Catalog contents come from the Star Citizen Wiki API (CC BY-SA 4.0) via the built-in provider.
@@ -20,41 +22,50 @@ export const v5GalleryNote =
 
 export const v5Gallery: GalleryShot[] = [
   {
-    src: "/screenshots/v5/tactical-board.png",
-    alt: "Squadron Control tactical board showing a staged convoy-escort operation: seven wings of hand-placed units, rally, staging, area-of-operations, danger, extraction and casualty zones, five routes, live alerts and the objective summary",
+    src: "/screenshots/v5/guide/51-live-board-en-route.webp",
+    alt: "Squadron Control tactical board, live in the En route phase: the convoy of five haulers inside the WP2 objective area with a six-fighter escort screen in two rows, scouts ahead near Port Tressler, medical at the casualty LZ, recovery at the debris field, logistics at the staging harbour, colour-coded routes that do not cross, and the objectives panel open",
     title: "The whole operation on one board",
     caption:
-      "Operation Halcyon Convoy, staged on the demo server: 32 units across seven wings (command, escort, transport, scouts, medical, recovery, logistics), six zones, five colour-coded routes with waypoint progress, two live alerts and the objective rollup (25/32 ready · 1 down · 2/7 objectives complete). Positions are placed by hand — LynxDock does not read the game.",
-    width: 1600,
-    height: 900,
+      "Operation Halcyon Convoy live, staged on the demo server: staging → transit → objective → extraction laid out left to right, recovery and the casualty LZ below, one colour per wing, five routes with waypoint progress and the summary card (28/32 ready · 1/6 objectives complete · 8 wings). Positions are placed by hand — LynxDock does not read the game.",
+    width: 1920,
+    height: 1080,
     wide: true,
   },
   {
-    src: "/screenshots/v5/tactical-orders.png",
-    alt: "The same tactical board with the Orders panel open, listing three issued orders beside the live picture",
-    title: "Orders beside the picture they describe",
+    src: "/screenshots/v5/guide/61-hold-recovery-zoom.webp",
+    alt: "The board zoomed on the recovery area with the Orders panel open: a warning alert about a debris strike, the disabled hauler in the debris field beside the recovery ship, and the issued hold order",
+    title: "Alerts and orders beside the picture they describe",
     caption:
-      "Orders are issued from the board and land next to the units they concern — here the convoy hold, the escort screen and the casualty pickup — each with its receipt state.",
-    width: 1600,
-    height: 900,
+      "A debris strike at WP2: the alert card, CARAVAN-2 down in the debris field with SALVOR-1 alongside, Mercy at the LZ, and the hold order in the Orders panel — zoomed with the mouse wheel, as any member would.",
+    width: 1920,
+    height: 1080,
   },
   {
-    src: "/screenshots/v5/tactical-routes.png",
-    alt: "The tactical board with the Routes panel open, showing five routes with kind, status and waypoint progress",
+    src: "/screenshots/v5/guide/52-live-routes-panel.webp",
+    alt: "The live tactical board with the Routes panel open: Caravan moving 2/5, Talon moving 2/4, LYNX-1 moving 1/3, SALVOR-1 holding 0/4, MERCY-1 holding 0/4",
     title: "Routes with waypoint progress",
     caption:
-      "Supply, escort, recon, search and medical routes, each assigned to a unit or a whole wing, with named waypoints and a per-route progress counter.",
-    width: 1600,
-    height: 900,
+      "Supply, escort, recon, search and medical routes, each assigned to a unit or a whole wing, with named waypoints, a status and a per-route progress counter; the contingency routes hold until they are needed.",
+    width: 1920,
+    height: 1080,
   },
   {
-    src: "/screenshots/v5/operations-roster.png",
-    alt: "The Operations page for the live operation: my participation panel (RSVP, check-in, unit, operational state, ship, fuel/ammo/hull) and the roster grouped by wing with status badges",
+    src: "/screenshots/v5/guide/42-staging-roster.webp",
+    alt: "The Operations page while staging: the operation banner, My participation with check-in, operational state, location and fuel/ammo/hull, and the roster grouped by wing with everyone checked in and Operational",
     title: "Operations — participation and readiness",
     caption:
-      "Each member's RSVP, check-in, unit, crew station, ship and resource state, and the roster grouped by wing with per-member operational status — the source the board, the dock and the overlay all read from.",
-    width: 1600,
-    height: 900,
+      "Each member's check-in, unit, crew station, ship and resource state, reported from their own client, and the roster grouped by wing with per-member operational status — the source the board, the dock and the overlay all read from.",
+    width: 1920,
+    height: 1080,
+  },
+  {
+    src: "/screenshots/v5/guide/74-incident-support-requests.webp",
+    alt: "The Requests tab: quick-request buttons (Medical, Repair, Rearm, Refuel, Resupply, Recovery, Escort, Under attack, Attacking, Intel) and two support requests — a critical recovery in progress and a high-priority refuel that is open with a Take button",
+    title: "Support requests",
+    caption:
+      "A hauler at 14 % fuel raises a refuel request; the logistics operator sees it beside the recovery already in progress and takes it. The full incident, from request to the logistics ledger, is walked through in the guide.",
+    width: 1920,
+    height: 1080,
   },
   {
     src: "/screenshots/v5/my-dock.png",
@@ -82,6 +93,15 @@ export const v5Gallery: GalleryShot[] = [
       "Stock by location, requirements for the operation, a resupply request approved and reserved against a carrier, and a transfer in transit — with the audit trail of every adjustment.",
     width: 1600,
     height: 900,
+  },
+  {
+    src: "/screenshots/v5/guide/84-close-debrief.webp",
+    alt: "The Debrief tab of the completed operation: planned vs actual counts for confirmations, check-ins, orders, requests, assets and preflight, lifecycle chips with times, and the filterable timeline",
+    title: "Debrief, computed from what actually happened",
+    caption:
+      "After Complete: planned vs actual, the lifecycle with timestamps, and a timeline of every durable event — check-ins, orders and receipts, requests, logistics — filterable by stage, kind, person and unit, with notes, lessons and actions written underneath.",
+    width: 1920,
+    height: 1080,
   },
   {
     src: "/screenshots/v5/ops-channel.png",

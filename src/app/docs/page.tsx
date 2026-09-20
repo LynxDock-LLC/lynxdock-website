@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 const cards = [
   { href: "/docs/getting-started/", title: "Quickstart", text: "What the alpha desktop app does today and how to try it." },
+  { href: "/guides/operations/", title: "Plan, deploy & coordinate an operation", text: "The illustrated V5 guide: one convoy operation from draft to debrief, as commander and as member." },
   { href: "/docs/architecture/", title: "Architecture", text: "How the spec, infrastructure, and product monorepo fit together." },
   { href: "/docs/developers/", title: "Developers", text: "The monorepo, the packages, and how the Rust ↔ TypeScript bridge works." },
   { href: "/docs/self-hosting/", title: "Self-hosting", text: "Where self-hosting is headed (Epic 3+) and the philosophy behind it." },

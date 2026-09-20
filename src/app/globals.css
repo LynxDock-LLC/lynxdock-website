@@ -191,6 +191,39 @@
     color: #eef6f8;
     font-weight: 600;
   }
+
+  /* Illustrated guides: numbered steps with a HUD-style counter */
+  .doc-prose ol.guide-steps {
+    counter-reset: guide-step;
+    list-style: none;
+    margin-left: 0;
+    gap: 0.9rem;
+  }
+  .doc-prose ol.guide-steps > li {
+    position: relative;
+    padding-left: 2.6rem;
+    counter-increment: guide-step;
+  }
+  .doc-prose ol.guide-steps > li::before {
+    content: counter(guide-step);
+    position: absolute;
+    left: 0;
+    top: 0.15em;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(94, 242, 242, 0.3);
+    background: rgba(94, 242, 242, 0.08);
+    color: var(--ld-cyan-bright);
+    font-family: var(--ld-font-mono);
+    font-size: 0.72rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .doc-prose figure + figure {
+    margin-top: 1.5rem;
+  }
 }
 
 @layer utilities {

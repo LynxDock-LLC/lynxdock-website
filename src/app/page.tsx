@@ -226,6 +226,10 @@ export default function Home() {
           className="mb-10"
         />
         <V5Gallery />
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <GlowButton href="/guides/operations/" variant="primary">Read the guide: plan, deploy &amp; coordinate an operation</GlowButton>
+          <GlowButton href="/docs/" variant="ghost">Documentation</GlowButton>
+        </div>
       </Section>
 
       {/* DESKTOP APPLICATION */}
