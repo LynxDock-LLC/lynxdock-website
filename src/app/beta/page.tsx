@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import V5Gallery from "@/components/V5Gallery";
 import {
   betaDownloads,
   betaDesktopArtifacts,
@@ -222,6 +223,13 @@ export default function BetaPage() {
             taken right after the problem, plus the game&rsquo;s display mode and which monitor the game and the overlay were on.
           </p>
         </GlassPanel>
+
+        {/* WHAT YOU'LL SEE — authentic captures of this build on a staged demo server (src/data/v5Gallery.ts). */}
+        <h2 className="mb-2 mt-16 text-xl font-semibold text-white">What you&rsquo;ll see in this build</h2>
+        <p className="mb-6 text-sm leading-relaxed text-[#9fb2ba]">
+          Captured from build {closedBetaBuild.buildId} itself. Use these to recognise each surface in the checklist above.
+        </p>
+        <V5Gallery />
 
         {/* STATUS — the currently PUBLISHED trusted-tester installers (manifest-driven). */}
         <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Current published build</h2>

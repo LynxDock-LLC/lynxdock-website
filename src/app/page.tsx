@@ -8,6 +8,7 @@ import EpicRoadmap from "@/components/EpicRoadmap";
 import DesktopMockup from "@/components/DesktopMockup";
 import ArchitectureFlow from "@/components/ArchitectureFlow";
 import LatestUpdates from "@/components/LatestUpdates";
+import V5Gallery from "@/components/V5Gallery";
 import { epics } from "@/data/epics";
 import type { Feature } from "@/data/features";
 import { releases } from "@/data/releases";
@@ -213,6 +214,18 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </Section>
+
+      {/* V5 IN PRACTICE — authentic captures of the qualified closed-beta build on a staged demo server. */}
+      <Section id="v5-gallery" className="py-16 sm:py-24">
+        <SectionHeader
+          align="center"
+          eyebrow="V5 closed beta · in practice"
+          title="One staged operation, every V5 surface."
+          description="A convoy escort and recovery run on an isolated demo server: the tactical board, orders and routes, participation and readiness, the personal dock, missions, logistics, comms, the Verse Catalog and the in-game overlay — as the qualified build actually renders them."
+          className="mb-10"
+        />
+        <V5Gallery />
       </Section>
 
       {/* DESKTOP APPLICATION */}
