@@ -15,6 +15,7 @@ import {
 } from "@/data/betaDownloads";
 import {
   closedBetaBuild,
+  closedBetaServer,
   closedBetaHighlights,
   closedBetaResiduals,
   closedBetaChecklist,
@@ -172,6 +173,56 @@ export default function BetaPage() {
                 title="The package has been qualified but not published yet."
               >
                 Closed beta · download not yet published
+              </span>
+            )}
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">Joining as a tester</h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+            Extract the ZIP, verify the hash, run the executable, and in the connect bar enter the{" "}
+            <span className="text-white">server address</span> and <span className="text-white">invite code</span> the
+            owner gave you, then <span className="text-white">Register</span>. Everything in the client — operations,
+            the tactical board, requests, logistics, the Verse Catalog — comes from that server; you do not host anything
+            yourself. The step-by-step walkthrough of one operation is at{" "}
+            <Link href="/guides/operations/" className="text-signal-bright hover:underline">
+              Plan, deploy and coordinate an operation
+            </Link>
+            .
+          </p>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">For the person hosting the beta server</h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+            The client needs a server of the same generation. A matching server build is packaged beside the client
+            (<span className="text-white">{closedBetaServer.packageFilename}</span>) with{" "}
+            <span className="text-white">{closedBetaServer.setupNotes}</span>: how to start it, make the first account
+            the owner, and enable and import the Star Citizen Wiki catalog (Verse Catalog → Catalog administration →
+            Enable → Dry run → Sync now → Promote; about 17 minutes and 132 requests for 17,029 entities on patch
+            4.10.0-LIVE). The signed 0.1.0 Host installer below bundles a pre-V5 server and cannot host this build.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {[
+              ["Server build", closedBetaServer.buildId],
+              ["File", `${closedBetaServer.executable.filename} · ${closedBetaServer.executable.sizeBytes.toLocaleString("en-US")} bytes`],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-4 rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+                <span className="text-sm text-[#9fb2ba]">{k}</span>
+                <span className="text-right text-xs font-medium text-white">{v}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 break-all font-mono text-xs text-[#7f939b]">SHA-256 {closedBetaServer.executable.sha256}</p>
+          <div className="mt-4">
+            {closedBetaServer.published && closedBetaServer.downloadUrl ? (
+              <GlowButton href={closedBetaServer.downloadUrl} external variant="secondary">
+                Download the server package
+              </GlowButton>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
+                title="The server package has been built and verified locally but not published yet."
+              >
+                Server package · download not yet published
               </span>
             )}
           </div>

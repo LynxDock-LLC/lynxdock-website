@@ -52,6 +52,25 @@ export const closedBetaBuild: ClosedBetaBuild = {
   published: false,
 };
 
+/**
+ * The server build that goes with the client, for whoever hosts the beta. Same product source
+ * (5a53bff), release profile, network catalog provider compiled in. Identity only; no URL until
+ * the owner has uploaded the server package beside the client package and verified the served bytes.
+ */
+export const closedBetaServer = {
+  buildId: "0.1.0+5a53bff",
+  sourceCommit: "5a53bff",
+  executable: {
+    filename: "lynxdock-server.exe",
+    sizeBytes: 20_652_544,
+    sha256: "B54053D64279822D25AFEF3017517132A44A1745642AD10C7474B74097228766",
+  },
+  packageFilename: "LynxDock-Server_V5-closed-beta.1_x64.zip",
+  setupNotes: "SERVER-SETUP-AND-CATALOG.md",
+  downloadUrl: "",
+  published: false,
+};
+
 /** What is new in this build, in the order a tester meets it. */
 export const closedBetaHighlights: { title: string; text: string }[] = [
   {

@@ -157,8 +157,14 @@ export default function OperationsGuide() {
             <ul>
               <li>
                 <strong>A V5 server and the V5 desktop client.</strong> Operations, the Tactical board, Requests, Logistics
-                and the in-game overlay all live on the V5 build. Connect the client to the server from the Connect form
-                (server address, username, password) — the demo used <code>http://127.0.0.1:8797</code>.
+                and the in-game overlay all live on the V5 build. As a tester you connect the client to the server address
+                you were given from the Connect form (server address, username, password; <UI>Register</UI> the first
+                time, <UI>Connect</UI> afterwards) — the demo used <code>http://127.0.0.1:8797</code>. Whoever hosts
+                that server needs a server build of the same protocol generation: the closed-beta package ships it
+                (<code>lynxdock-server.exe</code>, protocol 1, with the network catalog provider compiled in) together
+                with <code>SERVER-SETUP-AND-CATALOG.md</code>, which walks through starting it, making the first account
+                the owner, and the exact catalog import below. The same steps are executable from the Host application
+                once it is on the V5 build.
               </li>
               <li>
                 <strong>Permissions.</strong> Creating an operation, publishing it, issuing orders and editing the board
@@ -410,7 +416,8 @@ export default function OperationsGuide() {
             <p>
               The plan is drawn on the <UI>Tactical</UI> board: units placed by hand, wings for colour and grouping, zones
               for the areas that matter, routes with waypoints, objectives per wing, and a written briefing. The board is
-              then linked to the operation so the roster, orders and phases stay in sync.
+              then linked to the operation — a pointer, not a synchronisation. Read <em>What the link does, and does not
+              do</em> below before relying on it.
             </p>
             <Steps>
               <Step who="Commander">
@@ -447,10 +454,13 @@ export default function OperationsGuide() {
                 lower-left shows units ready, objectives complete and wing count.
               </Step>
               <Step who="Commander">
-                Open the <UI>ROSTER</UI> panel and link the board to the operation. The panel then shows the operation
-                name with its status chip (<em>DRAFT</em>) and every unit grouped as on the Operations roster. Click{" "}
-                <UI>Save</UI> in the toolbar when the board reads the way you want it; <UI>Restore…</UI> lists earlier
-                revisions and <em>32 units · rev 7</em> in the corner is the board revision.
+                Open the <UI>ROSTER</UI> panel: it says <em>No operation is linked to this board. Link an operation to
+                see its roster, ships, comms and requests here.</em> Pick the operation in <UI>Choose an operation.</UI>{" "}
+                and click <UI>Link</UI> (this sets the operation&rsquo;s <em>Tactical board ID</em>; <UI>Unlink</UI>{" "}
+                clears it). The panel then shows the operation name with its status chip (<em>DRAFT</em>) and every
+                participant grouped by unit, read live from the operation. Click <UI>Save</UI> in the toolbar when the
+                board reads the way you want it; <UI>Restore…</UI> lists earlier revisions and <em>32 units · rev 7</em>{" "}
+                in the corner is the board revision.
               </Step>
             </Steps>
             <GuideFigure
@@ -486,6 +496,24 @@ export default function OperationsGuide() {
               height={1080}
             />
 
+            <h3>What the link does, and does not do</h3>
+            <p>
+              Checked against the server and client source for this build and against the run above. The link is the
+              operation&rsquo;s <em>Tactical board ID</em> field, nothing more. <strong>Automatic through the link:</strong>{" "}
+              the board&rsquo;s <UI>ROSTER</UI> panel reads the linked operation live — its status chip, participants
+              grouped by unit with their check-in and operational state, committed ships, comms nets, open support
+              requests and active missions; the operation page, My Dock and the Debrief tab get an <UI>Open Tactical</UI>{" "}
+              / <UI>Open Mission Log (Tactical)</UI> button; My Dock&rsquo;s primary action opens the board instead of
+              the roster when a board is linked. <strong>Everything else is separate and updated by hand:</strong> unit
+              cards, their wing assignment and their <em>ready / standby / down</em> status, positions, zones, routes
+              and waypoint progress, objectives, the board <em>PHASE</em>, board orders and alerts live on the board and
+              are changed only by leaders on the board — a member checking in, changing <em>Operational state</em> or
+              acknowledging an order on the operation page does not move or recolour a card, and going <em>Live</em> or
+              <em>Completing</em> the operation does not advance the board phase. The other way round, board orders and
+              alerts never appear on the operation&rsquo;s Orders tab, and completing every objective does not complete
+              the operation. The two records share nothing but the pointer; each is authoritative for its own kind of
+              fact.
+            </p>
             {/* 06 ------------------------------------------------------------------------------ */}
             <H2 id="brief" n={6}>
               Brief and deploy
@@ -703,13 +731,17 @@ export default function OperationsGuide() {
             <Steps>
               <Step who="Commander">
                 Advance the phase from the toolbar: the <UI>PHASE</UI> selector or the <UI>Advance ▸ Objective</UI>{" "}
-                button move <em>Briefing → Forming up → En route → Objective → Extraction → Debrief</em>. The summary card
-                follows (<em>EN ROUTE · 28/32 ready · 1/6 complete</em>).
+                button move <em>Briefing → Forming up → En route → Objective → Extraction → Debrief</em>. This is a
+                board-only value — going <em>Live</em> on the operation page does not set it. The summary card follows
+                (<em>EN ROUTE · 28/32 ready · 1/6 complete</em>); its <em>ready</em> count is the board units&rsquo; own
+                status, not the operation&rsquo;s check-ins.
               </Step>
               <Step who="Wing leader">
                 Open <UI>ROUTES</UI> to set each route&rsquo;s status and tick off waypoints as the wing reaches them:{" "}
                 <em>Caravan — transport · MOVING · 2/5</em>, <em>SALVOR-1 · HOLDING · 0/4</em>. Move your wing&rsquo;s
-                cards along the route as positions are reported on the net — the board never guesses.
+                cards along the route as positions are reported on the net, and set a card&rsquo;s status (<em>ready /
+                standby / down</em>) yourself when a member reports a change — the board never guesses, and a
+                member&rsquo;s <em>Operational state</em> on the operation page does not change their card.
               </Step>
               <Step who="Commander">
                 Mark objectives as they resolve in the <UI>OBJ</UI> panel (<em>Pending → Active → Complete</em>); the
@@ -1196,10 +1228,22 @@ export default function OperationsGuide() {
             <h3>Empty catalog</h3>
             <ul>
               <li>
-                <UI>Location from catalog</UI> on an objective, and catalog-backed ship definitions, need a provider
-                import. Without one the Verse Catalog page is empty and the coverage dashboard says so; objectives can
-                still be typed by hand. The import is run by the server owner through the server&rsquo;s admin tooling (the demo used the
-                built-in Star Citizen Wiki provider).
+                <UI>Location from catalog</UI> on an objective, and catalog-backed ship definitions, need a catalog
+                import on the server. Without one the Verse Catalog page is empty and the coverage dashboard says so;
+                objectives can still be typed by hand. The import is run by the server owner from the client: open{" "}
+                <UI>Verse Catalog</UI>, expand <UI>Catalog administration</UI> (<UI>Show</UI>; it appears only for an
+                account with the server-management capability), and under <UI>Providers</UI> click <UI>Enable</UI> on{" "}
+                <em>Star Citizen Wiki API</em> (the row shows its terms: CC BY-SA 4.0, attribution required). Enabling
+                fetches nothing by itself. Leave the patch field blank for the provider&rsquo;s default version, click{" "}
+                <UI>Dry run</UI> to fetch and validate without writing, then <UI>Sync now</UI>; the run appears under{" "}
+                <em>Sync runs</em> with its request and record counts and a <UI>Log</UI>. When it reads{" "}
+                <em>Succeeded</em> with a <em>candidate</em> snapshot, go to <em>Snapshots</em> and click <UI>Promote</UI>{" "}
+                — only then does the catalog change for members. <em>Coverage for &lt;patch&gt;</em> then lists every kind
+                as <em>covered</em> with its count. If the panel says <em>This server build has no network provider
+                adapters</em>, the server was built without the provider feature; the beta server build has it. On the
+                demo server this procedure (run through the same RPCs the panel uses) imported 17,029 entities for
+                patch 4.10.0-LIVE in 132 requests; the full accounting is in the coverage report that accompanies the
+                beta package notes.
               </li>
             </ul>
             <h3>Unavailable controls</h3>
