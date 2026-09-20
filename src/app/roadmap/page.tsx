@@ -9,7 +9,7 @@ import { epics } from "@/data/epics";
 export const metadata: Metadata = {
   title: "Roadmap",
   description:
-    "The epic-level roadmap for LynxDock: foundation, messaging, networking, voice, tactical operations, and the Server Host are complete; communities/roles and release distribution are in progress; AI, plugins, and Studio are planned.",
+    "The epic-level roadmap for LynxDock: foundation, messaging, networking, voice, tactical operations, and the Server Host are complete; communities/roles, the V5 operations layer (Verse Catalog, canonical actions, bridge, in-game overlay — cleared for closed beta) and release distribution are in progress; AI, plugins, and Studio are planned.",
 };
 
 const GITHUB_ORG = "https://github.com/LynxDock-LLC";

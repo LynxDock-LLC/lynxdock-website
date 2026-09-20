@@ -5,6 +5,7 @@ export default function DevelopmentBanner() {
     "Active development",
     "Infrastructure complete",
     "Desktop application under construction",
+    "V5 closed beta cleared (Windows, trusted testers)",
   ];
   return (
     <div className="border-b border-line/60 bg-graphite-900/60">

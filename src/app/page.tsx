@@ -31,7 +31,10 @@ const desktopFeatures: Feature[] = [
   { title: "Genesis UI", description: "LynxDock's own component framework: design tokens, a theme engine, and a Tailwind preset.", icon: "palette" },
   { title: "Rust core", description: "A protocol-first Rust server and Tauri desktop shell; TypeScript types are generated from the Rust protocol so client and server can't drift.", icon: "server" },
   { title: "Server Host", description: "A dedicated owner console: guided setup, an Overview command center, members, roles, channels, invites, backups, connectivity, and diagnostics — self-hosting without config files.", icon: "code" },
-  { title: "Tested seriously", description: "Reconnect, offline replay, multi-client convergence, undo, and permissions covered by automated tests and live multi-account verification.", icon: "sparkles" },
+  { title: "In-game overlay", description: "A Windows overlay that stays click-through while passive so the game keeps your keyboard and mouse. Micro and Compact decks, a Quick Action control, a Pointer / Menu control, Escape to hand input back — no game injection, borderless or windowed.", icon: "bolt" },
+  { title: "Verse Catalog", description: "A patch-aware Star Citizen reference catalog — ships, vehicles, locations, commodities, missions — with provenance, search, compare, and a coverage dashboard that never claims more than it has.", icon: "layers" },
+  { title: "Canonical actions", description: "Quick actions derived on the server from canonical state, role, and revision. A repeated press replays instead of applying twice; a stale press is refused with a reason. One action registry for the app, the overlay, and paired devices.", icon: "cog" },
+  { title: "Tested seriously", description: "Reconnect, offline replay, multi-client convergence, undo, and permissions covered by automated tests and live multi-account verification — and the V5 overlay qualified live on Star Citizen before its closed beta.", icon: "sparkles" },
   { title: "Studio", description: "GSpec Studio validates a specification entirely in the browser using the shared core.", icon: "cpu" },
 ];
 
@@ -229,13 +232,15 @@ export default function Home() {
               Working today
             </span>
             <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Chat, voice, presence, and a live tactical board.
+              Chat, voice, presence, a live tactical board — and now an in-game overlay.
             </h3>
             <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
-              The desktop app now runs against a real self-hosted server: synced channels with replies and search,
+              The desktop app runs against a real self-hosted server: synced channels with replies and search,
               multi-party voice, live presence with custom status, and Squadron Control — a tactical operations
-              board with routes, orders, and replay, consistent across every connected member. All of it is in
-              active development and verified end to end as it lands.
+              board with routes, orders, and replay, consistent across every connected member. The V5 line adds
+              the Verse Catalog, canonical quick actions, a local control-surface bridge, and a Windows in-game
+              overlay — engineering closure complete and cleared for a closed beta on 2026-09-20. All of it is
+              verified end to end as it lands.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <GlowButton href="/download/" variant="primary">Download Alpha</GlowButton>
@@ -287,7 +292,7 @@ export default function Home() {
           <SectionHeader
             eyebrow="The roadmap"
             title="From foundation to a full platform"
-            description="LynxDock is built in the open, tracked as epics. Foundation, messaging, networking, voice, tactical operations, and the Server Host are done; communities and roles are landing; release distribution is in progress."
+            description="LynxDock is built in the open, tracked as epics. Foundation, messaging, networking, voice, tactical operations, and the Server Host are done; communities and roles are landing; the V5 operations layer is cleared for closed beta; release distribution is in progress."
           />
           <EpicRoadmap epics={epics} />
         </div>

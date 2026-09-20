@@ -16,6 +16,16 @@
 //   Operations and the Server Host owner app are COMPLETE; Release & Distribution
 //   is IN PROGRESS (CI installers + signed component supply chain shipped;
 //   Authenticode signing integrated, owner Azure provisioning pending).
+//
+// Reconciled 2026-09-20 against the monorepo's V5 closure record
+// (docs/v5/V5-CLOSURE-REPORT.md, V5-DECISIONS.md D-32 FINAL, V5-REQUIREMENTS-STATUS):
+//   Release & Distribution: the Authenticode signed-artifact acceptance PASSED on
+//   2026-09-02 and signed 0.1.0 installers are on the trusted-tester page; the V5
+//   closed-beta build 0.1.0+5a53bff was cleared 2026-09-20 (unsigned portable exe,
+//   owner hand-off). Epic 13 (V5 operations layer) added: Verse Catalog, canonical
+//   actions, Control Surface Bridge, in-game overlay — engineering closure complete,
+//   closed beta cleared; Tactical/Radar overlay modes, mobile, Stream Deck, GameGlass,
+//   Steam Deck and E2EE are later waves and are NOT claimed.
 
 export type EpicStatus = "completed" | "in-progress" | "planned";
 
@@ -152,9 +162,11 @@ export const epics: Epic[] = [
     highlights: [
       "CI-built Windows installers (MSI + NSIS) for the desktop app and the Server Host",
       "ed25519-signed component manifest + verify-before-execute; public component origin",
-      "Windows Authenticode via Azure Artifact Signing wired into CI (fail-closed, gated)",
+      "Windows Authenticode via Azure Artifact Signing wired into CI (fail-closed, gated) — signed-artifact acceptance passed 2026-09-02",
+      "Signed 0.1.0 trusted-tester installers published (unlisted page, hashes verified against the served bytes)",
+      "V5 closed-beta build 0.1.0+5a53bff qualified 2026-09-20 as an unsigned portable executable for direct owner hand-off",
     ],
-    future: "Owner Azure provisioning enables the first signed release; an auto-updater follows.",
+    future: "A signed V5 build, a public beta, and an auto-updater follow; public downloads stay closed until then.",
   },
   {
     n: "Epic 9",
@@ -170,6 +182,22 @@ export const epics: Epic[] = [
     ],
     future:
       "Dashboards, an integration layer, and AI Workforce views are designed and next.",
+  },
+  {
+    n: "Epic 13",
+    title: "V5 Operations Layer: Verse Catalog, Actions, Bridge & Overlay",
+    status: "in-progress",
+    description:
+      "The Star Citizen operations layer on top of comms and the tactical board: a patch-aware reference catalog, one canonical quick-action system, a local control-surface bridge, and a low-overhead in-game overlay — engineering closure complete and cleared for a Windows closed beta on 2026-09-20.",
+    highlights: [
+      "Verse Catalog: patch-aware ships, vehicles, locations, commodities and missions with provenance, search, facets, compare and a coverage dashboard — manual import; the Wiki provider ships disabled",
+      "Canonical actions: server-derived availability, strict expected revisions and durable idempotency, so a repeat press replays instead of applying twice and a stale press is refused with a reason",
+      "Control Surface Bridge: loopback-only, paired with one-time codes, scoped, rate-limited, revocable — with a Connected devices page and a documented SDK",
+      "In-game overlay (Windows): click-through and non-focusable while passive, Micro / Compact decks over the bridge, Raw Input activation without game injection, per-monitor and per-game layouts, diagnostics",
+      "Qualified live on Star Citizen (borderless): game keeps input while passive, deck press, dead-region pass-through, foreground restore; 454 requirements reconciled with zero unclassified",
+    ],
+    future:
+      "Tactical/Radar overlay modes, mobile, Stream Deck, GameGlass, Steam Deck and end-to-end encryption are later waves. Exclusive fullscreen is not supported.",
   },
   {
     n: "Epic 10",
