@@ -196,8 +196,10 @@ export default function BetaPage() {
             (<span className="text-white">{closedBetaServer.packageFilename}</span>) with{" "}
             <span className="text-white">{closedBetaServer.setupNotes}</span>: how to start it, make the first account
             the owner, and enable and import the Star Citizen Wiki catalog (Verse Catalog → Catalog administration →
-            Enable → Dry run → Sync now → Promote; about 17 minutes and 132 requests for 17,029 entities on patch
-            4.10.0-LIVE). The signed 0.1.0 Host installer below bundles a pre-V5 server and cannot host this build.
+            Enable → Dry run → Sync now → Promote). Observed on 2026-09-20 with the provider&rsquo;s default patch of
+            that day (4.10.0-LIVE): 132 requests in 13–17 minutes, 24,058 provider records fetched, 688 skipped, 286
+            rejected, 17,029 entities promoted — later runs will differ as the game patches. The signed 0.1.0 Host
+            installer below bundles a pre-V5 server and cannot host this build.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[

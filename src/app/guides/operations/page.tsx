@@ -1240,10 +1240,12 @@ export default function OperationsGuide() {
                 <em>Succeeded</em> with a <em>candidate</em> snapshot, go to <em>Snapshots</em> and click <UI>Promote</UI>{" "}
                 — only then does the catalog change for members. <em>Coverage for &lt;patch&gt;</em> then lists every kind
                 as <em>covered</em> with its count. If the panel says <em>This server build has no network provider
-                adapters</em>, the server was built without the provider feature; the beta server build has it. On the
-                demo server this procedure (run through the same RPCs the panel uses) imported 17,029 entities for
-                patch 4.10.0-LIVE in 132 requests; the full accounting is in the coverage report that accompanies the
-                beta package notes.
+                adapters</em>, the server was built without the provider feature; the beta server build has it. Observed
+                on the demo server on 2026-09-20 (same RPCs the panel uses, provider default patch 4.10.0-LIVE at
+                the time): 132 requests fetched all 24,058 records the Wiki listed, of which 688 were skipped by the
+                normaliser and 286 rejected as kind mismatches, leaving 17,029 entities — the patch and the totals
+                move with the game, so treat these as that day&rsquo;s result, not a constant. The full accounting is in
+                the coverage report that accompanies the beta package notes.
               </li>
             </ul>
             <h3>Unavailable controls</h3>

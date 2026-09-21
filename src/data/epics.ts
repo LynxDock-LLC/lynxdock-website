@@ -190,7 +190,7 @@ export const epics: Epic[] = [
     description:
       "The Star Citizen operations layer on top of comms and the tactical board: a patch-aware reference catalog, one canonical quick-action system, a local control-surface bridge, and a low-overhead in-game overlay — engineering closure complete and cleared for a Windows closed beta on 2026-09-20.",
     highlights: [
-      "Verse Catalog: patch-aware ships, vehicles, locations, commodities and missions with provenance, search, facets, compare and a coverage dashboard — manual import; the Wiki provider ships disabled",
+      "Verse Catalog: patch-aware ships, vehicles, locations, commodities and missions with provenance, search, facets, compare and a coverage dashboard — the Wiki provider ships disabled and is enabled server-side by the owner (full provider run recorded 2026-09-20)",
       "Canonical actions: server-derived availability, strict expected revisions and durable idempotency, so a repeat press replays instead of applying twice and a stale press is refused with a reason",
       "Control Surface Bridge: loopback-only, paired with one-time codes, scoped, rate-limited, revocable — with a Connected devices page and a documented SDK",
       "In-game overlay (Windows): click-through and non-focusable while passive, Micro / Compact decks over the bridge, Raw Input activation without game injection, per-monitor and per-game layouts, diagnostics",
