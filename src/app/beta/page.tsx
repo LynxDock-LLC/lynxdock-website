@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import V5Gallery from "@/components/V5Gallery";
 import {
   betaDownloads,
   betaDesktopArtifacts,
@@ -12,6 +13,13 @@ import {
   betaSigningPublisher,
   type BetaArtifact,
 } from "@/data/betaDownloads";
+import {
+  closedBetaBuild,
+  closedBetaServer,
+  closedBetaHighlights,
+  closedBetaResiduals,
+  closedBetaChecklist,
+} from "@/data/closedBeta";
 
 // UNLISTED trusted-tester page. noindex/nofollow keeps it out of search; it is
 // intentionally absent from src/app/sitemap.ts and from the primary navigation.
@@ -112,11 +120,179 @@ export default function BetaPage() {
       <PageHeader
         eyebrow="Private beta · Trusted tester build"
         title="LynxDock Private Beta"
-        description="You're receiving an early LynxDock build to help test installation, communication, Voice, Tactical Mode, and self-hosting before the wider beta. Thanks for helping shape it."
+        description="You're receiving an early LynxDock build to help test installation, communication, Voice, Tactical Mode, and self-hosting before the wider beta — and, in the next round, the in-game overlay and the Verse Catalog. Thanks for helping shape it."
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* STATUS */}
+        {/* NEXT ROUND — the qualified V5 build. Identity only; no download link until the owner
+            has published and verified the package (closedBeta.ts keeps downloadUrl empty). */}
+        <GlassPanel glow className="border-signal-cyan/25 p-8 sm:p-10">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="hud-label text-signal-bright">Next round · V5 closed beta</span>
+            <span className="rounded-full border border-line bg-graphite-700/40 px-2.5 py-0.5 text-xs font-medium text-[#c9b58a]">
+              {closedBetaBuild.published ? "Published" : "Qualified · upload pending"}
+            </span>
+          </div>
+          <h2 className="mt-3 text-2xl font-semibold text-white">
+            Build {closedBetaBuild.buildId} — cleared for closed beta on {closedBetaBuild.qualifiedOn}
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+            The next trusted-tester build adds the in-game overlay, the Verse Catalog, canonical quick
+            actions and the local Control Surface Bridge. It is a {closedBetaBuild.platformLabel}{" "}
+            <span className="text-white">portable executable</span>, delivered directly by the owner. It is{" "}
+            <span className="text-white">{closedBetaBuild.signed ? "code-signed" : "not code-signed"}</span>, so
+            verify the file before you run it: the SHA-256 below must match exactly.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {[
+              ["Build", closedBetaBuild.buildId],
+              ["Source commit", closedBetaBuild.sourceCommit],
+              ["Platform", closedBetaBuild.platformLabel],
+              ["Packaging", closedBetaBuild.packaging],
+              ["File", `${closedBetaBuild.executable.filename} · ${closedBetaBuild.executable.sizeBytes.toLocaleString("en-US")} bytes`],
+              ["Code signing (Authenticode)", closedBetaBuild.signed ? "Signed" : "Unsigned — verify the hash"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-4 rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+                <span className="text-sm text-[#9fb2ba]">{k}</span>
+                <span className="text-right text-xs font-medium text-white">{v}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 break-all font-mono text-xs text-[#7f939b]">
+            SHA-256 {closedBetaBuild.executable.sha256}
+          </p>
+          {closedBetaBuild.supersedes && (
+            <p className="mt-3 text-xs leading-relaxed text-[#7f939b]">
+              Supersedes {closedBetaBuild.supersedes.buildId} (SHA-256 {closedBetaBuild.supersedes.sha256.slice(0, 8)}…{closedBetaBuild.supersedes.sha256.slice(-6)}).{" "}
+              {closedBetaBuild.supersedes.note}
+            </p>
+          )}
+          <div className="mt-6">
+            {closedBetaBuild.published && closedBetaBuild.downloadUrl ? (
+              <GlowButton href={closedBetaBuild.downloadUrl} external variant="primary">
+                Download the closed beta
+              </GlowButton>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
+                title="The package has been qualified but not published yet."
+              >
+                Closed beta · download not yet published
+              </span>
+            )}
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">Joining as a tester</h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+            Extract the ZIP, verify the hash, run the executable, and in the connect bar enter the{" "}
+            <span className="text-white">server address</span> and <span className="text-white">invite code</span> the
+            owner gave you, then <span className="text-white">Register</span>. Everything in the client — operations,
+            the tactical board, requests, logistics, the Verse Catalog — comes from that server; you do not host anything
+            yourself. The step-by-step walkthrough of one operation is at{" "}
+            <Link href="/guides/operations/" className="text-signal-bright hover:underline">
+              Plan, deploy and coordinate an operation
+            </Link>
+            .
+          </p>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">For the person hosting the beta server</h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+            The client needs a server of the same generation. A matching server build is packaged beside the client
+            (<span className="text-white">{closedBetaServer.packageFilename}</span>) with{" "}
+            <span className="text-white">{closedBetaServer.setupNotes}</span>: how to start it, make the first account
+            the owner, and enable and import the Star Citizen Wiki catalog (Verse Catalog → Catalog administration →
+            Enable → Dry run → Sync now → Promote). Observed on 2026-09-20 with the provider&rsquo;s default patch of
+            that day (4.10.0-LIVE): 132 requests in 13–17 minutes, 24,058 provider records fetched, 688 skipped, 286
+            rejected, 17,029 entities promoted — later runs will differ as the game patches. The signed 0.1.0 Host
+            installer below bundles a pre-V5 server and cannot host this build.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {[
+              ["Server build", closedBetaServer.buildId],
+              ["File", `${closedBetaServer.executable.filename} · ${closedBetaServer.executable.sizeBytes.toLocaleString("en-US")} bytes`],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-4 rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+                <span className="text-sm text-[#9fb2ba]">{k}</span>
+                <span className="text-right text-xs font-medium text-white">{v}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 break-all font-mono text-xs text-[#7f939b]">SHA-256 {closedBetaServer.executable.sha256}</p>
+          <div className="mt-4">
+            {closedBetaServer.published && closedBetaServer.downloadUrl ? (
+              <GlowButton href={closedBetaServer.downloadUrl} external variant="secondary">
+                Download the server package
+              </GlowButton>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
+                title="The server package has been built and verified locally but not published yet."
+              >
+                Server package · download not yet published
+              </span>
+            )}
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">What is new in this build</h3>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {closedBetaHighlights.map((h) => (
+              <div key={h.title} className="rounded-xl border border-line/60 bg-graphite-800/30 p-4">
+                <h4 className="text-sm font-semibold text-white">{h.title}</h4>
+                <p className="mt-1 text-sm leading-relaxed text-[#9fb2ba]">{h.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">Known issues carried into this beta</h3>
+          <p className="mt-2 text-sm text-[#9fb2ba]">
+            These are known and accepted for a trusted-tester round. Where something is unmeasured we say so.
+          </p>
+          <ul className="mt-4 flex flex-col gap-3">
+            {closedBetaResiduals.map((r) => (
+              <li key={r.title} className="flex items-start gap-3 text-sm leading-relaxed text-[#9fb2ba]">
+                <span aria-hidden className="mt-2 inline-block h-1.5 w-1.5 flex-none rounded-full bg-signal-cyan" />
+                <span>
+                  <span className="font-medium text-white">{r.title}.</span> {r.text}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <h3 className="mt-10 text-lg font-semibold text-white">What to test in this build</h3>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {closedBetaChecklist.map((c, i) => (
+              <div key={c.title} className="flex gap-4 rounded-xl border border-line/60 bg-graphite-800/30 p-4">
+                <span
+                  aria-hidden
+                  className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-signal-cyan/30 bg-signal-cyan/10 text-xs font-semibold text-signal-bright"
+                >
+                  {i + 1}
+                </span>
+                <div>
+                  <h4 className="text-sm font-semibold text-white">{c.title}</h4>
+                  <p className="mt-1 text-sm leading-relaxed text-[#9fb2ba]">{c.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-xs text-[#7f939b]">
+            Overlay reports should include <span className="text-white">Settings → Game overlay → Copy diagnostics JSON</span>{" "}
+            taken right after the problem, plus the game&rsquo;s display mode and which monitor the game and the overlay were on.
+          </p>
+        </GlassPanel>
+
+        {/* WHAT YOU'LL SEE — authentic captures of this build on a staged demo server (src/data/v5Gallery.ts). */}
+        <h2 className="mb-2 mt-16 text-xl font-semibold text-white">What you&rsquo;ll see in this build</h2>
+        <p className="mb-6 text-sm leading-relaxed text-[#9fb2ba]">
+          Captured from candidate 1 (build 0.1.0+5a53bff) on 2026-09-20; the current candidate {closedBetaBuild.buildId} differs only by the
+          member-facing catalog attribution line, which these captures predate. Use them to recognise each surface in the checklist above.
+        </p>
+        <V5Gallery />
+
+        {/* STATUS — the currently PUBLISHED trusted-tester installers (manifest-driven). */}
+        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Current published build</h2>
         <GlassPanel glow className="p-8 sm:p-10">
           <span className="hud-label text-signal-bright">Build status</span>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">

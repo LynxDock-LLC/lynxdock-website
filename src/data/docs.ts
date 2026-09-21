@@ -13,6 +13,7 @@ export const docsNav: DocSection[] = [
   {
     title: "Guides",
     links: [
+      { href: "/guides/operations/", label: "Plan, deploy & coordinate an operation" },
       { href: "/docs/self-hosting/", label: "Self-hosting a server" },
       { href: "/docs/communities/", label: "Calls & communities" },
       { href: "/docs/bootstrap/", label: "Bootstrap basics" },
