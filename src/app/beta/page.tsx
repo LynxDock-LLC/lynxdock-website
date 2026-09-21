@@ -161,6 +161,12 @@ export default function BetaPage() {
           <p className="mt-4 break-all font-mono text-xs text-[#7f939b]">
             SHA-256 {closedBetaBuild.executable.sha256}
           </p>
+          {closedBetaBuild.supersedes && (
+            <p className="mt-3 text-xs leading-relaxed text-[#7f939b]">
+              Supersedes {closedBetaBuild.supersedes.buildId} (SHA-256 {closedBetaBuild.supersedes.sha256.slice(0, 8)}…{closedBetaBuild.supersedes.sha256.slice(-6)}).{" "}
+              {closedBetaBuild.supersedes.note}
+            </p>
+          )}
           <div className="mt-6">
             {closedBetaBuild.published && closedBetaBuild.downloadUrl ? (
               <GlowButton href={closedBetaBuild.downloadUrl} external variant="primary">
@@ -280,7 +286,8 @@ export default function BetaPage() {
         {/* WHAT YOU'LL SEE — authentic captures of this build on a staged demo server (src/data/v5Gallery.ts). */}
         <h2 className="mb-2 mt-16 text-xl font-semibold text-white">What you&rsquo;ll see in this build</h2>
         <p className="mb-6 text-sm leading-relaxed text-[#9fb2ba]">
-          Captured from build {closedBetaBuild.buildId} itself. Use these to recognise each surface in the checklist above.
+          Captured from candidate 1 (build 0.1.0+5a53bff) on 2026-09-20; the current candidate {closedBetaBuild.buildId} differs only by the
+          member-facing catalog attribution line, which these captures predate. Use them to recognise each surface in the checklist above.
         </p>
         <V5Gallery />
 

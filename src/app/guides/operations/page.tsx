@@ -98,6 +98,7 @@ export default function OperationsGuide() {
         <div className="flex flex-wrap items-center gap-3 text-xs text-[#9fb2ba]">
           <span className="hud-label text-signal-bright">Staged demonstration</span>
           <span>Build 0.1.0+5a53bff · captured 2026-09-20 · Operation Halcyon Convoy (SIMULATED)</span>
+          <span>The current beta candidate (0.1.0+2ca6589) differs only by the catalog attribution line added for members.</span>
         </div>
       </PageHeader>
 

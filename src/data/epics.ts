@@ -21,8 +21,9 @@
 // (docs/v5/V5-CLOSURE-REPORT.md, V5-DECISIONS.md D-32 FINAL, V5-REQUIREMENTS-STATUS):
 //   Release & Distribution: the Authenticode signed-artifact acceptance PASSED on
 //   2026-09-02 and signed 0.1.0 installers are on the trusted-tester page; the V5
-//   closed-beta build 0.1.0+5a53bff was cleared 2026-09-20 (unsigned portable exe,
-//   owner hand-off). Epic 13 (V5 operations layer) added: Verse Catalog, canonical
+//   closed-beta candidate 0.1.0+5a53bff was cleared 2026-09-20 (unsigned portable exe,
+//   owner hand-off) and superseded on 2026-09-21 by 0.1.0+2ca6589 (member-facing catalog
+//   attribution; client-only change) before any upload. Epic 13 (V5 operations layer) added: Verse Catalog, canonical
 //   actions, Control Surface Bridge, in-game overlay — engineering closure complete,
 //   closed beta cleared; Tactical/Radar overlay modes, mobile, Stream Deck, GameGlass,
 //   Steam Deck and E2EE are later waves and are NOT claimed.
@@ -164,7 +165,7 @@ export const epics: Epic[] = [
       "ed25519-signed component manifest + verify-before-execute; public component origin",
       "Windows Authenticode via Azure Artifact Signing wired into CI (fail-closed, gated) — signed-artifact acceptance passed 2026-09-02",
       "Signed 0.1.0 trusted-tester installers published (unlisted page, hashes verified against the served bytes)",
-      "V5 closed-beta build 0.1.0+5a53bff qualified 2026-09-20 as an unsigned portable executable for direct owner hand-off",
+      "V5 closed-beta candidate 0.1.0+5a53bff qualified 2026-09-20 as an unsigned portable executable for direct owner hand-off; superseded 2026-09-21 by 0.1.0+2ca6589 (member-facing Star Citizen Wiki attribution) before any upload",
     ],
     future: "A signed V5 build, a public beta, and an auto-updater follow; public downloads stay closed until then.",
   },

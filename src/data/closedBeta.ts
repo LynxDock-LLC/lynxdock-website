@@ -30,6 +30,9 @@ export type ClosedBetaBuild = {
   /** This build is NOT Authenticode-signed. */
   signed: boolean;
   executable: { filename: string; sizeBytes: number; sha256: string };
+  /** The candidate this one replaced before any upload, if any (identity only, so a tester who
+   *  was handed the earlier file by mistake can tell). */
+  supersedes?: { buildId: string; sha256: string; note: string };
   /** Empty until the owner has published and verified the package. */
   downloadUrl: string;
   published: boolean;
@@ -37,24 +40,30 @@ export type ClosedBetaBuild = {
 
 export const closedBetaBuild: ClosedBetaBuild = {
   productVersion: "0.1.0",
-  buildId: "0.1.0+5a53bff",
-  sourceCommit: "5a53bff",
-  qualifiedOn: "2026-09-20",
+  buildId: "0.1.0+2ca6589",
+  sourceCommit: "2ca6589",
+  qualifiedOn: "2026-09-21",
   platformLabel: "Windows 11 x64",
   packaging: "Portable executable (ZIP) — no installer",
   signed: false,
   executable: {
     filename: "lynxdock-desktop.exe",
-    sizeBytes: 15_399_424,
+    sizeBytes: 15_399_936,
+    sha256: "1A5CC93BFAFB25AE7D27648CC956867AAF2E78E158BCD8551055AE49C982E55E",
+  },
+  supersedes: {
+    buildId: "0.1.0+5a53bff",
     sha256: "69617FC11C043137EF840F73C3EEED34C4896A94E695E899E54D296E321EF1AC",
+    note: "Candidate 1, cleared 2026-09-20 and never distributed. Candidate 2 differs by one client-only change: the Star Citizen Wiki attribution, a source link and the CC BY-SA 4.0 licence link are shown to every member wherever catalog data appears. Its overlay, bridge and live-game qualification carries forward unchanged.",
   },
   downloadUrl: "",
   published: false,
 };
 
 /**
- * The server build that goes with the client, for whoever hosts the beta. Same product source
- * (5a53bff), release profile, network catalog provider compiled in. Identity only; no URL until
+ * The server build that goes with the client, for whoever hosts the beta. Server product source
+ * as in 5a53bff (unchanged by candidate 2's client-only commit 2ca6589), release profile, network
+ * catalog provider compiled in. Identity only; no URL until
  * the owner has uploaded the server package beside the client package and verified the served bytes.
  */
 export const closedBetaServer = {
