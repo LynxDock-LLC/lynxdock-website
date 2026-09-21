@@ -150,6 +150,7 @@ export default function BetaPage() {
               ["Platform", closedBetaBuild.platformLabel],
               ["Packaging", closedBetaBuild.packaging],
               ["File", `${closedBetaBuild.executable.filename} · ${closedBetaBuild.executable.sizeBytes.toLocaleString("en-US")} bytes`],
+              ...(closedBetaBuild.package ? [["Download (ZIP)", `${closedBetaBuild.package.filename} · ${closedBetaBuild.package.sizeBytes.toLocaleString("en-US")} bytes`]] : []),
               ["Code signing (Authenticode)", closedBetaBuild.signed ? "Signed" : "Unsigned — verify the hash"],
             ].map(([k, v]) => (
               <div key={k} className="flex items-center justify-between gap-4 rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
@@ -161,6 +162,11 @@ export default function BetaPage() {
           <p className="mt-4 break-all font-mono text-xs text-[#7f939b]">
             SHA-256 {closedBetaBuild.executable.sha256}
           </p>
+          {closedBetaBuild.package && (
+            <p className="mt-2 break-all font-mono text-xs text-[#7f939b]">
+              ZIP SHA-256 {closedBetaBuild.package.sha256}
+            </p>
+          )}
           {closedBetaBuild.supersedes && (
             <p className="mt-3 text-xs leading-relaxed text-[#7f939b]">
               Supersedes {closedBetaBuild.supersedes.buildId} (SHA-256 {closedBetaBuild.supersedes.sha256.slice(0, 8)}…{closedBetaBuild.supersedes.sha256.slice(-6)}).{" "}
@@ -169,9 +175,16 @@ export default function BetaPage() {
           )}
           <div className="mt-6">
             {closedBetaBuild.published && closedBetaBuild.downloadUrl ? (
-              <GlowButton href={closedBetaBuild.downloadUrl} external variant="primary">
-                Download the closed beta
-              </GlowButton>
+              <span className="inline-flex flex-wrap items-center gap-3">
+                <GlowButton href={closedBetaBuild.downloadUrl} external variant="primary">
+                  Download the closed beta
+                </GlowButton>
+                {closedBetaBuild.checksumsUrl && (
+                  <a href={closedBetaBuild.checksumsUrl} className="text-sm text-signal-bright hover:underline" rel="noreferrer">
+                    SHA256SUMS.txt
+                  </a>
+                )}
+              </span>
             ) : (
               <span
                 aria-disabled="true"
@@ -219,6 +232,11 @@ export default function BetaPage() {
             ))}
           </div>
           <p className="mt-3 break-all font-mono text-xs text-[#7f939b]">SHA-256 {closedBetaServer.executable.sha256}</p>
+          {closedBetaServer.package && (
+            <p className="mt-2 break-all font-mono text-xs text-[#7f939b]">
+              ZIP {closedBetaServer.package.filename} · {closedBetaServer.package.sizeBytes.toLocaleString("en-US")} bytes · SHA-256 {closedBetaServer.package.sha256}
+            </p>
+          )}
           <div className="mt-4">
             {closedBetaServer.published && closedBetaServer.downloadUrl ? (
               <GlowButton href={closedBetaServer.downloadUrl} external variant="secondary">

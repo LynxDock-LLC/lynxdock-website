@@ -33,6 +33,10 @@ export type ClosedBetaBuild = {
   /** The candidate this one replaced before any upload, if any (identity only, so a tester who
    *  was handed the earlier file by mistake can tell). */
   supersedes?: { buildId: string; sha256: string; note: string };
+  /** The ZIP a tester actually downloads (the executable above is inside it); hash of the served bytes. */
+  package?: { filename: string; sizeBytes: number; sha256: string };
+  /** Served SHA256SUMS.txt covering the ZIPs and the executables inside them. */
+  checksumsUrl?: string;
   /** Empty until the owner has published and verified the package. */
   downloadUrl: string;
   published: boolean;
@@ -56,8 +60,15 @@ export const closedBetaBuild: ClosedBetaBuild = {
     sha256: "69617FC11C043137EF840F73C3EEED34C4896A94E695E899E54D296E321EF1AC",
     note: "Candidate 1, cleared 2026-09-20 and never distributed. Candidate 2 differs by one client-only change: the Star Citizen Wiki attribution, a source link and the CC BY-SA 4.0 licence link are shown to every member wherever catalog data appears. Its overlay, bridge and live-game qualification carries forward unchanged.",
   },
-  downloadUrl: "",
-  published: false,
+  // Served bytes verified 2026-09-21 03:20Z: anonymous re-download of each object hashed to exactly these values.
+  package: {
+    filename: "LynxDock_V5-closed-beta.1_x64_portable.zip",
+    sizeBytes: 5_272_147,
+    sha256: "7EBAB452BC259727AB160892F510BBF2A14A40616EEF986F298540DD35C69724",
+  },
+  checksumsUrl: "https://beta-dl.lynxdock.app/beta/v5-closed-beta.1/SHA256SUMS.txt",
+  downloadUrl: "https://beta-dl.lynxdock.app/beta/v5-closed-beta.1/LynxDock_V5-closed-beta.1_x64_portable.zip",
+  published: true,
 };
 
 /**
@@ -75,9 +86,15 @@ export const closedBetaServer = {
     sha256: "B54053D64279822D25AFEF3017517132A44A1745642AD10C7474B74097228766",
   },
   packageFilename: "LynxDock-Server_V5-closed-beta.1_x64.zip",
+  // Served bytes verified 2026-09-21 03:20Z (anonymous re-download hashed to this value).
+  package: {
+    filename: "LynxDock-Server_V5-closed-beta.1_x64.zip",
+    sizeBytes: 7_178_331,
+    sha256: "953B37D1976975728EB61B2FD1982862A560DDAADC1E69658D8ACD4670BC99D9",
+  },
   setupNotes: "SERVER-SETUP-AND-CATALOG.md",
-  downloadUrl: "",
-  published: false,
+  downloadUrl: "https://beta-dl.lynxdock.app/beta/v5-closed-beta.1/LynxDock-Server_V5-closed-beta.1_x64.zip",
+  published: true,
 };
 
 /** What is new in this build, in the order a tester meets it. */
