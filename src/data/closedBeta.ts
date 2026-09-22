@@ -137,6 +137,32 @@ export const closedBetaResiduals: { title: string; text: string }[] = [
   },
 ];
 
+/**
+ * The 0.1.0 (084bcb1) Authenticode-signed NSIS/MSI installers that `public/beta-manifest.json`
+ * still describes.
+ *
+ * They are a PRE-V5 generation and they are NOT the current beta. They stayed on this page under
+ * the heading "Current published build" / "Most testers" long after `closedBetaBuild` superseded
+ * them, so a tester following the page literally installed the wrong generation — the reported
+ * "the latest beta from the website doesn't work". The bytes are fine (published, signed, hashes
+ * verified); the page was pointing at them.
+ *
+ * They stay reachable for rollback and for anyone who already has them installed, under a heading
+ * that says plainly what they are. `betaSigning.mjs` still derives the signing copy from manifest
+ * truth — that is unchanged; only this round's standing changed.
+ */
+export const supersededInstallers = {
+  version: "0.1.0",
+  sourceCommit: "084bcb1",
+  supersededOn: "2026-09-21",
+  supersededBy: closedBetaBuild.buildId,
+  /** Why a tester must not treat these as the current download. */
+  reason:
+    "A pre-V5 generation: no in-game overlay, no Verse Catalog, no canonical quick actions and no Control Surface Bridge. The LynxDock Host installer in this round bundles a pre-V5 server, which cannot host the current client build.",
+  /** What a tester should do instead. */
+  instead: `Download ${closedBetaBuild.package?.filename ?? "the current closed-beta package"} from the current build above.`,
+} as const;
+
 /** Test checklist additions specific to this build. */
 export const closedBetaChecklist: { title: string; text: string }[] = [
   { title: "Verify the file", text: "Get-FileHash lynxdock-desktop.exe -Algorithm SHA256 must match the value below before you run it." },
