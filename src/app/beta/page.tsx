@@ -19,6 +19,7 @@ import {
   closedBetaHighlights,
   closedBetaResiduals,
   closedBetaChecklist,
+  supersededInstallers,
 } from "@/data/closedBeta";
 
 // UNLISTED trusted-tester page. noindex/nofollow keeps it out of search; it is
@@ -34,24 +35,16 @@ export const metadata: Metadata = {
 const support = "admin@lynxdock.app";
 const github = "https://github.com/LynxDock-LLC";
 
+// Status of the SUPERSEDED 0.1.0 installer round (manifest-driven). It is no longer "the current
+// published build" — `closedBetaBuild` is — so the rows say which round they describe.
 const statusRows: { label: string; value: string; tone?: "ok" | "pending" }[] = [
-  { label: "Build", value: betaDownloads.version, tone: "ok" },
+  { label: "Build", value: betaDownloads.version, tone: "pending" },
+  { label: "Standing", value: `Superseded by ${supersededInstallers.supersededBy}`, tone: "pending" },
   { label: "Channel", value: betaDownloads.channelLabel, tone: "ok" },
   { label: "Platform", value: betaDownloads.platformLabel, tone: "ok" },
   // Driven by public/beta-manifest.json (see betaSigning.mjs) — never hard-coded.
   { label: "Code signing (Authenticode)", value: betaAuthenticode.statusValue, tone: betaAuthenticode.statusTone },
   { label: "Public beta", value: betaDownloads.publicBetaOpen ? "Open" : "Not yet open", tone: "pending" },
-];
-
-const checklist: { title: string; text: string }[] = [
-  { title: "Install", text: "Run the installer and let it finish (WebView2 is fetched automatically the first time)." },
-  { title: "Launch", text: "Open LynxDock. You should reach the connect bar at the top." },
-  { title: "Connect / join", text: "Enter the server address the owner gave you, then register a username + password for that server." },
-  { title: "Messaging", text: "Post in a text channel; try categories and channel switching." },
-  { title: "Voice", text: "Join a voice channel, allow the mic, pick devices, try mute / deafen." },
-  { title: "Tactical", text: "Open Tactical (Squadron Control) and view the live operations board." },
-  { title: "Restart / reconnect", text: "Close and reopen the app; confirm it reconnects and your state is intact." },
-  { title: "Host (only if self-hosting)", text: "Install LynxDock Host and walk the Overview command center." },
 ];
 
 const expectations: string[] = [
@@ -120,28 +113,34 @@ export default function BetaPage() {
       <PageHeader
         eyebrow="Private beta · Trusted tester build"
         title="LynxDock Private Beta"
-        description="You're receiving an early LynxDock build to help test installation, communication, Voice, Tactical Mode, and self-hosting before the wider beta — and, in the next round, the in-game overlay and the Verse Catalog. Thanks for helping shape it."
+        description="You're receiving an early LynxDock build to help test communication, Voice, Tactical Mode, the in-game overlay, the Verse Catalog and self-hosting before the wider beta. The current build is the V5 closed beta at the top of this page — take that one. Thanks for helping shape it."
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* NEXT ROUND — the qualified V5 build. Identity only; no download link until the owner
-            has published and verified the package (closedBeta.ts keeps downloadUrl empty). */}
+        {/* THE CURRENT BUILD — the qualified V5 closed beta. This is the ONE download a tester
+            should take. The older 0.1.0 signed installers are further down, clearly superseded. */}
         <GlassPanel glow className="border-signal-cyan/25 p-8 sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="hud-label text-signal-bright">Next round · V5 closed beta</span>
-            <span className="rounded-full border border-line bg-graphite-700/40 px-2.5 py-0.5 text-xs font-medium text-[#c9b58a]">
-              {closedBetaBuild.published ? "Published" : "Qualified · upload pending"}
+            <span className="hud-label text-signal-bright">Current build · V5 closed beta</span>
+            <span className="rounded-full border border-signal-cyan/50 bg-signal-cyan/15 px-2.5 py-0.5 text-xs font-medium text-signal-bright">
+              {closedBetaBuild.published ? "Download this one" : "Qualified · upload pending"}
             </span>
           </div>
           <h2 className="mt-3 text-2xl font-semibold text-white">
             Build {closedBetaBuild.buildId} — cleared for closed beta on {closedBetaBuild.qualifiedOn}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
-            The next trusted-tester build adds the in-game overlay, the Verse Catalog, canonical quick
-            actions and the local Control Surface Bridge. It is a {closedBetaBuild.platformLabel}{" "}
-            <span className="text-white">portable executable</span>, delivered directly by the owner. It is{" "}
+            <span className="text-white">This is the current trusted-tester build — start here.</span> It adds the
+            in-game overlay, the Verse Catalog, canonical quick actions and the local Control Surface Bridge. It is a{" "}
+            {closedBetaBuild.platformLabel} <span className="text-white">portable executable in a ZIP — there is no
+            installer</span>: you extract it and run it, nothing is written to Program Files. It is{" "}
             <span className="text-white">{closedBetaBuild.signed ? "code-signed" : "not code-signed"}</span>, so
             verify the file before you run it: the SHA-256 below must match exactly.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+            The signed <span className="text-white">{supersededInstallers.version}</span> .exe / .msi installers lower
+            down this page are an <span className="text-white">earlier round and are superseded</span> — don&rsquo;t
+            install those expecting this build.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {[
@@ -309,10 +308,26 @@ export default function BetaPage() {
         </p>
         <V5Gallery />
 
-        {/* STATUS — the currently PUBLISHED trusted-tester installers (manifest-driven). */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Current published build</h2>
-        <GlassPanel glow className="p-8 sm:p-10">
-          <span className="hud-label text-signal-bright">Build status</span>
+        {/* SUPERSEDED ROUND — the 0.1.0 signed installers (manifest-driven). Kept for rollback and
+            for testers who already have them; NEVER presented as the current download again. */}
+        <h2 className="mb-2 mt-16 text-xl font-semibold text-white">
+          Earlier round · {supersededInstallers.version} signed installers (superseded)
+        </h2>
+        <GlassPanel className="mb-6 border-[#c9b58a]/40 p-7">
+          <span className="hud-label text-[#c9b58a]">Not the current beta</span>
+          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+            These Authenticode-signed <span className="text-white">{supersededInstallers.version}</span> installers
+            (source {supersededInstallers.sourceCommit}) were superseded on{" "}
+            <span className="text-white">{supersededInstallers.supersededOn}</span> by{" "}
+            <span className="text-white">{supersededInstallers.supersededBy}</span>. {supersededInstallers.reason}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+            {supersededInstallers.instead} They stay published here so an existing install can be identified and
+            rolled back — installing them now will not give you the build this round asks you to test.
+          </p>
+        </GlassPanel>
+        <GlassPanel className="p-8 sm:p-10">
+          <span className="hud-label text-[#c9b58a]">Build status · superseded round</span>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {statusRows.map((r) => (
               <div
@@ -341,26 +356,30 @@ export default function BetaPage() {
           )}
         </GlassPanel>
 
-        {/* DOWNLOADS */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Download</h2>
+        {/* DOWNLOADS (superseded round) */}
+        <h2 className="mb-6 mt-12 text-xl font-semibold text-white">
+          Superseded downloads ({supersededInstallers.version})
+        </h2>
         <div className="grid gap-5 lg:grid-cols-2">
           <DownloadCard
-            eyebrow="Most testers"
-            heading="LynxDock"
-            blurb="The normal LynxDock client — chat, voice, and the tactical board. This is what you use to join a server. Pick the .exe installer unless you specifically need the MSI."
+            eyebrow="Superseded · rollback only"
+            heading={`LynxDock ${supersededInstallers.version}`}
+            blurb="The pre-V5 client installer. It has no in-game overlay, no Verse Catalog, no canonical quick actions and no Control Surface Bridge. Use the current closed-beta ZIP at the top of this page instead."
             artifacts={betaDesktopArtifacts}
           />
           <DownloadCard
-            eyebrow="Self-hosting only"
-            heading="LynxDock Host"
-            blurb="Only install Host if you're testing running your own LynxDock server. If you're just joining someone else's server, you don't need this."
+            eyebrow="Superseded · rollback only"
+            heading={`LynxDock Host ${supersededInstallers.version}`}
+            blurb="The pre-V5 self-hosting installer. It bundles a pre-V5 server and cannot host the current client build — host the beta with the server package from the current build above."
             artifacts={betaHostArtifacts}
           />
         </div>
 
         {/* INSTALLATION NOTICE — copy is chosen from manifest truth (betaAuthenticode), never hard-coded. */}
         <GlassPanel className="mt-8 border-signal-cyan/20 p-7">
-          <span className="hud-label text-signal-bright">Before you install</span>
+          <span className="hud-label text-signal-bright">
+            Before you install the superseded {supersededInstallers.version} round
+          </span>
           <h3 className="mt-3 text-lg font-semibold text-white">{betaAuthenticode.noticeHeading}</h3>
           {betaAuthenticode.signed ? (
             <>
@@ -400,24 +419,10 @@ export default function BetaPage() {
           )}
         </GlassPanel>
 
-        {/* TEST CHECKLIST */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">What to test</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {checklist.map((c, i) => (
-            <GlassPanel key={c.title} className="flex gap-4 p-5">
-              <span
-                aria-hidden
-                className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-signal-cyan/30 bg-signal-cyan/10 text-xs font-semibold text-signal-bright"
-              >
-                {i + 1}
-              </span>
-              <div>
-                <h3 className="text-sm font-semibold text-white">{c.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-[#9fb2ba]">{c.text}</p>
-              </div>
-            </GlassPanel>
-          ))}
-        </div>
+        {/* The test checklist lives with the CURRENT build (closedBetaChecklist, above). The old
+            generic "Install → Launch → …" list was removed on 2026-09-21: it described the
+            superseded installer round and sat under it, which is what steered testers into
+            installing the wrong generation. */}
 
         {/* REPORT A PROBLEM */}
         <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Report a problem</h2>
@@ -493,8 +498,13 @@ export default function BetaPage() {
           </summary>
           <div className="px-6 pb-6">
             <p className="mb-4 text-sm leading-relaxed text-[#9fb2ba]">
-              Every published installer is hashed by the beta pipeline after it&rsquo;s built and
-              verified against the exact bytes served from the download origin. To check a download on
+              This table covers the superseded {supersededInstallers.version} installer round. The current build&rsquo;s
+              hashes are in its card at the top of this page, and{" "}
+              <a href={closedBetaBuild.checksumsUrl} className="text-signal-bright hover:underline" rel="noreferrer">
+                SHA256SUMS.txt
+              </a>{" "}
+              is served beside its download. Every published installer is hashed by the beta pipeline after it&rsquo;s
+              built and verified against the exact bytes served from the download origin. To check a download on
               Windows:{" "}
               <code className="rounded bg-graphite-800/60 px-1.5 py-0.5 text-xs text-[#dbe6ea]">
                 Get-FileHash .\FILE -Algorithm SHA256
