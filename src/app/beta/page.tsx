@@ -13,6 +13,7 @@ import {
   betaSigningPublisher,
   type BetaArtifact,
 } from "@/data/betaDownloads";
+import { v6Candidate, v6Primary, v6Secondary } from "@/data/v6Candidate";
 import {
   closedBetaBuild,
   closedBetaServer,
@@ -79,16 +80,142 @@ function ArtifactButton({
   );
 }
 
+/**
+ * The V5 closed-beta round is superseded by the V6 candidate at the top of this
+ * page, so it is shown for identification and rollback only.
+ *
+ * A beta page must offer exactly ONE generation. The last time this page carried
+ * two, a tester followed it and installed the wrong one.
+ */
+const V5_ROUND_SUPERSEDED = true;
+
+function bytes(n: number) {
+  return `${n.toLocaleString("en-US")} bytes`;
+}
+
+/** The current round: every artifact it ships, each one actionable once published. */
+function CandidateRound() {
+  const c = v6Candidate;
+  return (
+    <GlassPanel className="mb-10 p-8 sm:p-10">
+      <span className="hud-label text-signal-bright">
+        {c.published ? "Current build — take this one" : "Current build — qualified, upload pending"}
+      </span>
+      <h2 className="mt-3 text-2xl font-semibold text-white">LynxDock {c.buildId}</h2>
+      <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+        Built from source commit <span className="text-white">{c.sourceCommit.slice(0, 7)}</span> and qualified on clean
+        Windows machines in every format it ships: download, install or extract, first launch, joining a server, a
+        restart with what you set still in place, uninstall, and an upgrade over the previous published build with its
+        data preserved.{" "}
+        {c.signed ? (
+          <>Every executable is <span className="text-white">code-signed</span> by {c.publisher}.</>
+        ) : (
+          <>These files are <span className="text-white">not code-signed</span>, so Windows will warn about an unknown
+          publisher — verify the SHA-256 below before you run anything.</>
+        )}
+      </p>
+      <p className="mt-4 rounded-xl border border-line/60 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
+        <span className="text-white">Upgrading from an older build? You will be asked to sign in once.</span> The
+        upgrade keeps your files — every one of the 173 files the previous build had left behind was still there
+        afterwards, and the server address you had entered survives — but it does not keep you signed in. Sign in again
+        with the account you already use; your memberships, your operation and your board are all still there. We
+        measured this rather than assuming it, and it is a known one-time cost of crossing generations, not data loss.
+      </p>
+      <div className="mt-3 rounded-xl border border-line/60 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
+        <p>
+          <span className="text-white">Your browser will hold the download and ask about it.</span>{" "}
+          Edge says the file &ldquo;isn&rsquo;t commonly downloaded&rdquo;. Nothing is wrong with it — Edge has the
+          whole file already and is waiting for you, but until you answer it looks exactly like a download that failed.
+          The path, as far as we were able to follow it on our test machines:
+        </p>
+        <ol className="mt-3 flex list-decimal flex-col gap-1 pl-5">
+          <li>Open the <span className="text-white">Downloads</span> arrow, top right, showing a warning badge.</li>
+          <li>
+            The row offers only <em>Delete</em> and <span className="text-white">More actions</span> —
+            choose <span className="text-white">More actions → Keep</span>.
+          </li>
+          <li>Edge asks again, in a dialog whose visible buttons are <em>Cancel</em> and <em>Delete</em>.</li>
+          <li>
+            Open the little arrow <em>on</em> the <em>Delete</em> button. Press the arrow, not the button: pressing{" "}
+            <em>Delete</em> discards the file Edge is holding and you start the download again.
+          </li>
+        </ol>
+        <p className="mt-3">
+          <span className="text-white">We could not complete that last step</span>, so we cannot tell you what the
+          option is called or promise it is offered on your machine — our test machines are centrally managed and that
+          may have withheld it. Steps 1 to 3 we watched happen. If step 4 looks different for you, tell us what you
+          see and take the portable ZIP in the meantime.
+        </p>
+        <p className="mt-3">
+          That dialog names the publisher, <span className="text-white">LynxDock LLC, Coos Bay, Oregon</span>, read
+          from our signature — so the signing is doing its job. What Edge is unsure of is this file&rsquo;s standing
+          with its reputation service, which a build released today has had no time to earn. Windows may warn again
+          when you open it: check the SHA-256 below first, then{" "}
+          <span className="text-white">More info → Run anyway</span>. We watched this on test machines rather than
+          guessing, and we cannot promise you will see no prompt — if what you see differs, tell us.
+        </p>
+      </div>
+      <div className="mt-6 flex flex-col gap-3">
+        {c.downloads.map((d) => (
+          <div key={d.key} className="rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <span className="text-sm text-white">{d.label}</span>
+              <span className="text-xs text-[#9fb2ba]">
+                {bytes(d.sizeBytes)} · {d.signed ? "signed" : "unsigned"}
+              </span>
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-[#9fb2ba]">{d.note}</p>
+            <p className="mt-1 break-all font-mono text-[0.6875rem] leading-relaxed text-[#7f949c]">{d.sha256}</p>
+            {c.published ? (
+              <a href={d.url} className="mt-2 inline-block text-sm text-signal-bright hover:underline" rel="noreferrer">
+                Download {d.filename}
+              </a>
+            ) : (
+              <p className="mt-2 text-xs text-[#6f838b]">{d.filename} — not uploaded yet</p>
+            )}
+          </div>
+        ))}
+      </div>
+      {c.published && v6Primary && (
+        <div className="mt-6">
+          <GlowButton href={v6Primary.url} external variant="primary">
+            Download {v6Primary.label}
+          </GlowButton>
+        </div>
+      )}
+      <p className="mt-6 text-xs leading-relaxed text-[#7f939b]">
+        Inside the packages:{" "}
+        {c.inner.map((i) => `${i.filename} (${bytes(i.sizeBytes)}, ${i.sha256.slice(0, 8)}…${i.sha256.slice(-6)})`).join(" · ")}.
+        The portable executable is signed in its own right, so its hash is deliberately not the hash of the copy inside
+        the installers.
+      </p>
+    </GlassPanel>
+  );
+}
+
 function DownloadCard({
   eyebrow,
   heading,
   blurb,
   artifacts,
+  identityOnly = false,
 }: {
   eyebrow: string;
   heading: string;
   blurb: string;
   artifacts: BetaArtifact[];
+  /**
+   * A superseded round is IDENTIFIABLE but not DOWNLOADABLE from this page.
+   *
+   * These installers stayed clickable under a current-build heading long enough
+   * for a tester to follow the page and install the wrong generation - the
+   * reported "the latest beta from the website doesn't work". Labelling them
+   * "superseded" is not enough while the button still works: a beta page must
+   * offer exactly ONE generation. The rows below let someone identify what they
+   * already have (filename, size, SHA-256) and roll back by asking for the file,
+   * without the page handing out the wrong one.
+   */
+  identityOnly?: boolean;
 }) {
   const primary = artifacts.find((a) => a.installerType === "nsis") ?? artifacts[0];
   const secondary = artifacts.filter((a) => a !== primary);
@@ -97,12 +224,32 @@ function DownloadCard({
       <span className="hud-label text-signal-bright">{eyebrow}</span>
       <h3 className="mt-3 text-xl font-semibold text-white">{heading}</h3>
       <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">{blurb}</p>
-      <div className="mt-6 flex flex-col gap-3">
-        {primary && <ArtifactButton artifact={primary} variant="primary" />}
-        {secondary.map((a) => (
-          <ArtifactButton key={a.filename} artifact={a} variant="secondary" />
-        ))}
-      </div>
+      {identityOnly ? (
+        <div className="mt-6 flex flex-col gap-3">
+          {artifacts.map((a) => (
+            <div key={a.filename} className="rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <span className="text-sm text-white">{a.filename}</span>
+                <span className="text-xs text-[#9fb2ba]">
+                  {a.size} · {a.signed ? "signed" : "unsigned"}
+                </span>
+              </div>
+              <p className="mt-1 break-all font-mono text-[0.6875rem] leading-relaxed text-[#7f949c]">{a.sha256}</p>
+            </div>
+          ))}
+          <p className="text-sm leading-relaxed text-[#9fb2ba]">
+            Not downloadable from this page. If you need one of these to roll back, ask the owner for
+            it directly and check it against the hash above.
+          </p>
+        </div>
+      ) : (
+        <div className="mt-6 flex flex-col gap-3">
+          {primary && <ArtifactButton artifact={primary} variant="primary" />}
+          {secondary.map((a) => (
+            <ArtifactButton key={a.filename} artifact={a} variant="secondary" />
+          ))}
+        </div>
+      )}
     </GlassPanel>
   );
 }
@@ -117,7 +264,9 @@ export default function BetaPage() {
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* THE CURRENT BUILD — the qualified V5 closed beta. This is the ONE download a tester
+        <CandidateRound />
+
+        {/* THE PREVIOUS ROUND — the qualified V5 closed beta. This is the ONE download a tester
             should take. The older 0.1.0 signed installers are further down, clearly superseded. */}
         <GlassPanel glow className="border-signal-cyan/25 p-8 sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -173,7 +322,7 @@ export default function BetaPage() {
             </p>
           )}
           <div className="mt-6">
-            {closedBetaBuild.published && closedBetaBuild.downloadUrl ? (
+            {!V5_ROUND_SUPERSEDED && closedBetaBuild.published && closedBetaBuild.downloadUrl ? (
               <span className="inline-flex flex-wrap items-center gap-3">
                 <GlowButton href={closedBetaBuild.downloadUrl} external variant="primary">
                   Download the closed beta
@@ -190,7 +339,7 @@ export default function BetaPage() {
                 className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
                 title="The package has been qualified but not published yet."
               >
-                Closed beta · download not yet published
+                {V5_ROUND_SUPERSEDED ? "Superseded round · identification only" : "Closed beta · download not yet published"}
               </span>
             )}
           </div>
@@ -237,7 +386,7 @@ export default function BetaPage() {
             </p>
           )}
           <div className="mt-4">
-            {closedBetaServer.published && closedBetaServer.downloadUrl ? (
+            {!V5_ROUND_SUPERSEDED && closedBetaServer.published && closedBetaServer.downloadUrl ? (
               <GlowButton href={closedBetaServer.downloadUrl} external variant="secondary">
                 Download the server package
               </GlowButton>
@@ -247,7 +396,7 @@ export default function BetaPage() {
                 className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-5 py-2.5 text-sm text-[#6f838b]"
                 title="The server package has been built and verified locally but not published yet."
               >
-                Server package · download not yet published
+                {V5_ROUND_SUPERSEDED ? "Superseded round · identification only" : "Server package · download not yet published"}
               </span>
             )}
           </div>
@@ -358,17 +507,19 @@ export default function BetaPage() {
 
         {/* DOWNLOADS (superseded round) */}
         <h2 className="mb-6 mt-12 text-xl font-semibold text-white">
-          Superseded downloads ({supersededInstallers.version})
+          Superseded round ({supersededInstallers.version}) — for identification, not download
         </h2>
         <div className="grid gap-5 lg:grid-cols-2">
           <DownloadCard
-            eyebrow="Superseded · rollback only"
+            identityOnly
+            eyebrow="Superseded · identify and roll back only"
             heading={`LynxDock ${supersededInstallers.version}`}
-            blurb="The pre-V5 client installer. It has no in-game overlay, no Verse Catalog, no canonical quick actions and no Control Surface Bridge. Use the current closed-beta ZIP at the top of this page instead."
+            blurb="The pre-V5 client installer. It has no in-game overlay, no Verse Catalog, no canonical quick actions and no Control Surface Bridge. Take the current build at the top of this page instead."
             artifacts={betaDesktopArtifacts}
           />
           <DownloadCard
-            eyebrow="Superseded · rollback only"
+            identityOnly
+            eyebrow="Superseded · identify and roll back only"
             heading={`LynxDock Host ${supersededInstallers.version}`}
             blurb="The pre-V5 self-hosting installer. It bundles a pre-V5 server and cannot host the current client build — host the beta with the server package from the current build above."
             artifacts={betaHostArtifacts}
@@ -499,11 +650,11 @@ export default function BetaPage() {
           <div className="px-6 pb-6">
             <p className="mb-4 text-sm leading-relaxed text-[#9fb2ba]">
               This table covers the superseded {supersededInstallers.version} installer round. The current build&rsquo;s
-              hashes are in its card at the top of this page, and{" "}
-              <a href={closedBetaBuild.checksumsUrl} className="text-signal-bright hover:underline" rel="noreferrer">
-                SHA256SUMS.txt
-              </a>{" "}
-              is served beside its download. Every published installer is hashed by the beta pipeline after it&rsquo;s
+              hashes are in its card at the top of this page, and its{" "}
+              <span className="text-white">SHA256SUMS.txt</span>{" "}
+              is served beside its own download — the link in that card, never this one, so a hash file from an older
+              round can never be checked against a newer build. Every published installer is hashed by the beta
+              pipeline after it&rsquo;s
               built and verified against the exact bytes served from the download origin. To check a download on
               Windows:{" "}
               <code className="rounded bg-graphite-800/60 px-1.5 py-0.5 text-xs text-[#dbe6ea]">
