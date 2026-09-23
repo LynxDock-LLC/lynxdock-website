@@ -1,0 +1,77 @@
+{
+  "candidate": "v6-candidate.1c",
+  "version": "0.1.0",
+  "buildId": "0.1.0+1261472",
+  "sourceCommit": "1261472bf031d341ee5f1f505a96f3fd0b894992",
+  "builtAt": "2026-09-22T22:03:59.1816718Z",
+  "runId": "35788703381",
+  "signed": true,
+  "publisher": "LynxDock LLC",
+  "published": true,
+  "downloads": [
+    {
+      "key": "portable",
+      "label": "Portable (ZIP)",
+      "note": "No installer. Extract and run.",
+      "filename": "LynxDock_v6-candidate.1c_x64_portable.zip",
+      "sizeBytes": 5434079,
+      "sha256": "9BBB9C15743B75CDBF25D0383985C07226A406444FFAC37EEC3CF64F3C4731E8",
+      "signed": false,
+      "url": "https://beta-dl.lynxdock.app/beta/v6-candidate.1c/LynxDock_v6-candidate.1c_x64_portable.zip"
+    },
+    {
+      "key": "nsis",
+      "label": "Windows installer (.exe)",
+      "note": "Per-user install; no administrator rights.",
+      "filename": "LynxDock_0.1.0_x64-setup.exe",
+      "sizeBytes": 4245312,
+      "sha256": "7DC893822D486806FB6D778C66E1076A5D346EF3D2D28CCEA5F8C2EC2012888F",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/v6-candidate.1c/LynxDock_0.1.0_x64-setup.exe"
+    },
+    {
+      "key": "msi",
+      "label": "MSI installer (.msi)",
+      "note": "For machine-wide or managed deployment.",
+      "filename": "LynxDock_0.1.0_x64_en-US.msi",
+      "sizeBytes": 5746688,
+      "sha256": "769D3EF6E7264A87DE99DA67882B602FB1C6E7DD3E1A445A64C5C9DEB2E13DE9",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/v6-candidate.1c/LynxDock_0.1.0_x64_en-US.msi"
+    },
+    {
+      "key": "server",
+      "label": "Server package (ZIP)",
+      "note": "Only if you are hosting the beta.",
+      "filename": "LynxDock-Server_v6-candidate.1c_x64.zip",
+      "sizeBytes": 7336933,
+      "sha256": "BE011F6525697D7C3DC32485E8C8B36279EA76DAB2590B5100599D31F62E9E9B",
+      "signed": false,
+      "url": "https://beta-dl.lynxdock.app/beta/v6-candidate.1c/LynxDock-Server_v6-candidate.1c_x64.zip"
+    },
+    {
+      "key": "checksums",
+      "label": "SHA256SUMS.txt",
+      "note": "Check what you downloaded before you run it.",
+      "filename": "SHA256SUMS.txt",
+      "sizeBytes": 613,
+      "sha256": "579D365DDA7A40C937CF9571BA7FF64CF442E73892D9017CFAE2B137FF45D076",
+      "signed": false,
+      "url": "https://beta-dl.lynxdock.app/beta/v6-candidate.1c/SHA256SUMS.txt"
+    }
+  ],
+  "inner": [
+    {
+      "filename": "lynxdock-desktop.exe",
+      "sizeBytes": 15453456,
+      "sha256": "E462EAF8CA9527132CDB0C8FDB3B5271B2CC84C7D987451241D7B727C2398C6A",
+      "signed": true
+    },
+    {
+      "filename": "lynxdock-server.exe",
+      "sizeBytes": 21094672,
+      "sha256": "76F3E9E40E2A3849E7BA12E583BB969D09623B770C2F9D546A5B720F5BC33001",
+      "signed": true
+    }
+  ]
+}
