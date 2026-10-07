@@ -14,6 +14,7 @@ import {
   type BetaArtifact,
 } from "@/data/betaDownloads";
 import { v6Candidate, v6Primary, v6Secondary } from "@/data/v6Candidate";
+import { release026, release026Desktop, release026Host, type ReleaseDownload } from "@/data/release026";
 import {
   closedBetaBuild,
   closedBetaServer,
@@ -89,19 +90,190 @@ function ArtifactButton({
  */
 const V5_ROUND_SUPERSEDED = true;
 
+/**
+ * The V6 closed beta (v6-candidate.1c, 0.1.0+1261472) is superseded by LynxDock 0.2.6 at the top of this page.
+ * Its files stay on the download origin for rollback; this page identifies them but no longer links them, so it
+ * offers exactly one generation.
+ */
+const V6_ROUND_SUPERSEDED = true;
+
 function bytes(n: number) {
   return `${n.toLocaleString("en-US")} bytes`;
 }
 
-/** The current round: every artifact it ships, each one actionable once published. */
+function ReleaseDownloadRow({ d, published }: { d: ReleaseDownload; published: boolean }) {
+  return (
+    <div className="rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <span className="text-sm text-white">{d.label}</span>
+        <span className="text-xs text-[#9fb2ba]">
+          {bytes(d.sizeBytes)} · {d.signed ? "signed" : "unsigned"}
+        </span>
+      </div>
+      <p className="mt-1 text-xs leading-relaxed text-[#9fb2ba]">{d.note}</p>
+      <p className="mt-1 break-all font-mono text-[0.6875rem] leading-relaxed text-[#7f949c]">{d.sha256}</p>
+      {published ? (
+        <a
+          href={d.url}
+          data-beta-download=""
+          data-filename={d.filename}
+          data-sha256={d.sha256}
+          data-size={d.sizeBytes}
+          className="mt-2 inline-block text-sm text-signal-bright hover:underline"
+          rel="noreferrer"
+        >
+          Download {d.filename}
+        </a>
+      ) : (
+        <p className="mt-2 text-xs text-[#6f838b]">{d.filename} — not uploaded yet</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The current round: LynxDock 0.2.6 — the app and LynxDock Host, as signed .exe and .msi installers only.
+ * `data-beta-round="current"` and the per-link data attributes are what the live-download verifier reads.
+ */
+function CurrentRelease() {
+  const r = release026;
+  const notes: { title: string; text: string }[] = [
+    {
+      title: "Share screen can stop responding after you stop a share and share again",
+      text: "If Share screen stops responding after you stopped a share, leave the voice channel and join again (or restart LynxDock), then report the time it happened.",
+    },
+    {
+      title: "Brief audio dropouts at a listener while others talk",
+      text: "If you hear a short dropout while others talk, note the time and report it.",
+    },
+    {
+      title: "Push-to-talk: the first syllable can arrive slightly late or quieter",
+      text: "If the first syllable after you press to talk sounds clipped or quiet, note the time and report it. Nothing is transmitted while the key is released.",
+    },
+    {
+      title: "Push-to-talk stops when LynxDock's window loses focus",
+      text: "That is deliberate, so a key can never get stuck. In one of our test runs the microphone also closed early while the key was still held, and we have not found why. If transmitting stops while you are still holding the key, note the time and report it.",
+    },
+  ];
+  return (
+    <div data-beta-round="current" data-beta-version={r.version} data-beta-commit={r.sourceCommit}>
+      <GlassPanel glow className="mb-10 border-signal-cyan/25 p-8 sm:p-10">
+        <span className="hud-label text-signal-bright">
+          {r.published ? "Current build — take this one" : "Current build — qualified, upload pending"}
+        </span>
+        <h2 className="mt-3 text-2xl font-semibold text-white">LynxDock {r.version}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+          Built from source commit <span className="text-white">{r.sourceCommit.slice(0, 7)}</span> (tag{" "}
+          <span className="text-white">{r.tag}</span>). Every installer is{" "}
+          <span className="text-white">code-signed</span> by {r.publisher} with a trusted timestamp. This round has two
+          products: the <span className="text-white">LynxDock app</span>, which every tester needs, and{" "}
+          <span className="text-white">LynxDock Host</span>, which only the person hosting the community server needs —
+          the server and the voice services are inside the Host. There is no portable ZIP and no separate server package
+          in this round.
+        </p>
+        <p className="mt-4 rounded-xl border border-[#c9b58a]/40 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
+          <span className="text-white">What has and has not been checked.</span> These signed installers passed the
+          required pre-release qualification: installing the .exe and the .msi on clean Windows machines, first launch,
+          signing in and a restart; upgrading over the previous round&rsquo;s app installers; and installing, upgrading
+          and uninstalling the Host on our test PC.{" "}
+          <span className="text-white">
+            The two-PC rehearsal and the final eight-hour acceptance run have not been carried out yet.
+          </span>{" "}
+          This is a closed-beta build, not a final release, and it has known, unresolved issues — listed below.
+        </p>
+
+        <h3 className="mt-8 text-lg font-semibold text-white">For every tester — the LynxDock app</h3>
+        <div className="mt-3 flex flex-col gap-3">
+          {release026Desktop.map((d) => (
+            <ReleaseDownloadRow key={d.key} d={d} published={r.published} />
+          ))}
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
+          <span className="text-white">Upgrading from the V6 closed beta?</span> Install 0.2.6 over it with the same
+          kind of installer you used before (.exe over .exe, .msi over .msi); it replaces the previous app in place and
+          keeps your profile and settings. If it asks you to sign in again, use the account you already have.
+        </p>
+
+        <h3 className="mt-8 text-lg font-semibold text-white">Only if you host the community server — LynxDock Host</h3>
+        <div className="mt-3 flex flex-col gap-3">
+          {release026Host.map((d) => (
+            <ReleaseDownloadRow key={d.key} d={d} published={r.published} />
+          ))}
+        </div>
+        <div className="mt-3 flex flex-col gap-3 rounded-xl border border-line/60 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
+          <p>
+            <span className="text-white">Quit the old Host before you upgrade.</span> Before installing LynxDock Host{" "}
+            {r.version} over LynxDock Host 0.1.0, quit the running Host first (system tray → LynxDock Host → Quit). If
+            the installer is started while 0.1.0 is still running, it stops with an error and leaves 0.1.0 and its data
+            untouched — quit the Host and run the installer again.
+          </p>
+          <p>
+            <span className="text-white">Ending the Host ends the server it runs.</span> When LynxDock Host ends — tray
+            Quit, a crash or End task — the community server and the voice services it started (LiveKit and coturn) stop
+            with it, and calls on that server end until the Host is started again. Closing the Host window only hides it
+            to the tray; the server keeps running. Processes the Host did not start are not touched.
+          </p>
+        </div>
+
+        <div className="mt-6 rounded-xl border border-line/60 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
+          <span className="text-white">Your browser and Windows may ask before running a new build.</span> For a
+          newly released file Edge can say it &ldquo;isn&rsquo;t commonly downloaded&rdquo;; with the previous round the
+          way through was <span className="text-white">Downloads → More actions → Keep</span>. When you run the
+          installer, check its SHA-256 above and that the publisher reads{" "}
+          <span className="text-white">LynxDock LLC</span>, then{" "}
+          <span className="text-white">More info → Run anyway</span> if Windows warns. If what you see differs, tell us.
+        </div>
+
+        <h3 className="mt-8 text-lg font-semibold text-white">Known issues in this build — accepted, not fixed</h3>
+        <ul className="mt-4 flex flex-col gap-3">
+          {notes.map((n) => (
+            <li key={n.title} className="flex items-start gap-3 text-sm leading-relaxed text-[#9fb2ba]">
+              <span aria-hidden className="mt-2 inline-block h-1.5 w-1.5 flex-none rounded-full bg-signal-cyan" />
+              <span>
+                <span className="font-medium text-white">{n.title}.</span> {n.text}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-xs leading-relaxed text-[#7f939b]">
+          Signing run {r.signingRunId} · clean-machine qualification run {r.qualificationRunId}. To check a download on
+          Windows:{" "}
+          <code className="rounded bg-graphite-800/60 px-1.5 py-0.5 text-xs text-[#dbe6ea]">
+            Get-FileHash .\FILE -Algorithm SHA256
+          </code>
+          .
+        </p>
+      </GlassPanel>
+    </div>
+  );
+}
+
+/**
+ * The V6 round. While it was current, every artifact it ships was actionable; since LynxDock 0.2.6 superseded it
+ * (V6_ROUND_SUPERSEDED) it is shown for identification and rollback only — no links.
+ */
 function CandidateRound() {
   const c = v6Candidate;
+  const live = c.published && !V6_ROUND_SUPERSEDED;
   return (
+    <div data-beta-round={V6_ROUND_SUPERSEDED ? "superseded" : "current"} data-beta-version={c.buildId}>
     <GlassPanel className="mb-10 p-8 sm:p-10">
-      <span className="hud-label text-signal-bright">
-        {c.published ? "Current build — take this one" : "Current build — qualified, upload pending"}
+      <span className={V6_ROUND_SUPERSEDED ? "hud-label text-[#c9b58a]" : "hud-label text-signal-bright"}>
+        {V6_ROUND_SUPERSEDED
+          ? `Previous round · V6 closed beta — superseded by LynxDock ${release026.version}`
+          : c.published
+            ? "Current build — take this one"
+            : "Current build — qualified, upload pending"}
       </span>
       <h2 className="mt-3 text-2xl font-semibold text-white">LynxDock {c.buildId}</h2>
+      {V6_ROUND_SUPERSEDED ? (
+        <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
+          The V6 closed beta, built from source commit <span className="text-white">{c.sourceCommit.slice(0, 7)}</span>{" "}
+          and code-signed by {c.publisher}. It is kept here so an existing install can be identified and rolled back.{" "}
+          <span className="text-white">Not downloadable from this page</span> — take {release026.version} above. If you
+          need one of these files to roll back, ask the owner for it directly and check it against the SHA-256 below.
+        </p>
+      ) : (
       <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
         Built from source commit <span className="text-white">{c.sourceCommit.slice(0, 7)}</span> and qualified on clean
         Windows machines in every format it ships: download, install or extract, first launch, joining a server, a
@@ -114,6 +286,9 @@ function CandidateRound() {
           publisher — verify the SHA-256 below before you run anything.</>
         )}
       </p>
+      )}
+      {!V6_ROUND_SUPERSEDED && (
+      <>
       <p className="mt-4 rounded-xl border border-line/60 bg-graphite-800/40 px-4 py-3 text-sm leading-relaxed text-[#9fb2ba]">
         <span className="text-white">Upgrading from an older build? You will be asked to sign in once.</span> The
         upgrade keeps your files — every one of the 173 files the previous build had left behind was still there
@@ -155,6 +330,8 @@ function CandidateRound() {
           guessing, and we cannot promise you will see no prompt — if what you see differs, tell us.
         </p>
       </div>
+      </>
+      )}
       <div className="mt-6 flex flex-col gap-3">
         {c.downloads.map((d) => (
           <div key={d.key} className="rounded-xl border border-line/60 bg-graphite-800/30 px-4 py-3">
@@ -166,17 +343,19 @@ function CandidateRound() {
             </div>
             <p className="mt-1 text-xs leading-relaxed text-[#9fb2ba]">{d.note}</p>
             <p className="mt-1 break-all font-mono text-[0.6875rem] leading-relaxed text-[#7f949c]">{d.sha256}</p>
-            {c.published ? (
+            {live ? (
               <a href={d.url} className="mt-2 inline-block text-sm text-signal-bright hover:underline" rel="noreferrer">
                 Download {d.filename}
               </a>
+            ) : V6_ROUND_SUPERSEDED ? (
+              <p className="mt-2 text-xs text-[#6f838b]">{d.filename} — superseded, identification only</p>
             ) : (
               <p className="mt-2 text-xs text-[#6f838b]">{d.filename} — not uploaded yet</p>
             )}
           </div>
         ))}
       </div>
-      {c.published && v6Primary && (
+      {live && v6Primary && (
         <div className="mt-6">
           <GlowButton href={v6Primary.url} external variant="primary">
             Download {v6Primary.label}
@@ -190,6 +369,7 @@ function CandidateRound() {
         the installers.
       </p>
     </GlassPanel>
+    </div>
   );
 }
 
@@ -260,26 +440,35 @@ export default function BetaPage() {
       <PageHeader
         eyebrow="Private beta · Trusted tester build"
         title="LynxDock Private Beta"
-        description="You're receiving an early LynxDock build to help test communication, Voice, Tactical Mode, the in-game overlay, the Verse Catalog and self-hosting before the wider beta. The current build is the V5 closed beta at the top of this page — take that one. Thanks for helping shape it."
+        description={`You're receiving an early LynxDock build to help test communication, Voice, Tactical Mode, the in-game overlay, the Verse Catalog and self-hosting before the wider beta. The current build is LynxDock ${release026.version} at the top of this page — take that one. Earlier rounds below are for identification and rollback only. Thanks for helping shape it.`}
       />
 
       <section className="mx-auto max-w-5xl px-5 py-16">
+        <CurrentRelease />
         <CandidateRound />
 
-        {/* THE PREVIOUS ROUND — the qualified V5 closed beta. This is the ONE download a tester
-            should take. The older 0.1.0 signed installers are further down, clearly superseded. */}
-        <GlassPanel glow className="border-signal-cyan/25 p-8 sm:p-10">
+        {/* AN EARLIER ROUND — the V5 closed beta, superseded (V5_ROUND_SUPERSEDED): identification only.
+            The one download a tester should take is the current round at the top of the page. */}
+        <div data-beta-round={V5_ROUND_SUPERSEDED ? "superseded" : "current"} data-beta-version={closedBetaBuild.buildId}>
+        <GlassPanel glow={!V5_ROUND_SUPERSEDED} className="border-signal-cyan/25 p-8 sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="hud-label text-signal-bright">Current build · V5 closed beta</span>
+            <span className={V5_ROUND_SUPERSEDED ? "hud-label text-[#c9b58a]" : "hud-label text-signal-bright"}>
+              {V5_ROUND_SUPERSEDED ? "Earlier round · V5 closed beta" : "Current build · V5 closed beta"}
+            </span>
             <span className="rounded-full border border-signal-cyan/50 bg-signal-cyan/15 px-2.5 py-0.5 text-xs font-medium text-signal-bright">
-              {closedBetaBuild.published ? "Download this one" : "Qualified · upload pending"}
+              {V5_ROUND_SUPERSEDED ? "Superseded" : closedBetaBuild.published ? "Download this one" : "Qualified · upload pending"}
             </span>
           </div>
           <h2 className="mt-3 text-2xl font-semibold text-white">
             Build {closedBetaBuild.buildId} — cleared for closed beta on {closedBetaBuild.qualifiedOn}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[#9fb2ba]">
-            <span className="text-white">This is the current trusted-tester build — start here.</span> It adds the
+            <span className="text-white">
+              {V5_ROUND_SUPERSEDED
+                ? "This round is superseded — take the current build at the top of this page."
+                : "This is the current trusted-tester build — start here."}
+            </span>{" "}
+            It adds the
             in-game overlay, the Verse Catalog, canonical quick actions and the local Control Surface Bridge. It is a{" "}
             {closedBetaBuild.platformLabel} <span className="text-white">portable executable in a ZIP — there is no
             installer</span>: you extract it and run it, nothing is written to Program Files. It is{" "}
@@ -448,12 +637,14 @@ export default function BetaPage() {
             taken right after the problem, plus the game&rsquo;s display mode and which monitor the game and the overlay were on.
           </p>
         </GlassPanel>
+        </div>
 
         {/* WHAT YOU'LL SEE — authentic captures of this build on a staged demo server (src/data/v5Gallery.ts). */}
         <h2 className="mb-2 mt-16 text-xl font-semibold text-white">What you&rsquo;ll see in this build</h2>
         <p className="mb-6 text-sm leading-relaxed text-[#9fb2ba]">
-          Captured from candidate 1 (build 0.1.0+5a53bff) on 2026-09-20; the current candidate {closedBetaBuild.buildId} differs only by the
-          member-facing catalog attribution line, which these captures predate. Use them to recognise each surface in the checklist above.
+          Captured from the V5 closed beta (candidate 1, build 0.1.0+5a53bff) on 2026-09-20. Later builds, including{" "}
+          {release026.version}, changed parts of the interface, so use these to recognise each surface rather than as an
+          exact picture of the current build.
         </p>
         <V5Gallery />
 
@@ -650,10 +841,9 @@ export default function BetaPage() {
           <div className="px-6 pb-6">
             <p className="mb-4 text-sm leading-relaxed text-[#9fb2ba]">
               This table covers the superseded {supersededInstallers.version} installer round. The current build&rsquo;s
-              hashes are in its card at the top of this page, and its{" "}
-              <span className="text-white">SHA256SUMS.txt</span>{" "}
-              is served beside its own download — the link in that card, never this one, so a hash file from an older
-              round can never be checked against a newer build. Every published installer is hashed by the beta
+              SHA-256 values are in its card at the top of this page — check a download against that card, never
+              against this table, so a hash from an older round is never checked against a newer build. Every published
+              installer is hashed by the beta
               pipeline after it&rsquo;s
               built and verified against the exact bytes served from the download origin. To check a download on
               Windows:{" "}

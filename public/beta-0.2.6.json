@@ -1,0 +1,57 @@
+{
+  "round": "0.2.6",
+  "version": "0.2.6",
+  "sourceCommit": "facc36a6f2998a68ca4477ae26f9e3184550d9ff",
+  "tag": "desktop-v0.2.6",
+  "signingRunId": "37623249656",
+  "qualificationRunId": "37627637629",
+  "signed": true,
+  "publisher": "LynxDock LLC",
+  "published": true,
+  "downloads": [
+    {
+      "key": "desktop-nsis",
+      "product": "desktop",
+      "label": "LynxDock - Windows installer (.exe)",
+      "note": "For every tester. Per-user install; no administrator rights. Take this one.",
+      "filename": "LynxDock_0.2.6_x64-setup.exe",
+      "sizeBytes": 5244784,
+      "sha256": "A0EB615632E166B37E0846AB251C2473ACBFD40767CDDEAE528DED7D31087DD5",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/0.2.6/facc36a/LynxDock_0.2.6_x64-setup.exe"
+    },
+    {
+      "key": "desktop-msi",
+      "product": "desktop",
+      "label": "LynxDock - MSI installer (.msi)",
+      "note": "The same app for machine-wide or managed deployment.",
+      "filename": "LynxDock_0.2.6_x64_en-US.msi",
+      "sizeBytes": 7147520,
+      "sha256": "4BEFDAEA2D566FF87662F4C23135A8D44B6A27BC27A7FFC2E7143A834765CC5B",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/0.2.6/facc36a/LynxDock_0.2.6_x64_en-US.msi"
+    },
+    {
+      "key": "host-nsis",
+      "product": "host",
+      "label": "LynxDock Host - Windows installer (.exe)",
+      "note": "Only if you host the community server. The server and voice services are inside the Host.",
+      "filename": "LynxDock Host_0.2.6_x64-setup.exe",
+      "sizeBytes": 9051768,
+      "sha256": "834FF785B3A8C4FEAE2AD2991AC938BAAEE6D262CCB46658C880B750B723C4CE",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/0.2.6/facc36a/LynxDock%20Host_0.2.6_x64-setup.exe"
+    },
+    {
+      "key": "host-msi",
+      "product": "host",
+      "label": "LynxDock Host - MSI installer (.msi)",
+      "note": "The same Host for machine-wide or managed deployment.",
+      "filename": "LynxDock Host_0.2.6_x64_en-US.msi",
+      "sizeBytes": 12877824,
+      "sha256": "FB25A12DB14C580526589212587523C1E6094871C0DA7D2EFCAB5C3A6E2ADDD3",
+      "signed": true,
+      "url": "https://beta-dl.lynxdock.app/beta/0.2.6/facc36a/LynxDock%20Host_0.2.6_x64_en-US.msi"
+    }
+  ]
+}
