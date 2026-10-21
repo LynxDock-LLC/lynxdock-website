@@ -71,6 +71,7 @@
 
 @layer base {
   html {
+    color-scheme: dark;
     scroll-behavior: smooth;
     scroll-padding-top: 84px;
     -webkit-text-size-adjust: 100%;
@@ -415,25 +416,29 @@
   }
 
   /* ------------------------------------------------------------------ tabs */
+  /* Two columns on phones so every tab stays visible; one row from 640px. */
   .tablist {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.35rem;
-    overflow-x: auto;
     padding: 0.3rem;
     border: 1px solid var(--line);
     border-radius: 12px;
     background: rgba(16, 25, 31, 0.7);
-    scrollbar-width: thin;
+  }
+  @media (min-width: 640px) {
+    .tablist {
+      display: flex;
+    }
   }
   .tab {
     flex: 1 0 auto;
     min-height: 44px;
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     border-radius: 9px;
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--muted);
-    white-space: nowrap;
   }
   .tab:hover {
     color: var(--text);
@@ -506,6 +511,46 @@
       grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.2fr);
       gap: 1rem;
       align-items: baseline;
+    }
+  }
+
+  /*
+   * Release tables. Below 768px each row stacks into labelled blocks (cells carry data-label), so nothing,
+   * the SHA-256 included, sits off-screen in a sideways scroll. The markup keeps explicit table roles because
+   * changing a table's display can drop its semantics in some browsers.
+   */
+  @media (max-width: 767px) {
+    .rtable thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .rtable,
+    .rtable tbody,
+    .rtable tr,
+    .rtable th,
+    .rtable td {
+      display: block;
+      width: 100%;
+    }
+    .rtable tr {
+      padding-block: 0.5rem;
+    }
+    .rtable th,
+    .rtable td {
+      padding-block: 0.4rem !important;
+    }
+    .rtable td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 0.15rem;
+      font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #8d9da6;
     }
   }
 

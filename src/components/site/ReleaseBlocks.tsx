@@ -69,27 +69,27 @@ export function LimitationsList({ headingLevel = 3 }: { headingLevel?: 3 | 4 }) 
  */
 export function ReleaseArtifacts({ r, caption }: { r: ReleaseRecord; caption: string }) {
   return (
-    // A focusable, labelled region so keyboard users can scroll the table sideways on narrow screens.
+    // Below 768px the rows stack (.rtable); from 768px it is a normal table in a labelled, focusable region.
     <div tabIndex={0} role="region" aria-label={caption} className="overflow-x-auto rounded-[var(--radius)] border border-line">
-      <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+      <table role="table" className="rtable w-full border-collapse text-left text-sm md:min-w-[640px]">
         <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr className="border-b border-line text-[0.8125rem] text-[#8d9da6]">
-            <th scope="col" className="px-4 py-3 font-semibold">
+          <tr role="row" className="border-b border-line text-[0.8125rem] text-[#8d9da6]">
+            <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
               Installer
             </th>
-            <th scope="col" className="px-4 py-3 font-semibold">
+            <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
               Format and size
             </th>
-            <th scope="col" className="px-4 py-3 font-semibold">
+            <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
               SHA-256
             </th>
           </tr>
         </thead>
         <tbody>
           {r.artifacts.map((a) => (
-            <tr key={a.filename} className="border-b border-line/70 align-top last:border-b-0">
-              <th scope="row" className="px-4 py-3 font-semibold text-ink">
+            <tr role="row" key={a.filename} className="border-b border-line/70 align-top last:border-b-0">
+              <th role="rowheader" scope="row" className="px-4 py-3 font-semibold text-ink">
                 <span className="block">{a.product === "desktop" ? "LynxDock app" : "LynxDock Host"}</span>
                 <span className="mono block break-all text-[0.78rem] font-normal text-muted">{a.filename}</span>
                 {r.downloadsOnThisSite && a.url ? (
@@ -108,12 +108,14 @@ export function ReleaseArtifacts({ r, caption }: { r: ReleaseRecord; caption: st
                   <span className="mt-1 block text-[0.8125rem] font-normal text-[#8d9da6]">Not downloadable here</span>
                 )}
               </th>
-              <td className="px-4 py-3 text-muted">
+              <td role="cell" data-label="Format and size" className="px-4 py-3 text-muted">
                 {a.format === "msi" ? "Windows Installer (.msi)" : "Windows setup (.exe)"}
                 <span className="block text-[0.8125rem]">{formatBytes(a.sizeBytes)}</span>
                 <span className="block text-[0.8125rem]">{a.signed ? `Signed: ${r.publisher}` : "Unsigned"}</span>
               </td>
-              <td className="mono break-all px-4 py-3 text-[0.78rem] leading-relaxed text-[#c3ced3]">{a.sha256}</td>
+              <td role="cell" data-label="SHA-256" className="mono break-all px-4 py-3 text-[0.78rem] leading-relaxed text-[#c3ced3]">
+                {a.sha256}
+              </td>
             </tr>
           ))}
         </tbody>

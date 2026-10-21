@@ -89,7 +89,7 @@ export default function ArchitectureFigure() {
                 {p.hops.map((h, i) => (
                   <span key={h.title} className="contents">
                     {i > 0 && (
-                      <span className="flex min-w-[44px] max-w-[90px] flex-1">
+                      <span className="flex min-w-[36px] max-w-[48px] flex-1 lg:max-w-[90px]">
                         <Arrow />
                       </span>
                     )}

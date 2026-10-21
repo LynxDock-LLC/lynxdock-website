@@ -116,32 +116,34 @@ export default function ReleasesPage() {
             aria-label="Release history table"
             className="mt-6 overflow-x-auto rounded-[var(--radius)] border border-line"
           >
-            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+            <table role="table" className="rtable w-full border-collapse text-left text-sm md:min-w-[620px]">
               <caption className="sr-only">LynxDock release history, newest first</caption>
               <thead>
-                <tr className="border-b border-line text-[0.8125rem] text-[#8d9da6]">
-                  <th scope="col" className="px-4 py-3 font-semibold">
+                <tr role="row" className="border-b border-line text-[0.8125rem] text-[#8d9da6]">
+                  <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
                     Date
                   </th>
-                  <th scope="col" className="px-4 py-3 font-semibold">
+                  <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
                     Release
                   </th>
-                  <th scope="col" className="px-4 py-3 font-semibold">
+                  <th role="columnheader" scope="col" className="px-4 py-3 font-semibold">
                     Standing
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.name} className="border-b border-line/70 align-top last:border-b-0">
-                    <td className="mono whitespace-nowrap px-4 py-3 text-[0.8125rem] text-muted">
+                  <tr role="row" key={r.name} className="border-b border-line/70 align-top last:border-b-0">
+                    <td role="cell" data-label="Date" className="mono whitespace-nowrap px-4 py-3 text-[0.8125rem] text-muted">
                       {r.date ? <time dateTime={r.date}>{r.date}</time> : "Not yet"}
                     </td>
-                    <th scope="row" className="px-4 py-3 font-semibold text-ink">
+                    <th role="rowheader" scope="row" className="px-4 py-3 font-semibold text-ink">
                       {r.name}
                       <span className="block text-[0.8125rem] font-normal text-muted">{r.detail}</span>
                     </th>
-                    <td className="px-4 py-3 text-[#d7e1e5]">{r.standing}</td>
+                    <td role="cell" data-label="Standing" className="px-4 py-3 text-[#d7e1e5]">
+                      {r.standing}
+                    </td>
                   </tr>
                 ))}
               </tbody>

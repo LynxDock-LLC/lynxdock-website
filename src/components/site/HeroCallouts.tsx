@@ -38,7 +38,8 @@ export default function HeroCallouts({ shot, callouts }: { shot: Shot; callouts:
             sizes="(min-width: 1240px) 1240px, 100vw"
             priority
           />
-          <span className="label-chip absolute left-3 top-3">{shot.label}</span>
+          {/* On phones the chip would cover callout 1; the caption below says the same thing. */}
+          <span className="label-chip absolute left-3 top-3 hidden sm:inline-block">{shot.label}</span>
           {callouts.map((c, i) => (
             <span
               key={c.title}

@@ -328,7 +328,7 @@ export default function BetaPage() {
                 </span>{" "}
                 This is a closed-beta build, not a final release, and it has known, unresolved issues, listed below.
               </p>
-              <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:items-start">
+              <div className="grid gap-6">
                 <ReleaseArtifacts r={r026} caption={`LynxDock ${r026.version} installers`} />
                 <ReleaseIdentity r={r026} />
               </div>
