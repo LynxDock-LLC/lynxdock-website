@@ -5,6 +5,7 @@ import FeatureCard from "@/components/FeatureCard";
 import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
 import { productDetails } from "@/data/productDetails";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "LynxDock Studio",
@@ -46,6 +47,9 @@ export default function StudioPage() {
           ))}
         </div>
       </PageHeader>
+      <div className="wrap pt-8">
+        <HistoryNote era="2026">LynxDock Studio is the company's AI-assisted development workspace, kept here for attribution.</HistoryNote>
+      </div>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
         <figure className="glass mb-12 overflow-hidden rounded-2xl shadow-panel">

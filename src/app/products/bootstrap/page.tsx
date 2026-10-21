@@ -5,6 +5,7 @@ import GlassPanel from "@/components/GlassPanel";
 import AudienceGrid, { type Audience } from "@/components/AudienceGrid";
 import GlowButton from "@/components/GlowButton";
 import { productDetails } from "@/data/productDetails";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "LynxDock Bootstrap",
@@ -63,6 +64,9 @@ export default function BootstrapPage() {
           ))}
         </div>
       </PageHeader>
+      <div className="wrap pt-8">
+        <HistoryNote era="2026">LynxDock Bootstrap is the company's spec-to-assets generator, kept here for attribution.</HistoryNote>
+      </div>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
         <div className="mb-12 grid gap-4 sm:grid-cols-3">

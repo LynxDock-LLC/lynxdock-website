@@ -1,39 +1,33 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import DevelopmentBanner from "@/components/DevelopmentBanner";
-import Footer from "@/components/Footer";
+import { dmSans, manrope } from "./fonts";
+import SiteHeader from "@/components/site/SiteHeader";
+import SiteFooter from "@/components/site/SiteFooter";
+import PreviewNotice from "@/components/site/PreviewNotice";
+import DemoDialog from "@/components/site/DemoDialog";
 import Analytics from "@/components/Analytics";
 import siteMetadata from "@/data/siteMetadata";
 import { companyInfo } from "@/data/companyInfo";
+import { isPreview, siteOrigin } from "@/lib/siteEnv";
 
-const og = siteMetadata.openGraph;
+const title = "LynxDock: voice, chat and operations on your server";
+const description =
+  "LynxDock brings your community together in a desktop workspace for text, voice, screen sharing and operations, on a server you control. Windows closed beta.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteMetadata.url),
+  // The real domain in every build. Previews are kept out of search by `robots` below, not by a different origin.
+  metadataBase: new URL(siteOrigin),
   title: {
-    default: siteMetadata.title,
-    template: `%s - ${siteMetadata.name}`,
+    default: title,
+    template: `%s · ${siteMetadata.name}`,
   },
-  description: siteMetadata.description,
-  keywords: [
-    "LynxDock",
-    "privacy-first",
-    "self-hosted communication",
-    "voice chat",
-    "self-hosting",
-    "developer tools",
-    "AI workspace",
-  ],
-  authors: [{ name: "LynxDock LLC" }],
-  creator: "LynxDock LLC",
-  // Feed autodiscovery - emits <link rel="alternate" type="application/rss+xml">
-  // so readers find the feed from any page on the site.
+  description,
+  applicationName: siteMetadata.name,
+  authors: [{ name: companyInfo.name }],
+  creator: companyInfo.name,
   alternates: {
     types: {
-      "application/rss+xml": [
-        { url: "/rss.xml", title: `${siteMetadata.name} Blog` },
-      ],
+      "application/rss+xml": [{ url: "/rss.xml", title: `${siteMetadata.name} updates` }],
     },
   },
   icons: {
@@ -45,80 +39,71 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: og.url,
-    siteName: og.siteName,
-    title: og.title,
-    description: og.description,
-    images: [
-      {
-        url: og.image,
-        width: og.imageWidth,
-        height: og.imageHeight,
-        alt: og.imageAlt,
-      },
-    ],
+    url: `${siteOrigin}/`,
+    siteName: siteMetadata.name,
+    title,
+    description,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "LynxDock" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: og.title,
-    description: og.description,
-    images: [og.image],
+    title,
+    description,
+    images: ["/og.png"],
   },
-  robots: { index: true, follow: true },
+  // Indexing is configured per build: production follows the site's existing policy (indexed); every preview
+  // build is noindex. Individual pages (the tester hub, drafts, moved-page notices) opt out on their own.
+  robots: isPreview ? { index: false, follow: false } : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05090c",
+  themeColor: "#090e12",
   width: "device-width",
   initialScale: 1,
 };
 
-// Structured data (schema.org) built from GSpec-generated metadata.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": `${siteMetadata.url}/#organization`,
+      "@id": `${siteOrigin}/#organization`,
       name: companyInfo.name,
-      url: siteMetadata.url,
-      logo: `${siteMetadata.url}/logo/lynxdock-icon.png`,
-      slogan: companyInfo.motto,
+      url: siteOrigin,
+      logo: `${siteOrigin}/apple-icon.png`,
       sameAs: [companyInfo.github],
     },
     {
       "@type": "WebSite",
-      "@id": `${siteMetadata.url}/#website`,
+      "@id": `${siteOrigin}/#website`,
       name: siteMetadata.name,
-      url: siteMetadata.url,
-      description: siteMetadata.description,
-      publisher: { "@id": `${siteMetadata.url}/#organization` },
+      url: siteOrigin,
+      description,
+      publisher: { "@id": `${siteOrigin}/#organization` },
     },
   ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-graphite-950 text-[#cdd9de] antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+    // suppressHydrationWarning: the inline script below adds data-js to <html> before React hydrates.
+    <html lang="en" className={`${manrope.variable} ${dmSans.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen bg-bg antialiased">
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.setAttribute('data-js','')" }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-graphite-800 focus:px-4 focus:py-2 focus:text-signal-bright"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-panel-2 focus:px-4 focus:py-3 focus:text-ink"
         >
           Skip to content
         </a>
-        <Navigation />
-        <DevelopmentBanner />
-        <main id="main">{children}</main>
-        <Footer />
+        <PreviewNotice />
+        <SiteHeader />
+        <main id="main" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
+        <SiteFooter />
+        <DemoDialog />
         <Analytics />
       </body>
     </html>

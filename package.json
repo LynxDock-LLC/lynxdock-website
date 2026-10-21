@@ -7,7 +7,10 @@
     "dev": "next dev -p 4300",
     "build": "next build",
     "start": "next start -p 4300",
-    "preview": "npx serve@latest out -l 4300"
+    "preview": "npx serve@latest out -l 4300",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/data/betaSigning.test.mjs src/data/betaStanding.test.mjs",
+    "check": "node scripts/check-site.mjs"
   },
   "dependencies": {
     "next": "^15.1.9",
