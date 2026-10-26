@@ -178,6 +178,33 @@ for (const [route, raw] of pages) {
   }
 }
 
+// Owner-only facts: visible [OWNER: ...] fields are expected in review builds and must all be filled before a
+// production build can pass.
+for (const [route, raw] of pages) {
+  const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+  const owner = text.match(/\[OWNER:/g) ?? [];
+  if (owner.length) {
+    if (PREVIEW) warn.push(`${route}: ${owner.length} [OWNER] field(s) still to fill before production`);
+    else fail(route, `${owner.length} [OWNER] field(s) unfilled in a production build`);
+  }
+}
+
+// Tester eligibility: 18+, self-declared, never presented as verified.
+const ELIGIBILITY = "Testers must be 18 or older.";
+for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started/"]) {
+  const text = (pages.get(route) || "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'").replace(/\s+/g, " ");
+  if (!text.includes(ELIGIBILITY)) fail(route, "the 18+ eligibility statement is missing");
+  if (!/(does not|doesn't) verify age/.test(text)) fail(route, "the page does not say that age is not verified");
+}
+for (const [route, raw] of pages) {
+  const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'");
+  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+    if (/\bverif\w*/i.test(sentence) && /\bages?\b/i.test(sentence) && !/\b(not|no|never|nothing|doesn't)\b/i.test(sentence)) {
+      fail(route, `a sentence could imply age verification: "${sentence.trim().slice(0, 120)}"`);
+    }
+  }
+}
+
 // Retired claims must not come back on the primary routes.
 const RETIRED = [/Quick Call/i, /\bP2P\b/, /(?<!not )peer-to-peer (calls|rooms)/i, /vs Discord/i, /exactly once/i, /Linux and macOS builds/i];
 for (const route of PRIMARY) {

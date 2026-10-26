@@ -96,6 +96,18 @@ test("the push-to-talk scope is stated in the approved wording", () => {
   );
 });
 
+test("tester eligibility is 18+, self-declared, and never presented as verified", () => {
+  const form = readFileSync(join(src, "components", "site", "EnquiryForm.tsx"), "utf8");
+  assert.ok(status.includes('statement: "Testers must be 18 or older."'), "the eligibility statement");
+  assert.match(status, /LynxDock does not verify age/, "the self-declaration says age is not verified");
+  assert.match(page, /s\.eligibility\.statement/, "the tester hub shows it");
+  // The beta form's checkbox starts unticked and must be ticked to send; only the beta form asks for it.
+  assert.match(form, /name="ageConfirmed"[\s\S]{0,80}required/, "the 18+ box is required");
+  assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "the 18+ box is never pre-ticked");
+  assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 1, "only the beta form asks for it");
+  assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
+});
+
 test("the stale installer checklist is gone", () => {
   // "Install → Launch → Connect" described the superseded installers and sat directly under them.
   assert.ok(

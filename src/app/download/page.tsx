@@ -35,7 +35,10 @@ export default function DownloadPage() {
                 How the beta works
               </h2>
               <ol className="num-list body mt-5">
-                <li>You request access with the form on this page.</li>
+                <li>
+                  You request access with the form on this page. {siteStatus.eligibility.statement} You confirm it
+                  yourself: LynxDock does not verify age.
+                </li>
                 <li>
                   Testers join a <span className="strong">community server</span> through an invitation from whoever
                   runs it. That can be your own administrator, using{" "}
@@ -66,6 +69,10 @@ export default function DownloadPage() {
                 <div>
                   <dt>Platform</dt>
                   <dd>{s.platform}</dd>
+                </div>
+                <div>
+                  <dt>Who can test</dt>
+                  <dd>18 or older (self-declared; not verified)</dd>
                 </div>
                 <div>
                   <dt>Next tester release</dt>

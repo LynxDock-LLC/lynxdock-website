@@ -93,11 +93,25 @@ export const pushToTalk = {
   qualifier: "This describes how push-to-talk is intended to behave in the current release line.",
 };
 
+/**
+ * Tester eligibility (owner direction, 2026-10-25). Age is self-declared. Nothing verifies it: there is no age
+ * check in the website, the apps or the community server, so no page may imply one.
+ */
+export const eligibility = {
+  heading: "Testers must be 18 or older",
+  statement: "Testers must be 18 or older.",
+  selfDeclaration:
+    "This is a self-declaration: LynxDock does not verify age, and nothing in the apps or the community server checks it.",
+  checkboxLabel: "I confirm I am 18 or older.",
+  checkboxHint: "A self-declaration. LynxDock does not verify age.",
+};
+
 export type Limitation = { title: string; text: string };
 
 /** Known limitations every visitor and tester should see. Pages render all of them in body text. */
 export const limitations: Limitation[] = [
   { title: pushToTalk.heading, text: `${pushToTalk.statement} ${pushToTalk.qualifier}` },
+  { title: eligibility.heading, text: `${eligibility.statement} ${eligibility.selfDeclaration}` },
   {
     title: "Windows only",
     text: "The desktop app and LynxDock Host are Windows (x64) builds. There are no macOS, Linux or mobile builds.",
@@ -135,6 +149,7 @@ export const siteStatus = {
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,
+  eligibility,
   limitations,
 };
 

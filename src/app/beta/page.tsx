@@ -120,6 +120,7 @@ export default function BetaPage() {
           <ul className="flex flex-wrap gap-2">
             {[
               ["#status", "Release status"],
+              ["#eligibility", "Who can test"],
               ["#which", "App or Host"],
               ["#first-connection", "First connection"],
               ["#limitations", "Known limitations"],
@@ -157,6 +158,21 @@ export default function BetaPage() {
                 person running your server which release your community uses.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ELIGIBILITY: self-declared, never verified */}
+      <section id="eligibility" aria-labelledby="eligibility-title" className="section-tight">
+        <div className="wrap">
+          <div className="card-notice max-w-3xl">
+            <h2 id="eligibility-title" className="text-lg font-bold text-[#ecd6a8]">
+              {s.eligibility.heading}
+            </h2>
+            <p className="body mt-2">
+              {s.eligibility.statement} {s.eligibility.selfDeclaration} People who request beta access through this
+              site confirm it themselves when they ask.
+            </p>
           </div>
         </div>
       </section>

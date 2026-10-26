@@ -28,6 +28,9 @@ export default function Quickstart() {
         <h2 id="before">Before you start</h2>
         <ul>
           <li>
+            <strong>{s.eligibility.statement}</strong> This is a self-declaration: LynxDock does not verify age.
+          </li>
+          <li>
             <strong>Members</strong> install only the LynxDock app. <strong>The administrator</strong> who runs the
             server also uses LynxDock Host; see{" "}
             <Link href="/products/lynxdock-host/">LynxDock Host</Link>.

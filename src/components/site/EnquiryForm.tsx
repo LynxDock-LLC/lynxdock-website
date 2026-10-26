@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { supportEmail } from "@/data/siteShell";
+import { eligibility } from "@/data/siteStatus";
 
 // The site's existing form service: the production build sets NEXT_PUBLIC_FORM_ENDPOINT (a Formspree form that
 // accepts a JSON POST), as the early-access form always has. When the build has no endpoint, the form says so
@@ -10,7 +11,7 @@ const ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
 
 export type EnquiryKind = "demo" | "beta" | "business";
 
-type FieldName = "name" | "email" | "organisation" | "interest" | "message";
+type FieldName = "name" | "email" | "organisation" | "interest" | "message" | "ageConfirmed";
 
 const COPY: Record<
   EnquiryKind,
@@ -22,6 +23,8 @@ const COPY: Record<
     messageHint: string;
     messageRequired: boolean;
     interest?: { label: string; options: string[] };
+    /** Tester intake: an unticked 18+ self-declaration that must be ticked to send. It is not age verification. */
+    ageDeclaration?: boolean;
   }
 > = {
   demo: {
@@ -39,6 +42,7 @@ const COPY: Record<
     messageLabel: "Anything we should know? (optional)",
     messageHint: "For example the games you play together and roughly how many people would join.",
     messageRequired: false,
+    ageDeclaration: true,
     interest: {
       label: "How would you use LynxDock?",
       options: ["As a member", "Running our community's server", "Not sure yet"],
@@ -99,6 +103,8 @@ export default function EnquiryForm({
     else if (!EMAIL_RE.test(email)) next.email = "Enter an email address like name@example.com.";
     if (copy.messageRequired && !message) next.message = "Add a short message.";
     if (copy.interest && !data.get("interest")) next.interest = `Choose an option for "${copy.interest.label}".`;
+    if (copy.ageDeclaration && data.get("ageConfirmed") !== "yes")
+      next.ageConfirmed = "Testers must be 18 or older. Tick the box to confirm, or don’t send this request.";
     return next;
   }
 
@@ -134,6 +140,7 @@ export default function EnquiryForm({
           organisation: String(data.get("organisation") ?? "").trim(),
           interest: String(data.get("interest") ?? ""),
           message: String(data.get("message") ?? "").trim(),
+          ...(copy.ageDeclaration ? { ageConfirmed: "self-declared 18 or older (not verified)" } : {}),
           source: `lynxdock.app ${window.location.pathname}`,
         }),
       });
@@ -177,7 +184,9 @@ export default function EnquiryForm({
       ref={formRef}
       method="post"
       action={ENDPOINT || undefined}
-      noValidate
+      // Without JavaScript the browser's own required checks apply (including the 18+ box); once the script runs,
+      // the form validates itself with accessible messages instead.
+      noValidate={hydrated}
       onSubmit={onSubmit}
       className="flex flex-col gap-4"
       aria-describedby={!ENDPOINT ? id("not-connected") : undefined}
@@ -247,6 +256,7 @@ export default function EnquiryForm({
                   type="radio"
                   name="interest"
                   value={o}
+                  required
                   aria-invalid={errors.interest ? true : undefined}
                   className="h-[18px] w-[18px] accent-[#5ce1df]"
                 />
@@ -274,6 +284,26 @@ export default function EnquiryForm({
         </p>
         {err("message")}
       </div>
+      {copy.ageDeclaration && (
+        <div className="field">
+          <label className="flex min-h-[44px] cursor-pointer items-start gap-3 text-[0.9375rem] font-semibold text-ink">
+            <input
+              type="checkbox"
+              name="ageConfirmed"
+              value="yes"
+              required
+              className="mt-0.5 h-[18px] w-[18px] flex-none accent-[#5ce1df]"
+              aria-invalid={errors.ageConfirmed ? true : undefined}
+              aria-describedby={[id("ageConfirmed-hint"), errors.ageConfirmed ? id("ageConfirmed-error") : ""].filter(Boolean).join(" ")}
+            />
+            {eligibility.checkboxLabel}
+          </label>
+          <p id={id("ageConfirmed-hint")} className="hint">
+            {eligibility.statement} {eligibility.checkboxHint}
+          </p>
+          {err("ageConfirmed")}
+        </div>
+      )}
       {/* Spam trap for the form service; hidden from people and assistive technology. */}
       <div aria-hidden="true" className="hidden">
         <label htmlFor={id("gotcha")}>Leave this empty</label>
