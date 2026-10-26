@@ -8,7 +8,7 @@ import {
   ReleaseIdentity,
   fmtDate,
 } from "@/components/site/ReleaseBlocks";
-import siteStatus, { formatBytes } from "@/data/siteStatus";
+import siteStatus, { betaLicence, formatBytes } from "@/data/siteStatus";
 import { githubOrg, supportEmail } from "@/data/siteShell";
 import { betaDownloads, betaAuthenticode, betaSigningPublisher } from "@/data/betaDownloads";
 import { v6Candidate } from "@/data/v6Candidate";
@@ -195,7 +195,7 @@ export default function BetaPage() {
             <div className="card">
               <h3 className="h-card">The beta licence</h3>
               <p className="small mt-2">
-                Everyone in the beta takes part under the LynxDock Beta Evaluation Licence:{" "}
+                Everyone in the beta takes part under the {betaLicence.name} ({betaLicence.id}):{" "}
                 <OwnerField>link to the approved licence text, once counsel and the owner have approved it</OwnerField>.
               </p>
             </div>

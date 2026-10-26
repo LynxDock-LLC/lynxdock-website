@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { supportEmail } from "@/data/siteShell";
-import { eligibility } from "@/data/siteStatus";
+import { betaLicence, eligibility } from "@/data/siteStatus";
 
 // The site's existing form service: the production build sets NEXT_PUBLIC_FORM_ENDPOINT (a Formspree form that
 // accepts a JSON POST), as the early-access form always has. When the build has no endpoint, the form says so
@@ -166,7 +166,9 @@ export default function EnquiryForm({
           interest: String(data.get("interest") ?? ""),
           message: String(data.get("message") ?? "").trim(),
           ...(copy.ageDeclaration ? { ageConfirmed: "self-declared 18 or older (not verified)" } : {}),
-          ...(copy.termsAcknowledgement ? { termsAcknowledged: "read the beta requirements and agreed to them" } : {}),
+          ...(copy.termsAcknowledgement
+            ? { termsAcknowledged: `accepted ${betaLicence.name} (${betaLicence.id}) after reading the beta requirements` }
+            : {}),
           source: `lynxdock.app ${window.location.pathname}`,
         }),
       });

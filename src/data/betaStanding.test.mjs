@@ -116,6 +116,7 @@ test("beta eligibility is 18+ for everyone, self-declared, and never presented a
   assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "no box is ever pre-ticked");
   assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 2, "only beta access and the confirmation ask");
   assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
+  assert.match(form, /\$\{betaLicence\.id\}/, "an acceptance records which licence version was accepted");
   // Validation messages only appear after interaction, so the build guard cannot see them; pin them here.
   for (const key of ["ageConfirmed", "termsAcknowledged"]) {
     const message = (form.match(new RegExp(`next\\.${key} =\\s*"([^"]+)"`)) ?? [])[1] ?? "";

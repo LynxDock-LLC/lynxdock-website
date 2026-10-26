@@ -30,7 +30,7 @@ export default function Quickstart() {
           <li>
             <strong>{s.eligibility.statement}</strong> {s.eligibility.scope} {s.eligibility.selfDeclaration} If you
             will use the older 0.2.6 app, confirm the <Link href="/beta/#requirements">beta requirements</Link> on
-            the tester hub before your community invites you.
+            the tester hub before you join your community.
           </li>
           <li>
             <strong>Members</strong> install only the LynxDock app. <strong>The administrator</strong> who runs the

@@ -120,6 +120,16 @@ export const eligibility = {
   termsCheckboxLabel: "I have read the beta requirements and the beta licence on this page, and I accept the licence.",
 };
 
+/**
+ * The beta licence participants accept (name and ID from the licence draft r2, 2026-10-26). NOT yet approved: the hub's
+ * link to its text is an [OWNER] field, and this ID must match the approved text before anything ships. The hub's
+ * acceptance form sends this ID, so each confirmation names the version that was accepted.
+ */
+export const betaLicence = {
+  name: "LynxDock Beta Evaluation Licence",
+  id: "LYNXDOCK-BETA-EVAL-1.0",
+};
+
 export type Limitation = { title: string; text: string };
 
 /** Known limitations every visitor and tester should see. Pages render all of them in body text. */

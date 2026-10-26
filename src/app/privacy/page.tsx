@@ -110,7 +110,7 @@ export default function PrivacyPage() {
             address, organisation or community, the option you chose and your message. A beta access request also
             includes your confirmation that you are 18 or older. The beta requirements confirmation on the tester hub
             includes your name, email address, the community you are joining, your confirmation that you are 18 or
-            older and your confirmation that you have read and agree to the beta requirements.
+            older, and your confirmation that you have read and agree to the beta requirements, with the version you agreed to.
           </p>
           <p>
             Formspree also records technical details such as your IP address and browser type, and processes data in
