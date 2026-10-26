@@ -28,7 +28,7 @@ export default function Quickstart() {
         <h2 id="before">Before you start</h2>
         <ul>
           <li>
-            <strong>{s.eligibility.statement}</strong> This is a self-declaration: LynxDock does not verify age.
+            <strong>{s.eligibility.statement}</strong> {s.eligibility.selfDeclaration}
           </li>
           <li>
             <strong>Members</strong> install only the LynxDock app. <strong>The administrator</strong> who runs the

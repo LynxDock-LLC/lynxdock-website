@@ -94,14 +94,19 @@ export const pushToTalk = {
 };
 
 /**
- * Tester eligibility (owner direction, 2026-10-25). Age is self-declared. Nothing verifies it: there is no age
- * check in the website, the apps or the community server, so no page may imply one.
+ * Tester eligibility (owner direction, 2026-10-25/26). "18 or older" is an eligibility POLICY. The only mechanism is
+ * SELF-DECLARATION (the unticked, required box on the beta access form, enforced only in the visitor's browser).
+ * Nothing verifies age, and nothing in the website, apps, installers or community servers checks it, so no page may
+ * imply verification or enforcement. People invited straight onto a community server never meet the site's form.
  */
 export const eligibility = {
   heading: "Testers must be 18 or older",
   statement: "Testers must be 18 or older.",
   selfDeclaration:
-    "This is a self-declaration: LynxDock does not verify age, and nothing in the apps or the community server checks it.",
+    "This is an eligibility rule that you confirm yourself: LynxDock does not verify age, and nothing in the apps, the installers or community servers checks it.",
+  /** Factual, not a policy decision: who never meets the site's self-declaration step. */
+  directInvites:
+    "People invited straight onto a community server by its administrator do not go through this site's form.",
   checkboxLabel: "I confirm I am 18 or older.",
   checkboxHint: "A self-declaration. LynxDock does not verify age.",
 };

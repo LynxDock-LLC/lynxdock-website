@@ -128,8 +128,9 @@ export default function PrivacyPage() {
 
         <Section id="email" title="Email">
           <p>
-            Links that start an email only open your own email app; nothing is sent until you send it. Email you send
-            us is handled by <OwnerField>email provider for lynxdock.app</OwnerField> and kept for{" "}
+            Links that start an email only open your own email app; nothing is sent until you send it. Email sent to
+            a lynxdock.app address is received by Cloudflare Email Routing, which forwards it to{" "}
+            <OwnerField>the mailbox and provider it is forwarded to</OwnerField>, where it is kept for{" "}
             <OwnerField>retention</OwnerField>.
           </p>
         </Section>
@@ -148,9 +149,10 @@ export default function PrivacyPage() {
 
         <Section id="age" title="Beta testers and age">
           <p>
-            {eligibility.statement} Age is self-declared: a beta access request asks you to confirm that you are 18 or
-            older. LynxDock does not verify age, and nothing in the apps or the community server checks it. This
-            website is not directed at children.
+            {eligibility.statement} That is an eligibility rule, and the only way it is confirmed is your own
+            declaration: a beta access request on this site asks you to tick a box confirming that you are 18 or
+            older. LynxDock does not verify age, and nothing in the apps, the installers or community servers checks
+            it. {eligibility.directInvites} This website is not directed at children.
           </p>
           <p>
             <OwnerField>what you do if you learn a request came from someone under 18, for example delete it</OwnerField>

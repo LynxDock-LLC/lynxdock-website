@@ -196,14 +196,25 @@ for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started
   if (!text.includes(ELIGIBILITY)) fail(route, "the 18+ eligibility statement is missing");
   if (!/(does not|doesn't) verify age/.test(text)) fail(route, "the page does not say that age is not verified");
 }
+// Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
+// verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so
+// no sentence may suggest otherwise. (It reads rendered page text; messages that only appear after interaction,
+// such as the form's validation errors, are pinned by src/data/betaStanding.test.mjs instead.)
+const AGE_CONTEXT = /\bages?\b|\b18 or older\b|\b18\+|\bover 18\b|\bunder 18\b/i;
+const CONTROL_WORD = /\bverif\w*|\benforc\w*|\bcheck(s|ed|ing)?\b|\bvalidat\w*|\bprov(e|es|en|ing)\b/i;
+const NEGATION = /\b(not|no|never|nothing|doesn't|cannot|can't)\b/i;
+let sentencesChecked = 0;
 for (const [route, raw] of pages) {
   const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'");
   for (const sentence of text.split(/(?<=[.!?])\s+/)) {
-    if (/\bverif\w*/i.test(sentence) && /\bages?\b/i.test(sentence) && !/\b(not|no|never|nothing|doesn't)\b/i.test(sentence)) {
-      fail(route, `a sentence could imply age verification: "${sentence.trim().slice(0, 120)}"`);
+    if (!AGE_CONTEXT.test(sentence)) continue;
+    sentencesChecked++;
+    if (CONTROL_WORD.test(sentence) && !NEGATION.test(sentence)) {
+      fail(route, `a sentence could imply age verification or enforcement: "${sentence.trim().slice(0, 120)}"`);
     }
   }
 }
+console.log(`Age wording: ${sentencesChecked} age-related sentence(s) checked across all ${pages.size} pages.`);
 
 // Retired claims must not come back on the primary routes.
 const RETIRED = [/Quick Call/i, /\bP2P\b/, /(?<!not )peer-to-peer (calls|rooms)/i, /vs Discord/i, /exactly once/i, /Linux and macOS builds/i];

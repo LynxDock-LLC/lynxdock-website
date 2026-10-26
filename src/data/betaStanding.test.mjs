@@ -106,6 +106,16 @@ test("tester eligibility is 18+, self-declared, and never presented as verified"
   assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "the 18+ box is never pre-ticked");
   assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 1, "only the beta form asks for it");
   assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
+  // Policy vs mechanism vs enforcement, as the owner asked them to be distinguished.
+  assert.ok(
+    status.includes("nothing in the apps, the installers or community servers checks it"),
+    "the self-declaration names apps, installers and servers as not checking age",
+  );
+  assert.match(status, /directInvites:/, "directly invited testers are named as outside the site's form");
+  // The validation message only appears after interaction, so the build guard cannot see it; pin it here.
+  const message = (form.match(/next\.ageConfirmed =\s*"([^"]+)"/) ?? [])[1] ?? "";
+  assert.ok(message.includes("18 or older"), "the validation message states the rule");
+  assert.ok(!/verif|enforc|prove|proof/i.test(message), "the validation message implies no verification");
 });
 
 test("the stale installer checklist is gone", () => {

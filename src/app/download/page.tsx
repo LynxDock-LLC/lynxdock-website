@@ -37,7 +37,8 @@ export default function DownloadPage() {
               <ol className="num-list body mt-5">
                 <li>
                   You request access with the form on this page. {siteStatus.eligibility.statement} You confirm it
-                  yourself: LynxDock does not verify age.
+                  yourself by ticking a box: LynxDock does not verify age, and nothing in the apps, the installers or
+                  community servers checks it.
                 </li>
                 <li>
                   Testers join a <span className="strong">community server</span> through an invitation from whoever

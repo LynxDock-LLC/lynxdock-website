@@ -171,7 +171,7 @@ export default function BetaPage() {
             </h2>
             <p className="body mt-2">
               {s.eligibility.statement} {s.eligibility.selfDeclaration} People who request beta access through this
-              site confirm it themselves when they ask.
+              site tick a box to confirm it when they ask. {s.eligibility.directInvites}
             </p>
           </div>
         </div>
