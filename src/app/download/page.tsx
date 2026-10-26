@@ -36,9 +36,9 @@ export default function DownloadPage() {
               </h2>
               <ol className="num-list body mt-5">
                 <li>
-                  You request access with the form on this page. {siteStatus.eligibility.statement} You confirm it
-                  yourself by ticking a box: LynxDock does not verify age, and nothing in the apps, the installers or
-                  community servers checks it.
+                  You request access with the form on this page. {siteStatus.eligibility.statement}{" "}
+                  {siteStatus.eligibility.scope} {siteStatus.eligibility.selfDeclaration} Here, you confirm it by
+                  ticking a box.
                 </li>
                 <li>
                   Testers join a <span className="strong">community server</span> through an invitation from whoever
@@ -72,8 +72,8 @@ export default function DownloadPage() {
                   <dd>{s.platform}</dd>
                 </div>
                 <div>
-                  <dt>Who can test</dt>
-                  <dd>18 or older (self-declared; not verified)</dd>
+                  <dt>Who can take part</dt>
+                  <dd>Everyone 18 or older, including invited members and server operators (self-declared; not verified)</dd>
                 </div>
                 <div>
                   <dt>Next tester release</dt>

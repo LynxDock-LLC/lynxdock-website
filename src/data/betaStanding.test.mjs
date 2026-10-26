@@ -96,26 +96,32 @@ test("the push-to-talk scope is stated in the approved wording", () => {
   );
 });
 
-test("tester eligibility is 18+, self-declared, and never presented as verified", () => {
+test("beta eligibility is 18+ for everyone, self-declared, and never presented as verified", () => {
   const form = readFileSync(join(src, "components", "site", "EnquiryForm.tsx"), "utf8");
-  assert.ok(status.includes('statement: "Testers must be 18 or older."'), "the eligibility statement");
-  assert.match(status, /LynxDock does not verify age/, "the self-declaration says age is not verified");
-  assert.match(page, /s\.eligibility\.statement/, "the tester hub shows it");
-  // The beta form's checkbox starts unticked and must be ticked to send; only the beta form asks for it.
-  assert.match(form, /name="ageConfirmed"[\s\S]{0,80}required/, "the 18+ box is required");
-  assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "the 18+ box is never pre-ticked");
-  assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 1, "only the beta form asks for it");
-  assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
-  // Policy vs mechanism vs enforcement, as the owner asked them to be distinguished.
+  // Owner decision 2026-10-26: everyone in the beta, not only people who apply on the site.
+  assert.ok(status.includes('statement: "Everyone in the LynxDock beta must be 18 or older."'), "the eligibility statement");
+  assert.match(status, /people a community invites directly, and people who run a community server with LynxDock Host/, "the scope");
+  assert.ok(!/Testers must be 18/.test(status + page + form), "no applicant-only wording remains");
+  assert.match(status, /LynxDock asks you to confirm that you are 18 or older and does not verify age/, "self-declared, not verified");
   assert.ok(
-    status.includes("nothing in the apps, the installers or community servers checks it"),
-    "the self-declaration names apps, installers and servers as not checking age",
+    status.includes("Nothing in the apps, the installers or community servers checks it"),
+    "apps, installers and servers are named as not checking age",
   );
-  assert.match(status, /directInvites:/, "directly invited testers are named as outside the site's form");
-  // The validation message only appears after interaction, so the build guard cannot see it; pin it here.
-  const message = (form.match(/next\.ageConfirmed =\s*"([^"]+)"/) ?? [])[1] ?? "";
-  assert.ok(message.includes("18 or older"), "the validation message states the rule");
-  assert.ok(!/verif|enforc|prove|proof/i.test(message), "the validation message implies no verification");
+  assert.match(page, /s\.eligibility\.statement/, "the tester hub shows it");
+  assert.match(page, /id="requirements"/, "the hub has the beta requirements section operators can send people to");
+  assert.match(page, /<EnquiryForm kind="acknowledgement" \/>/, "older-app users can confirm the requirements on the hub");
+  // Both self-declaration boxes start unticked and must be ticked to send; only the two intake forms ask.
+  assert.match(form, /name="ageConfirmed"[\s\S]{0,80}required/, "the 18+ box is required");
+  assert.match(form, /name="termsAcknowledged"[\s\S]{0,80}required/, "the requirements box is required");
+  assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "no box is ever pre-ticked");
+  assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 2, "only beta access and the confirmation ask");
+  assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
+  // Validation messages only appear after interaction, so the build guard cannot see them; pin them here.
+  for (const key of ["ageConfirmed", "termsAcknowledged"]) {
+    const message = (form.match(new RegExp(`next\\.${key} =\\s*"([^"]+)"`)) ?? [])[1] ?? "";
+    assert.ok(message.length > 0, `the ${key} validation message exists`);
+    assert.ok(!/verif|enforc|prove|proof/i.test(message), `the ${key} message implies no verification`);
+  }
 });
 
 test("the stale installer checklist is gone", () => {

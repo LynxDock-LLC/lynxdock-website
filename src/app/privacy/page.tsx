@@ -12,7 +12,7 @@ import { eligibility } from "@/data/siteStatus";
 export const metadata: Metadata = {
   title: "Privacy notice",
   description:
-    "How the LynxDock website handles information: hosting, page-view analytics, enquiry forms and email, and the 18+ self-declaration for beta testers.",
+    "How the LynxDock website handles information: hosting, page-view analytics, enquiry forms and email, and the 18+ self-declaration for beta participants.",
 };
 
 const CLOUDFLARE_POLICY = "https://www.cloudflare.com/privacypolicy/";
@@ -103,12 +103,14 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section id="forms" title="Forms: demo, beta access and business enquiries">
+        <Section id="forms" title="Forms: demo, beta access, business enquiries and the beta requirements confirmation">
           <p>
             When you send one of these forms, what you enter goes to Formspree, a form-handling service, which stores
             the submission in LynxDock&rsquo;s account and emails it to the team. That can include your name, email
-            address, optional organisation or community, the option you chose, your message and, for beta access
-            requests, your confirmation that you are 18 or older.
+            address, organisation or community, the option you chose and your message. A beta access request also
+            includes your confirmation that you are 18 or older. The beta requirements confirmation on the tester hub
+            includes your name, email address, the community you are joining, your confirmation that you are 18 or
+            older and your confirmation that you have read and agree to the beta requirements.
           </p>
           <p>
             Formspree also records technical details such as your IP address and browser type, and processes data in
@@ -116,9 +118,14 @@ export default function PrivacyPage() {
             <External href={FORMSPREE_POLICY}>privacy policy</External>.
           </p>
           <p>
-            We use what you send to reply to you and to handle your request.{" "}
-            <OwnerField>confirm no other use, for example no mailing list</OwnerField> Retention:{" "}
-            <OwnerField>how long submissions are kept in Formspree and in email</OwnerField>.
+            We use what you send to reply to you, to handle your request and to keep a record that you confirmed the
+            beta requirements.{" "}
+            <OwnerField>
+              confirm no other use, for example no mailing list, and whether a confirmation is ever shared with the
+              community&rsquo;s administrator
+            </OwnerField>{" "}
+            Retention:{" "}
+            <OwnerField>how long submissions, including beta requirements confirmations, are kept in Formspree and in email</OwnerField>.
           </p>
           <p>
             Nothing is sent until you press the form&rsquo;s send button. A form that is not connected to the
@@ -147,15 +154,20 @@ export default function PrivacyPage() {
           </ul>
         </Section>
 
-        <Section id="age" title="Beta testers and age">
+        <Section id="age" title="Beta participants and age">
           <p>
-            {eligibility.statement} That is an eligibility rule, and the only way it is confirmed is your own
-            declaration: a beta access request on this site asks you to tick a box confirming that you are 18 or
-            older. LynxDock does not verify age, and nothing in the apps, the installers or community servers checks
-            it. {eligibility.directInvites} This website is not directed at children.
+            {eligibility.statement} {eligibility.scope} That is an eligibility rule, and the only way it is confirmed
+            is each person&rsquo;s own declaration. On this website, the beta access form and the beta requirements
+            confirmation ask you to tick a box confirming that you are 18 or older. From the next tester release, the
+            LynxDock app and Host also ask for this confirmation when they first start; that happens in the app, not on
+            this website. LynxDock does not verify age, and nothing in the apps, the installers or community servers
+            checks it. This website is not directed at children.
           </p>
           <p>
-            <OwnerField>what you do if you learn a request came from someone under 18, for example delete it</OwnerField>
+            <OwnerField>
+              what you do if you learn that a request or confirmation came from someone under 18, for example delete
+              it and ask the community not to invite them
+            </OwnerField>
           </p>
         </Section>
 

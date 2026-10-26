@@ -94,21 +94,30 @@ export const pushToTalk = {
 };
 
 /**
- * Tester eligibility (owner direction, 2026-10-25/26). "18 or older" is an eligibility POLICY. The only mechanism is
- * SELF-DECLARATION (the unticked, required box on the beta access form, enforced only in the visitor's browser).
- * Nothing verifies age, and nothing in the website, apps, installers or community servers checks it, so no page may
- * imply verification or enforcement. People invited straight onto a community server never meet the site's form.
+ * Beta eligibility. Owner decision 2026-10-26: "18 or older" applies to EVERYONE in the beta (people who request
+ * access here, people a community invites directly, and Host operators), not only website applicants. It is an
+ * eligibility POLICY confirmed by SELF-DECLARATION: LynxDock asks people to confirm it and does not verify age.
+ * Nothing in the website, apps, installers or community servers checks it, so no page may imply verification or
+ * enforcement. How each route is asked to confirm is in `routes` (the next release's app and Host ask on first start,
+ * per the release coordinator; the older 0.2.6 app has no such screen, so its users confirm on the tester hub).
  */
 export const eligibility = {
-  heading: "Testers must be 18 or older",
-  statement: "Testers must be 18 or older.",
+  heading: "Everyone in the beta must be 18 or older",
+  statement: "Everyone in the LynxDock beta must be 18 or older.",
+  scope:
+    "That includes people who request access on this site, people a community invites directly, and people who run a community server with LynxDock Host.",
   selfDeclaration:
-    "This is an eligibility rule that you confirm yourself: LynxDock does not verify age, and nothing in the apps, the installers or community servers checks it.",
-  /** Factual, not a policy decision: who never meets the site's self-declaration step. */
-  directInvites:
-    "People invited straight onto a community server by its administrator do not go through this site's form.",
+    "Age is self-declared: LynxDock asks you to confirm that you are 18 or older and does not verify age. Nothing in the apps, the installers or community servers checks it.",
+  routes: {
+    site: "On this site, the beta access form asks you to tick a box to confirm it.",
+    nextRelease:
+      "From the next tester release, the installers and the LynxDock app and LynxDock Host show the beta licence, which includes this requirement, and ask you to accept it: on the installer page and again before you sign in or start services.",
+    olderApp:
+      "The older 0.2.6 app shows no licence screen. If you will use it, read the beta requirements on the tester hub and accept them there before you join your community.",
+  },
   checkboxLabel: "I confirm I am 18 or older.",
   checkboxHint: "A self-declaration. LynxDock does not verify age.",
+  termsCheckboxLabel: "I have read the beta requirements and the beta licence on this page, and I accept the licence.",
 };
 
 export type Limitation = { title: string; text: string };
@@ -116,7 +125,10 @@ export type Limitation = { title: string; text: string };
 /** Known limitations every visitor and tester should see. Pages render all of them in body text. */
 export const limitations: Limitation[] = [
   { title: pushToTalk.heading, text: `${pushToTalk.statement} ${pushToTalk.qualifier}` },
-  { title: eligibility.heading, text: `${eligibility.statement} ${eligibility.selfDeclaration}` },
+  {
+    title: eligibility.heading,
+    text: `${eligibility.statement} ${eligibility.scope} ${eligibility.selfDeclaration}`,
+  },
   {
     title: "Windows only",
     text: "The desktop app and LynxDock Host are Windows (x64) builds. There are no macOS, Linux or mobile builds.",

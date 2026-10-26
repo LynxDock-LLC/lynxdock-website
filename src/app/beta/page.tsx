@@ -13,6 +13,8 @@ import { githubOrg, supportEmail } from "@/data/siteShell";
 import { betaDownloads, betaAuthenticode, betaSigningPublisher } from "@/data/betaDownloads";
 import { v6Candidate } from "@/data/v6Candidate";
 import { closedBetaBuild, closedBetaServer, closedBetaResiduals, supersededInstallers } from "@/data/closedBeta";
+import EnquiryForm from "@/components/site/EnquiryForm";
+import OwnerField from "@/components/site/OwnerField";
 
 // The invited-tester hub. noindex/nofollow, absent from the sitemap and from the primary navigation; reached from
 // /download/, the quickstart, /releases/ and /support/. It is an unlisted page, not an access-controlled one.
@@ -120,7 +122,7 @@ export default function BetaPage() {
           <ul className="flex flex-wrap gap-2">
             {[
               ["#status", "Release status"],
-              ["#eligibility", "Who can test"],
+              ["#requirements", "Beta requirements"],
               ["#which", "App or Host"],
               ["#first-connection", "First connection"],
               ["#limitations", "Known limitations"],
@@ -162,17 +164,70 @@ export default function BetaPage() {
         </div>
       </section>
 
-      {/* ELIGIBILITY: self-declared, never verified */}
-      <section id="eligibility" aria-labelledby="eligibility-title" className="section-tight">
+      {/* BETA REQUIREMENTS: for everyone in the beta (owner decision 2026-10-26). Operators can send people here.
+          Age is self-declared and never verified; nothing in the apps, installers or servers checks it. */}
+      <section id="requirements" aria-labelledby="requirements-title" className="section section-band">
         <div className="wrap">
-          <div className="card-notice max-w-3xl">
-            <h2 id="eligibility-title" className="text-lg font-bold text-[#ecd6a8]">
-              {s.eligibility.heading}
+          <div className="max-w-3xl">
+            <h2 id="requirements-title" className="h-section">
+              Beta requirements
             </h2>
-            <p className="body mt-2">
-              {s.eligibility.statement} {s.eligibility.selfDeclaration} People who request beta access through this
-              site tick a box to confirm it when they ask. {s.eligibility.directInvites}
+            <p className="lead mt-3">
+              These apply to everyone taking part in the LynxDock beta. A community&rsquo;s administrator may send
+              you here before inviting you.
             </p>
+          </div>
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <div className="card">
+              <h3 className="h-card">What the beta is</h3>
+              <p className="small mt-2">
+                A closed test of pre-release software. Expect rough edges and bugs, and report what you find. Please
+                don&rsquo;t redistribute builds or post links to them publicly. Feedback you send may be used to
+                improve LynxDock.
+              </p>
+            </div>
+            <div id="eligibility" className="card-notice">
+              <h3 className="text-lg font-bold text-[#ecd6a8]">{s.eligibility.heading}</h3>
+              <p className="small mt-2">
+                {s.eligibility.statement} {s.eligibility.scope} {s.eligibility.selfDeclaration}
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="h-card">The beta licence</h3>
+              <p className="small mt-2">
+                Everyone in the beta takes part under the LynxDock Beta Evaluation Licence:{" "}
+                <OwnerField>link to the approved licence text, once counsel and the owner have approved it</OwnerField>.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="h-card">How you confirm</h3>
+              <ul className="tick-list small mt-2">
+                <li>{s.eligibility.routes.site}</li>
+                <li>{s.eligibility.routes.nextRelease}</li>
+                <li>{s.eligibility.routes.olderApp}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="confirm" className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+            <div>
+              <h3 className="h-card text-[1.3rem]">Using the older 0.2.6 app? Accept the requirements here before you join</h3>
+              <p className="body mt-3">
+                The 0.2.6 app shows no licence screen when it starts, so confirm your age and accept the beta licence
+                here. This sends your confirmation to the LynxDock team; it does not reach your community&rsquo;s
+                server, so tell its administrator once you have sent it. You can also wait and use the next release,
+                which asks on the installer page and when it first starts.
+              </p>
+              <p className="small mt-4">
+                <span className="strong">If you run a community server:</span> the requirement applies to you as
+                well, and the next release&rsquo;s Host asks you to accept the beta licence before it starts services.
+                Your acceptance covers you only; each member accepts for themselves. Before you invite someone who will
+                use the 0.2.6 app, send them to this section.
+              </p>
+            </div>
+            <div className="card">
+              <EnquiryForm kind="acknowledgement" />
+            </div>
           </div>
         </div>
       </section>

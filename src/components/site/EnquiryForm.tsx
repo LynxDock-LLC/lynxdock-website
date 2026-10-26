@@ -9,9 +9,9 @@ import { eligibility } from "@/data/siteStatus";
 // and never reports that anything was sent.
 const ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
 
-export type EnquiryKind = "demo" | "beta" | "business";
+export type EnquiryKind = "demo" | "beta" | "business" | "acknowledgement";
 
-type FieldName = "name" | "email" | "organisation" | "interest" | "message" | "ageConfirmed";
+type FieldName = "name" | "email" | "organisation" | "interest" | "message" | "ageConfirmed" | "termsAcknowledged";
 
 const COPY: Record<
   EnquiryKind,
@@ -23,8 +23,14 @@ const COPY: Record<
     messageHint: string;
     messageRequired: boolean;
     interest?: { label: string; options: string[] };
-    /** Tester intake: an unticked 18+ self-declaration that must be ticked to send. It is not age verification. */
+    /** An unticked 18+ self-declaration that must be ticked to send. It is not age verification. */
     ageDeclaration?: boolean;
+    /** An unticked confirmation that the sender read and agrees to the beta requirements (tester hub). */
+    termsAcknowledgement?: boolean;
+    organisationRequired?: boolean;
+    /** Defaults to true. */
+    showMessage?: boolean;
+    deliveredText?: string;
   }
 > = {
   demo: {
@@ -47,6 +53,21 @@ const COPY: Record<
       label: "How would you use LynxDock?",
       options: ["As a member", "Running our community's server", "Not sure yet"],
     },
+  },
+  // Beta requirements confirmation (tester hub): for people who will use the older 0.2.6 app, which has no
+  // first-start terms screen. A record that the person confirmed the requirements, not proof of age or identity.
+  acknowledgement: {
+    subject: "LynxDock beta requirements confirmation",
+    submit: "Send my confirmation",
+    organisationLabel: "Community you are joining",
+    organisationRequired: true,
+    messageLabel: "",
+    messageHint: "",
+    messageRequired: false,
+    showMessage: false,
+    ageDeclaration: true,
+    termsAcknowledgement: true,
+    deliveredText: "Your confirmation was delivered to the LynxDock team. Let your community’s administrator know you have sent it.",
   },
   business: {
     subject: "LynxDock business enquiry",
@@ -103,8 +124,12 @@ export default function EnquiryForm({
     else if (!EMAIL_RE.test(email)) next.email = "Enter an email address like name@example.com.";
     if (copy.messageRequired && !message) next.message = "Add a short message.";
     if (copy.interest && !data.get("interest")) next.interest = `Choose an option for "${copy.interest.label}".`;
+    if (copy.organisationRequired && !String(data.get("organisation") ?? "").trim())
+      next.organisation = "Enter the community you are joining.";
     if (copy.ageDeclaration && data.get("ageConfirmed") !== "yes")
-      next.ageConfirmed = "Testers must be 18 or older. Tick the box to confirm, or don’t send this request.";
+      next.ageConfirmed = "Everyone in the beta must be 18 or older. Tick the box to confirm, or don’t send this.";
+    if (copy.termsAcknowledgement && data.get("termsAcknowledged") !== "yes")
+      next.termsAcknowledged = "Tick the box to accept the beta licence, or don’t send this.";
     return next;
   }
 
@@ -141,6 +166,7 @@ export default function EnquiryForm({
           interest: String(data.get("interest") ?? ""),
           message: String(data.get("message") ?? "").trim(),
           ...(copy.ageDeclaration ? { ageConfirmed: "self-declared 18 or older (not verified)" } : {}),
+          ...(copy.termsAcknowledgement ? { termsAcknowledged: "read the beta requirements and agreed to them" } : {}),
           source: `lynxdock.app ${window.location.pathname}`,
         }),
       });
@@ -165,7 +191,7 @@ export default function EnquiryForm({
     return (
       <div ref={statusRef} tabIndex={-1} role="status" className="card-2">
         <p className="strong">Thank you. Your message was delivered.</p>
-        <p className="small mt-2">The LynxDock team will reply by email.</p>
+        <p className="small mt-2">{copy.deliveredText ?? "The LynxDock team will reply by email."}</p>
         {onDone && (
           <button type="button" className="btn btn-secondary btn-sm mt-4" onClick={onDone}>
             Close
@@ -243,8 +269,12 @@ export default function EnquiryForm({
           type="text"
           autoComplete="organization"
           maxLength={160}
+          required={copy.organisationRequired}
           className="input"
+          aria-invalid={errors.organisation ? true : undefined}
+          aria-describedby={describedBy("organisation")}
         />
+        {err("organisation")}
       </div>
       {copy.interest && (
         <fieldset className="field" aria-describedby={describedBy("interest")}>
@@ -267,6 +297,7 @@ export default function EnquiryForm({
           {err("interest")}
         </fieldset>
       )}
+      {copy.showMessage !== false && (
       <div className="field">
         <label htmlFor={id("message")}>{copy.messageLabel}</label>
         <textarea
@@ -284,6 +315,7 @@ export default function EnquiryForm({
         </p>
         {err("message")}
       </div>
+      )}
       {copy.ageDeclaration && (
         <div className="field">
           <label className="flex min-h-[44px] cursor-pointer items-start gap-3 text-[0.9375rem] font-semibold text-ink">
@@ -302,6 +334,23 @@ export default function EnquiryForm({
             {eligibility.statement} {eligibility.checkboxHint}
           </p>
           {err("ageConfirmed")}
+        </div>
+      )}
+      {copy.termsAcknowledgement && (
+        <div className="field">
+          <label className="flex min-h-[44px] cursor-pointer items-start gap-3 text-[0.9375rem] font-semibold text-ink">
+            <input
+              type="checkbox"
+              name="termsAcknowledged"
+              value="yes"
+              required
+              className="mt-0.5 h-[18px] w-[18px] flex-none accent-[#5ce1df]"
+              aria-invalid={errors.termsAcknowledged ? true : undefined}
+              aria-describedby={errors.termsAcknowledged ? id("termsAcknowledged-error") : undefined}
+            />
+            {eligibility.termsCheckboxLabel}
+          </label>
+          {err("termsAcknowledged")}
         </div>
       )}
       {/* Spam trap for the form service; hidden from people and assistive technology. */}

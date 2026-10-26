@@ -189,12 +189,22 @@ for (const [route, raw] of pages) {
   }
 }
 
-// Tester eligibility: 18+, self-declared, never presented as verified.
-const ELIGIBILITY = "Testers must be 18 or older.";
+// Beta eligibility (owner decision 2026-10-26): 18+ for EVERYONE in the beta, self-declared, never presented as
+// verified, and never worded as if it applied only to people who apply through this site.
+const ELIGIBILITY = "Everyone in the LynxDock beta must be 18 or older.";
+const SCOPE = "people a community invites directly, and people who run a community server with LynxDock Host";
 for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started/"]) {
   const text = (pages.get(route) || "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'").replace(/\s+/g, " ");
   if (!text.includes(ELIGIBILITY)) fail(route, "the 18+ eligibility statement is missing");
   if (!/(does not|doesn't) verify age/.test(text)) fail(route, "the page does not say that age is not verified");
+  if (!text.includes(SCOPE)) fail(route, "the eligibility scope (invited members and server operators) is missing");
+  if (/Testers must be 18/.test(text)) fail(route, "old applicant-only wording is back");
+}
+{
+  const hub = pages.get("/beta/") || "";
+  if (!/id="requirements"/.test(hub)) fail("/beta/", "the beta requirements section is missing");
+  if (!/name="termsAcknowledged"/.test(hub) || !/name="ageConfirmed"/.test(hub))
+    fail("/beta/", "the beta requirements confirmation form is missing its two self-declaration boxes");
 }
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so
