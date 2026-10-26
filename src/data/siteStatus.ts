@@ -62,7 +62,7 @@ export const release026Record: ReleaseRecord = {
   signed: release026.signed,
   downloadsOnThisSite: release026.published,
   summary:
-    "Signed Windows installers for the LynxDock app and LynxDock Host. The community server and the voice services are inside the Host.",
+    "Signed Windows installers for the LynxDock app and LynxDock Host. The Host includes the community server and sets up the voice services.",
   provenance: `Signing run ${release026.signingRunId} · clean-machine qualification run ${release026.qualificationRunId}`,
   artifacts: release026.downloads.map(fromManifest),
 };

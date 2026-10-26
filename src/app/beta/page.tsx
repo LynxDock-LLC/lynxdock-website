@@ -196,8 +196,8 @@ export default function BetaPage() {
               <p className="eyebrow">Only the server&rsquo;s administrator</p>
               <h3 className="h-card mt-2">LynxDock Host</h3>
               <p className="small mt-2">
-                For the person who runs the community server. The server and the voice services are inside the
-                Host installer, so members do not install it.
+                For the person who runs the community server. The Host installer includes the server, and Host sets
+                up the voice services when the administrator turns voice on. Members do not install it.
               </p>
             </div>
           </div>

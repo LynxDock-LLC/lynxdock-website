@@ -134,7 +134,15 @@ export default function HostPage() {
             <p className="small mt-2">
               LynxDock Host is a Windows (x64) app in this beta, and it runs the community server on the same PC.
               That Windows requirement belongs to Host. The application server it manages is a separate Rust
-              service, which this beta packages inside Host along with the voice services.
+              service, which this beta packages inside Host.
+            </p>
+            <h3 className="h-card mt-6">What Host connects to</h3>
+            <p className="small mt-2">
+              When the administrator turns voice on, Host downloads the voice components, each checked against a
+              signed manifest: LiveKit from LiveKit&rsquo;s own GitHub releases, and coturn from LynxDock&rsquo;s
+              download storage. Its &ldquo;Make reachable&rdquo; step, which the administrator starts, also asks
+              two public STUN servers (Google&rsquo;s and Cloudflare&rsquo;s) for the PC&rsquo;s public address and
+              asks the router to open a port (UPnP). Members&rsquo; apps connect only to their community&rsquo;s own server and voice services.
             </p>
             <h3 className="h-card mt-6">For invited administrators</h3>
             <p className="small mt-2">
