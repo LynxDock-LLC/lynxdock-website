@@ -111,9 +111,9 @@ export const eligibility = {
   routes: {
     site: "On this site, the beta access form asks you to tick a box to confirm it.",
     nextRelease:
-      "From the next tester release, the installers and the LynxDock app and LynxDock Host show the beta licence, which includes this requirement, and ask you to accept it: on the installer page and again before you sign in or start services.",
+      "From the next tester release, the installers and the LynxDock app and LynxDock Host show the beta licence, which includes this requirement, and ask you to accept it: on the installer page and again before you sign in or start services. The app or Host keeps a record of your acceptance on your device only; it is not sent anywhere.",
     olderApp:
-      "The older 0.2.6 app shows no licence screen. If you will use it, read the beta requirements on the tester hub and accept them there before you join your community.",
+      "The older 0.2.6 app shows no licence screen. If you will join with it, confirm the beta requirements in the section below before a community’s administrator invites you.",
   },
   checkboxLabel: "I confirm I am 18 or older.",
   checkboxHint: "A self-declaration. LynxDock does not verify age.",
@@ -128,6 +128,8 @@ export const eligibility = {
 export const betaLicence = {
   name: "LynxDock Beta Evaluation Licence",
   id: "LYNXDOCK-BETA-EVAL-1.0",
+  /** [OWNER] Where the approved licence text is published. While this is null, the hub shows an [OWNER] marker. */
+  textUrl: null as string | null,
 };
 
 export type Limitation = { title: string; text: string };

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
 import OwnerField from "@/components/site/OwnerField";
-import { eligibility } from "@/data/siteStatus";
+import { betaLicence, eligibility } from "@/data/siteStatus";
 
 // Privacy notice for the website (owner direction, 2026-10-25: an accurate update before any public beta intake or
 // announcement). It describes what this site actually processes, as verified on 2026-10-26: Cloudflare hosting and
@@ -106,11 +106,15 @@ export default function PrivacyPage() {
         <Section id="forms" title="Forms: demo, beta access, business enquiries and the beta requirements confirmation">
           <p>
             When you send one of these forms, what you enter goes to Formspree, a form-handling service, which stores
-            the submission in LynxDock&rsquo;s account and emails it to the team. That can include your name, email
-            address, organisation or community, the option you chose and your message. A beta access request also
-            includes your confirmation that you are 18 or older. The beta requirements confirmation on the tester hub
-            includes your name, email address, the community you are joining, your confirmation that you are 18 or
-            older, and your confirmation that you have read and agree to the beta requirements, with the version you agreed to.
+            the submission in LynxDock&rsquo;s account and emails it to the team. Each submission also says which form
+            it came from and the page you sent it from. Depending on the form, what you enter can include your name,
+            email address, organisation or community, the option you chose and your message. A beta access request
+            also includes your confirmation that you are 18 or older.
+          </p>
+          <p>
+            The beta requirements confirmation on the tester hub sends your name, your email address, the community
+            you are joining, your confirmation that you are 18 or older, and your agreement to the beta requirements
+            with the identifier of the version you agreed to ({betaLicence.id}). It has no message field.
           </p>
           <p>
             Formspree also records technical details such as your IP address and browser type, and processes data in
@@ -158,10 +162,16 @@ export default function PrivacyPage() {
           <p>
             {eligibility.statement} {eligibility.scope} That is an eligibility rule, and the only way it is confirmed
             is each person&rsquo;s own declaration. On this website, the beta access form and the beta requirements
-            confirmation ask you to tick a box confirming that you are 18 or older. From the next tester release, the
-            LynxDock app and Host also ask for this confirmation when they first start; that happens in the app, not on
-            this website. LynxDock does not verify age, and nothing in the apps, the installers or community servers
-            checks it. This website is not directed at children.
+            confirmation ask you to tick a box confirming that you are 18 or older. LynxDock does not verify age, and
+            nothing in the apps, the installers or community servers checks it. This website is not directed at
+            children.
+          </p>
+          <p>
+            From the next tester release, the LynxDock app and LynxDock Host also ask for this declaration when they
+            first start, as part of accepting the beta requirements. That happens in the app, not on this website. The
+            app keeps a record of the acceptance on your device only, for your Windows account: the identifier and
+            version you accepted, a fingerprint of the text, your 18+ declaration, the time and the app version. The
+            record contains nothing that identifies you and is never sent to LynxDock or to any server.
           </p>
           <p>
             <OwnerField>
@@ -173,9 +183,10 @@ export default function PrivacyPage() {
 
         <Section id="apps" title="The LynxDock apps and community servers">
           <p>
-            This notice covers the website only. Community servers are run by the communities that use them: their
-            accounts, messages, voice and records stay on infrastructure each community controls, and LynxDock LLC has
-            no access to them unless someone sends us information, for example in a problem report.
+            Apart from the in-app acceptance record described above, this notice covers the website only. Community
+            servers are run by the communities that use them: their accounts, messages, voice and records stay on
+            infrastructure each community controls, and LynxDock LLC has no access to them unless someone sends us
+            information, for example in a problem report.
           </p>
         </Section>
 

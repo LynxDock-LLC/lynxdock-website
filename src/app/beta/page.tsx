@@ -98,6 +98,17 @@ function HashRows({ rows }: { rows: { name: string; detail: string; sha256: stri
   );
 }
 
+// The approved licence text, or an [OWNER] marker until counsel and the owner have approved it (betaLicence.textUrl).
+function LicenceTextLink() {
+  return betaLicence.textUrl ? (
+    <a href={betaLicence.textUrl} className="text-link">
+      read the licence text
+    </a>
+  ) : (
+    <OwnerField>link to the approved licence text, once counsel and the owner have approved it</OwnerField>
+  );
+}
+
 export default function BetaPage() {
   const s = siteStatus;
   const r026 = s.earlierPublished;
@@ -192,11 +203,11 @@ export default function BetaPage() {
                 {s.eligibility.statement} {s.eligibility.scope} {s.eligibility.selfDeclaration}
               </p>
             </div>
-            <div className="card">
+            <div id="licence" className="card">
               <h3 className="h-card">The beta licence</h3>
               <p className="small mt-2">
                 Everyone in the beta takes part under the {betaLicence.name} ({betaLicence.id}):{" "}
-                <OwnerField>link to the approved licence text, once counsel and the owner have approved it</OwnerField>.
+                <LicenceTextLink />.
               </p>
             </div>
             <div className="card">
@@ -209,20 +220,52 @@ export default function BetaPage() {
             </div>
           </div>
 
+          {/* OLDER-APP ACCEPTANCE. Matches the 0.3.0 operator instructions (SERVER-SETUP-AND-CATALOG.md, "Who may take
+              part, and members on the older app") and licence draft r2 sections 13 and 17. It does not quote the
+              licence. */}
           <div id="confirm" className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
             <div>
-              <h3 className="h-card text-[1.3rem]">Using the older 0.2.6 app? Accept the requirements here before you join</h3>
+              <h3 className="h-card text-[1.3rem]">Joining with the older 0.2.6 app? Confirm here before you are invited</h3>
               <p className="body mt-3">
-                The 0.2.6 app shows no licence screen when it starts, so confirm your age and accept the beta licence
-                here. This sends your confirmation to the LynxDock team; it does not reach your community&rsquo;s
-                server, so tell its administrator once you have sent it. You can also wait and use the next release,
-                which asks on the installer page and when it first starts.
+                During the move to the next release, the 0.2.6 app can still connect to a community server, but it
+                shows no licence screen. If you will join with it, you confirm the beta requirements here instead.
               </p>
-              <p className="small mt-4">
-                <span className="strong">If you run a community server:</span> the requirement applies to you as
-                well, and the next release&rsquo;s Host asks you to accept the beta licence before it starts services.
-                Your acceptance covers you only; each member accepts for themselves. Before you invite someone who will
-                use the 0.2.6 app, send them to this section.
+              <ol className="num-list body mt-5">
+                <li>
+                  <span className="strong">Who:</span> everyone who will join a beta community with the 0.2.6 app,
+                  however you were invited: directly by a community&rsquo;s administrator, or after requesting access on
+                  this site.
+                </li>
+                <li>
+                  <span className="strong">When:</span> before the administrator invites you. They may send you here
+                  first.
+                </li>
+                <li>
+                  <span className="strong">Read:</span> the beta requirements above and the {betaLicence.name}{" "}
+                  ({betaLicence.id}): <LicenceTextLink />.
+                </li>
+                <li>
+                  <span className="strong">Confirm:</span> that you are 18 or older, which is your own declaration
+                  (LynxDock does not verify age), and that you accept the {betaLicence.name} ({betaLicence.id}). The
+                  form sends both to the LynxDock team, with your name, email address and community.
+                </li>
+                <li>
+                  <span className="strong">Then:</span> tell the administrator who is inviting you that you have
+                  confirmed. Your confirmation goes to the LynxDock team only. It does not reach your community&rsquo;s
+                  server, and the administrator cannot see it.
+                </li>
+              </ol>
+              <p className="small mt-5">
+                <span className="strong">If you run a community server:</span> before you invite a member who will use
+                the 0.2.6 app, send them to this section and wait until they tell you they have confirmed. The
+                requirement applies to you as well: the next release&rsquo;s Host asks you to accept the beta licence
+                before it starts services, and your acceptance covers only you, never a member.
+              </p>
+              <p className="small mt-3">
+                <span className="strong">On the next release instead:</span> members who install the next release,
+                once it is available, don&rsquo;t use this form. Its installer and the app ask them to accept the beta
+                licence, with the same 18+ declaration, before the app signs in, and the app keeps that record on their
+                own device.
               </p>
             </div>
             <div className="card">

@@ -206,6 +206,21 @@ for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started
   if (!/name="termsAcknowledged"/.test(hub) || !/name="ageConfirmed"/.test(hub))
     fail("/beta/", "the beta requirements confirmation form is missing its two self-declaration boxes");
 }
+{
+  // Older-app (0.2.6) acceptance on the hub (owner request 2026-10-27): the steps and the operator's part are there.
+  const hub = (pages.get("/beta/") || "").replace(/<script[\s\S]*?<\/script>/g, "");
+  const text = hub.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'").replace(/\s+/g, " ");
+  if (!/id="confirm"/.test(hub) || !/id="licence"/.test(hub)) fail("/beta/", "the older-app confirmation or the licence card is missing");
+  if (!text.includes("wait until they tell you they have confirmed")) fail("/beta/", "the operator's step for older-app members is missing");
+}
+{
+  // Privacy (owner direction 2026-10-25): nothing about licensing; the in-app acceptance record is described as
+  // kept on the device and never sent.
+  const privacy = (pages.get("/privacy/") || "").replace(/<script[\s\S]*?<\/script>/g, "");
+  const text = privacy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  if (/licen[cs]/i.test(text)) fail("/privacy/", "the privacy notice must not mention licensing");
+  if (!text.includes("never sent to LynxDock or to any server")) fail("/privacy/", "the device-only in-app acceptance record is not described");
+}
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so
 // no sentence may suggest otherwise. (It reads rendered page text; messages that only appear after interaction,

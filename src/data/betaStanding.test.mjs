@@ -125,6 +125,18 @@ test("beta eligibility is 18+ for everyone, self-declared, and never presented a
   }
 });
 
+test("older-app (0.2.6) members get complete acceptance instructions, and privacy matches what is sent", () => {
+  const privacy = readFileSync(join(src, "app", "privacy", "page.tsx"), "utf8");
+  assert.match(page, /id="confirm"/, "the hub has the older-app confirmation");
+  for (const step of ["Who:", "When:", "Read:", "Confirm:", "Then:"]) {
+    assert.ok(page.includes(step + "</span>"), "the hub states " + step);
+  }
+  assert.ok(page.includes("wait until they tell you they have confirmed"), "operators wait for the member to confirm");
+  assert.equal((page.match(/<LicenceTextLink \/>/g) ?? []).length, 2, "the licence text link is on the card and in the steps");
+  assert.match(privacy, /\{betaLicence\.id\}/, "privacy names the version identifier the confirmation sends");
+  assert.ok(privacy.includes("never sent to LynxDock or to any server"), "privacy describes the device-only in-app record");
+});
+
 test("the stale installer checklist is gone", () => {
   // "Install → Launch → Connect" described the superseded installers and sat directly under them.
   assert.ok(
