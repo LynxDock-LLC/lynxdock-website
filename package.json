@@ -9,7 +9,7 @@
     "start": "next start -p 4300",
     "preview": "npx serve@latest out -l 4300",
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/data/betaSigning.test.mjs src/data/betaStanding.test.mjs",
+    "test": "node --test src/data/betaSigning.test.mjs src/data/betaStanding.test.mjs src/lib/buildEnv.test.mjs",
     "check": "node scripts/check-site.mjs"
   },
   "dependencies": {

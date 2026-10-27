@@ -5,8 +5,9 @@ import OwnerField from "@/components/site/OwnerField";
 import { betaLicence, eligibility } from "@/data/siteStatus";
 
 // Privacy notice for the website (owner direction, 2026-10-25: an accurate update before any public beta intake or
-// announcement). It describes what this site actually processes, as verified on 2026-10-26: Cloudflare hosting and
-// downloads, Cloudflare Web Analytics, the Formspree enquiry form and email. It says nothing about accounts or
+// announcement). It describes what this site actually processes, as verified on 2026-10-26 and 2026-10-27: Cloudflare
+// hosting and downloads (with Cloudflare's network error reports), Cloudflare Web Analytics (loaded twice on the live
+// site: the site's own beacon and the one Cloudflare Pages adds), the Formspree enquiry form and email. It says nothing about accounts or
 // licensing, which do not exist. Every fact only the owner can supply is an <OwnerField>; a production build that
 // still contains one fails scripts/check-site.mjs.
 export const metadata: Metadata = {
@@ -86,6 +87,13 @@ export default function PrivacyPage() {
             IP address, your browser details and the page or file requested.
           </p>
           <p>
+            Cloudflare also asks browsers that support network error reporting to tell it when a request to this site
+            fails, for example when a page does not load. It asks for no reports about requests that succeed. A report
+            goes from your browser to Cloudflare (a.nel.cloudflare.com), not to LynxDock, and describes the failed
+            request: the address, the type of error and technical details such as the server address and protocol.
+            Like any request, it reaches Cloudflare with your IP address.
+          </p>
+          <p>
             Retention of these request records: <OwnerField>as set in the Cloudflare account</OwnerField>.
             Cloudflare&rsquo;s own handling is described in its <External href={CLOUDFLARE_POLICY}>privacy policy</External>.
           </p>
@@ -98,7 +106,18 @@ export default function PrivacyPage() {
             visitors&rsquo; personal data. We use the totals to understand which pages are read.
           </p>
           <p>
-            Retention: <OwnerField>retention shown in the Cloudflare Web Analytics account</OwnerField>. The site works
+            At present each page loads the script twice: once from the website&rsquo;s own code and once added by
+            Cloudflare Pages, the service that hosts the website. Each copy counts the page view in a separate Cloudflare
+            Web Analytics report.{" "}
+            <OwnerField>
+              keep one analytics script or both; if one is removed, replace this paragraph with one sentence naming the
+              one that remains
+            </OwnerField>
+          </p>
+          <p>
+            Retention:{" "}
+            <OwnerField>retention shown in the Cloudflare Web Analytics account, for each report that is kept</OwnerField>.
+            The site works
             normally if a content blocker stops the script.
           </p>
         </Section>
@@ -149,8 +168,11 @@ export default function PrivacyPage() {
         <Section id="not-used" title="What this website does not do">
           <ul className="tick-list">
             <li>
-              It does not set cookies. <OwnerField>confirm that no Cloudflare security or bot cookies are switched on
-              for the domain</OwnerField>
+              It does not set cookies of its own, and none were seen on ordinary requests to the site.{" "}
+              <OwnerField>
+                confirm whether Cloudflare bot or security protection is on for the domain: a security challenge can set
+                a cookie such as __cf_bm or cf_clearance; if it can, name it here as a strictly necessary security cookie
+              </OwnerField>
             </li>
             <li>It does not show advertising or load advertising or social-media trackers.</li>
             <li>It loads its fonts from this site, not from a third-party font service.</li>

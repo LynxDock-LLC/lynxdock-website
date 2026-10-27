@@ -4,10 +4,13 @@ import { useEffect, useId, useRef, useState } from "react";
 import { supportEmail } from "@/data/siteShell";
 import { betaLicence, eligibility } from "@/data/siteStatus";
 
-// The site's existing form service: the production build sets NEXT_PUBLIC_FORM_ENDPOINT (a Formspree form that
-// accepts a JSON POST), as the early-access form always has. When the build has no endpoint, the form says so
-// and never reports that anything was sent.
-const ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "";
+// The site's existing form service (a Formspree form that accepts a JSON POST). next.config.mjs passes the endpoint
+// to this bundle for PRODUCTION builds only (src/lib/buildEnv.mjs); a preview build gets none, whatever its
+// environment variables say, so a preview cannot send anything. Without an endpoint, or in any preview, the form
+// says it is not connected, has no action, never calls fetch and keeps its send button switched off.
+const ENDPOINT = process.env.LYNXDOCK_FORM_ENDPOINT ?? "";
+const PREVIEW_BUILD = process.env.LYNXDOCK_BUILD_ENV !== "production";
+const CONNECTED = !PREVIEW_BUILD && ENDPOINT !== "";
 
 export type EnquiryKind = "demo" | "beta" | "business" | "acknowledgement";
 
@@ -135,6 +138,11 @@ export default function EnquiryForm({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // The send button is switched off when not connected; this also stops any other way of submitting.
+    if (!CONNECTED) {
+      setStatus("not-connected");
+      return;
+    }
     const form = e.currentTarget;
     const data = new FormData(form);
     const found = validate(data);
@@ -146,11 +154,6 @@ export default function EnquiryForm({
       return;
     }
     if (String(data.get("_gotcha") ?? "") !== "") return;
-
-    if (!ENDPOINT) {
-      setStatus("not-connected");
-      return;
-    }
 
     setStatus("submitting");
     try {
@@ -203,26 +206,29 @@ export default function EnquiryForm({
     );
   }
 
-  // Without JavaScript the form can only post to the endpoint itself. With no endpoint it stays disabled, so a
-  // no-JS submit can never put anyone's details into a URL.
-  const blockedWithoutScript = !ENDPOINT && !hydrated;
-
   return (
     <form
       ref={formRef}
       method="post"
-      action={ENDPOINT || undefined}
+      // Without JavaScript a connected form posts to the endpoint itself. A form that is not connected has no action
+      // and a switched-off button, so a no-JS submit cannot send anything or put anyone's details into a URL.
+      action={CONNECTED ? ENDPOINT : undefined}
       // Without JavaScript the browser's own required checks apply (including the 18+ box); once the script runs,
       // the form validates itself with accessible messages instead.
       noValidate={hydrated}
       onSubmit={onSubmit}
       className="flex flex-col gap-4"
-      aria-describedby={!ENDPOINT ? id("not-connected") : undefined}
+      aria-describedby={!CONNECTED ? id("not-connected") : undefined}
+      data-form-connected={CONNECTED ? "yes" : "no"}
     >
-      {!ENDPOINT && (
+      {!CONNECTED && (
         <p id={id("not-connected")} className="card-notice small">
-          <span className="strong text-[#ecd6a8]">This build is not connected to the form service.</span> You can
-          try the form, but nothing you enter is sent. To reach us now, email{" "}
+          <span className="strong text-[#ecd6a8]">
+            {PREVIEW_BUILD
+              ? "This is a preview build, so its forms are switched off."
+              : "This build is not connected to the form service."}
+          </span>{" "}
+          Nothing can be sent from this form. To reach us now, email{" "}
           <a className="text-link" href={`mailto:${supportEmail}`}>
             {supportEmail}
           </a>
@@ -372,7 +378,7 @@ export default function EnquiryForm({
         <button
           type="submit"
           className="btn btn-primary w-full sm:w-auto"
-          disabled={status === "submitting" || blockedWithoutScript}
+          disabled={!CONNECTED || status === "submitting"}
         >
           {status === "submitting" ? "Sending…" : copy.submit}
         </button>

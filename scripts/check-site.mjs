@@ -221,6 +221,40 @@ for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started
   if (/licen[cs]/i.test(text)) fail("/privacy/", "the privacy notice must not mention licensing");
   if (!text.includes("never sent to LynxDock or to any server")) fail("/privacy/", "the device-only in-app acceptance record is not described");
 }
+// Previews never send a form or count a page view (owner instruction 2026-10-27: keep previews disconnected from
+// production submissions). Whether this build is a preview is read from its own robots.txt, so a production build
+// checked without --production is never mistaken for one. If the form endpoint or the beacon token is set in this
+// shell, as it may be on a Cloudflare Pages preview, neither value may appear anywhere in out/.
+const robotsTxt = existsSync(join(OUT, "robots.txt")) ? readFileSync(join(OUT, "robots.txt"), "utf8") : "";
+const builtAsPreview = /^Disallow:\s*\/\s*$/m.test(robotsTxt);
+let previewFormsChecked = 0;
+if (builtAsPreview) {
+  const given = [process.env.NEXT_PUBLIC_FORM_ENDPOINT, process.env.NEXT_PUBLIC_CF_BEACON_TOKEN]
+    .map((v) => (v ?? "").trim())
+    .filter((v) => v.length >= 6);
+  for (const file of files) {
+    if (!/\.(html|js|txt|json)$/.test(file)) continue;
+    const body = readFileSync(file, "utf8");
+    const where = "/" + relative(OUT, file).split(sep).join("/");
+    if (/formspree\.io\/f\//.test(body)) fail(where, "a preview build contains a Formspree form endpoint");
+    if (/data-cf-beacon/.test(body)) fail(where, "a preview build loads the site's analytics beacon");
+    for (const v of given) if (body.includes(v)) fail(where, "a preview build contains the endpoint or token from its environment");
+  }
+  for (const [route, raw] of pages) {
+    for (const form of raw.match(/<form\b[\s\S]*?<\/form>/g) ?? []) {
+      previewFormsChecked++;
+      const open = form.match(/<form\b[^>]*>/)[0];
+      if (/\saction=/.test(open)) fail(route, "a preview form has an action");
+      if (!/data-form-connected="no"/.test(open)) fail(route, "a preview form is not marked as not connected");
+      const buttons = form.match(/<button\b[^>]*type="submit"[^>]*>/g) ?? [];
+      if (buttons.length === 0) fail(route, "a preview form has no send button to check");
+      for (const button of buttons) {
+        if (!/\sdisabled(=|\s|>)/.test(button)) fail(route, "a preview form's send button is not switched off");
+      }
+    }
+  }
+  console.log(`Preview guard: checked ${previewFormsChecked} form(s), and every file in out/ for a form endpoint or the beacon${given.length ? " (endpoint/token were set in the environment)" : ""}.`);
+}
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so
 // no sentence may suggest otherwise. (It reads rendered page text; messages that only appear after interaction,
