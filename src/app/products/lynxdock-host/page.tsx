@@ -148,9 +148,9 @@ export default function HostPage() {
               &ldquo;Make reachable&rdquo; also asks the router to open a port (UPnP).
             </p>
             <p className="small mt-2">
-              The LiveKit server Host runs (version 1.8.4) is set to discover its public address itself. According to
-              LiveKit&rsquo;s documentation, it does this by asking public STUN servers from its built-in list, which
-              in that version includes Google&rsquo;s and Twilio&rsquo;s.
+              The LiveKit server Host runs (version 1.8.4) is set to discover its public address itself when it
+              starts; the configuration Host writes for it names no STUN servers. According to LiveKit&rsquo;s
+              documentation, LiveKit then uses STUN for this. Which servers it contacts has not been verified.
             </p>
             <p className="small mt-2">
               Members&rsquo; apps connect to their community&rsquo;s server and voice service and, to find a route for

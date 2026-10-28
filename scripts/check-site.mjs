@@ -240,15 +240,22 @@ for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started
 {
   // External contacts (owner instruction 2026-10-27: describe the effective configuration of the pinned SDK and
   // LiveKit versions). No page may say the apps connect only to the community's server: by default they also ask
-  // Google's public STUN server. The Host page states LiveKit's own STUN lookups as documented behaviour.
+  // Google's public STUN server. The Host page states LiveKit's own STUN use as documented behaviour and names no
+  // STUN server for it: binary strings do not establish which servers LiveKit contacts (owner instruction 2026-10-28,
+  // licence draft r6), so no page may name one in a sentence about LiveKit's address discovery, or name Twilio at all.
   for (const [route, raw] of pages) {
     const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
     if (/apps? (connects?|talks?) only to/i.test(text)) fail(route, "says the apps connect only to the community's own server");
+    if (/Twilio/i.test(text)) fail(route, "names Twilio, which the evidence does not establish as a LiveKit contact");
+    for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+      if (/LiveKit/.test(sentence) && /built-in list|discover|uses STUN/i.test(sentence) && /Google|Cloudflare|Twilio|stun[.:]/i.test(sentence))
+        fail(route, `names a STUN server for LiveKit: "${sentence.slice(0, 120)}"`);
+    }
   }
   const hostRaw = pages.get("/products/lynxdock-host/") || "";
   const host = hostRaw.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
   if (!/id="connects"/.test(hostRaw)) fail("/products/lynxdock-host/", "the 'What Host connects to' section is missing");
-  for (const must of ["Google's public STUN server", "According to LiveKit's documentation", "Twilio"]) {
+  for (const must of ["Google's public STUN server", "According to LiveKit's documentation", "names no STUN servers", "has not been verified"]) {
     if (!host.includes(must)) fail("/products/lynxdock-host/", `the external contacts do not mention: ${must}`);
   }
 }
