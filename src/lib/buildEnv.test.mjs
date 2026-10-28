@@ -80,3 +80,14 @@ test("the site's analytics beacon only loads with a token, which previews never 
   assert.match(analytics, /const TOKEN = process\.env\.LYNXDOCK_CF_BEACON_TOKEN \?\? "";/);
   assert.match(analytics, /if \(!TOKEN\) return null;/);
 });
+
+test("the production build runs the production check, so placeholders cannot be deployed", () => {
+  // Cloudflare Pages runs `npm run build`; without this gate a merge to main would deploy [OWNER] fields and
+  // [UNCONFIRMED] claims (worker C R175). The gate runs check-site --production only for a production build.
+  const pkg = JSON.parse(read("package.json"));
+  assert.match(pkg.scripts.build, /^next build && node scripts\/production-gate\.mjs$/);
+  const gate = read("scripts", "production-gate.mjs");
+  assert.match(gate, /resolveSiteEnv\(process\.env\) !== "production"/, "the gate uses the shared production rule");
+  assert.match(gate, /"scripts\/check-site\.mjs", "--production"/, "it runs the production check");
+  assert.match(gate, /process\.exit\(r\.status \|\| 1\)/, "a failed check fails the build");
+});
