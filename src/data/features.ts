@@ -55,7 +55,7 @@ export const lynxdockFeatures: Feature[] = [
   {
     title: "Voice & screen share",
     description:
-      "Real-time audio and screen sharing over a self-hosted SFU media plane, with device selection and deafen. NAT traversal is handled for you by a self-hosted TURN relay — no LiveKit or coturn setup required.",
+      "Real-time audio and screen sharing over a self-hosted SFU media plane, with device selection and deafen. NAT traversal is handled for you by a self-hosted TURN relay, with Google's public STUN server used by default to find a route — no LiveKit or coturn setup required.",
     icon: "bolt",
   },
   {

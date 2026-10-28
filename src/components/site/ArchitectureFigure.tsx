@@ -107,7 +107,9 @@ export default function ArchitectureFigure() {
       </div>
       <figcaption id="architecture-caption" className="caption mt-4">
         Simplified architecture. Client media reaches LiveKit directly or through TURN; these are
-        participant-to-service connections, not peer-to-peer rooms.
+        participant-to-service connections, not peer-to-peer rooms. To find a route, the apps also ask the connection
+        helpers the server gives them: by default Google&rsquo;s public STUN server, which sees each member&rsquo;s IP
+        address.
       </figcaption>
     </figure>
   );

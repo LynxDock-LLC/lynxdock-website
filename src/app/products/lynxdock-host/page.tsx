@@ -136,13 +136,27 @@ export default function HostPage() {
               That Windows requirement belongs to Host. The application server it manages is a separate Rust
               service, which this beta packages inside Host.
             </p>
-            <h3 className="h-card mt-6">What Host connects to</h3>
+            <h3 id="connects" className="h-card mt-6">
+              What Host connects to
+            </h3>
             <p className="small mt-2">
-              When the administrator turns voice on, Host downloads the voice components, each checked against a
-              signed manifest: LiveKit from LiveKit&rsquo;s own GitHub releases, and coturn from LynxDock&rsquo;s
-              download storage. Its &ldquo;Make reachable&rdquo; step, which the administrator starts, also asks
-              two public STUN servers (Google&rsquo;s and Cloudflare&rsquo;s) for the PC&rsquo;s public address and
-              asks the router to open a port (UPnP). Members&rsquo; apps connect only to their community&rsquo;s own server and voice services.
+              When the administrator turns voice on, Host downloads LiveKit from LiveKit&rsquo;s own GitHub releases
+              and, if TURN is on, coturn from LynxDock&rsquo;s download storage, and checks each against a signed
+              manifest before using it. To learn the PC&rsquo;s public address, Host asks Google&rsquo;s public STUN
+              server (and Cloudflare&rsquo;s only if Google&rsquo;s does not answer) when the administrator uses
+              &ldquo;Make reachable&rdquo;, and each time voice starts with TURN on, including an automatic start.
+              &ldquo;Make reachable&rdquo; also asks the router to open a port (UPnP).
+            </p>
+            <p className="small mt-2">
+              The LiveKit server Host runs (version 1.8.4) is set to discover its public address itself. According to
+              LiveKit&rsquo;s documentation, it does this by asking public STUN servers from its built-in list, which
+              in that version includes Google&rsquo;s and Twilio&rsquo;s.
+            </p>
+            <p className="small mt-2">
+              Members&rsquo; apps connect to their community&rsquo;s server and voice service and, to find a route for
+              voice, to the connection helpers that server gives them: by default Google&rsquo;s public STUN server,
+              which sees the member&rsquo;s IP address, and the community&rsquo;s TURN relay if it is on. Neither Host
+              nor the app checks for or downloads application updates.
             </p>
             <h3 className="h-card mt-6">For invited administrators</h3>
             <p className="small mt-2">

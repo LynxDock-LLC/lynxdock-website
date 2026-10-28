@@ -8,13 +8,14 @@ import {
   ReleaseIdentity,
   fmtDate,
 } from "@/components/site/ReleaseBlocks";
-import siteStatus, { betaLicence, formatBytes } from "@/data/siteStatus";
+import siteStatus, { betaLicence, formatBytes, participationDocument } from "@/data/siteStatus";
 import { githubOrg, supportEmail } from "@/data/siteShell";
 import { betaDownloads, betaAuthenticode, betaSigningPublisher } from "@/data/betaDownloads";
 import { v6Candidate } from "@/data/v6Candidate";
 import { closedBetaBuild, closedBetaServer, closedBetaResiduals, supersededInstallers } from "@/data/closedBeta";
 import EnquiryForm from "@/components/site/EnquiryForm";
 import OwnerField from "@/components/site/OwnerField";
+import Unconfirmed from "@/components/site/Unconfirmed";
 
 // The invited-tester hub. noindex/nofollow, absent from the sitemap and from the primary navigation; reached from
 // /download/, the quickstart, /releases/ and /support/. It is an unlisted page, not an access-controlled one.
@@ -107,6 +108,21 @@ function LicenceTextLink() {
   ) : (
     <OwnerField>link to the approved licence text, once counsel and the owner have approved it</OwnerField>
   );
+}
+
+// The document that sets the beta participation requirements, or an [OWNER] marker until counsel names it
+// (participationDocument; licence draft r5 field PARTICIPATION_DOCUMENT).
+function ParticipationDocumentLink() {
+  const d = participationDocument;
+  if (d.title && d.url) {
+    return (
+      <a href={d.url} className="text-link">
+        {d.title}
+      </a>
+    );
+  }
+  if (d.title) return <>{d.title}</>;
+  return <OwnerField>the document that sets the beta participation requirements, and its link: counsel&rsquo;s choice</OwnerField>;
 }
 
 export default function BetaPage() {
@@ -204,10 +220,15 @@ export default function BetaPage() {
               </p>
             </div>
             <div id="licence" className="card">
-              <h3 className="h-card">The beta licence</h3>
+              <h3 className="h-card">The beta licence and the participation requirements</h3>
               <p className="small mt-2">
-                Everyone in the beta takes part under the {betaLicence.name} ({betaLicence.id}):{" "}
-                <LicenceTextLink />.
+                The next release&rsquo;s app and Host are used under the {betaLicence.name} ({betaLicence.id}), which
+                you accept in the installer and when the app or Host first starts: <LicenceTextLink />.
+              </p>
+              <p className="small mt-2">
+                Members who join with the older 0.2.6 app don&rsquo;t accept that licence. They acknowledge the beta
+                participation requirements instead, set out in <ParticipationDocumentLink />. That acknowledgement covers
+                taking part in the beta only: it does not license, replace or change the terms of the 0.2.6 app.
               </p>
             </div>
             <div className="card">
@@ -220,15 +241,20 @@ export default function BetaPage() {
             </div>
           </div>
 
-          {/* OLDER-APP ACCEPTANCE. Matches the 0.3.0 operator instructions (SERVER-SETUP-AND-CATALOG.md, "Who may take
-              part, and members on the older app") and licence draft r2 sections 13 and 17. It does not quote the
-              licence. */}
+          {/* OLDER-APP ACKNOWLEDGEMENT. Licence draft r5 sections 12, 13 and 17: members on the older 0.2.6 app
+              acknowledge the beta participation requirements (including 18+) here, before the operator invites them.
+              They do not accept the licence, and the acknowledgement does not change the terms of their app. No
+              licence text is quoted. Where a submission ends up is marked UNCONFIRMED until there is evidence. */}
           <div id="confirm" className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
             <div>
-              <h3 className="h-card text-[1.3rem]">Joining with the older 0.2.6 app? Confirm here before you are invited</h3>
+              <h3 className="h-card text-[1.3rem]">
+                Joining with the older 0.2.6 app? Acknowledge the requirements here before you are invited
+              </h3>
               <p className="body mt-3">
                 During the move to the next release, the 0.2.6 app can still connect to a community server, but it
-                shows no licence screen. If you will join with it, you confirm the beta requirements here instead.
+                shows no licence screen. If you will join with it, you acknowledge the beta participation requirements
+                here instead. Your acknowledgement covers taking part in the beta only: it does not license, replace or
+                change the terms of your 0.2.6 app.
               </p>
               <ol className="num-list body mt-5">
                 <li>
@@ -241,31 +267,33 @@ export default function BetaPage() {
                   first.
                 </li>
                 <li>
-                  <span className="strong">Read:</span> the beta requirements above and the {betaLicence.name}{" "}
-                  ({betaLicence.id}): <LicenceTextLink />.
+                  <span className="strong">Read:</span> the beta requirements on this page and the document that sets
+                  them: <ParticipationDocumentLink />.
                 </li>
                 <li>
-                  <span className="strong">Confirm:</span> that you are 18 or older, which is your own declaration
-                  (LynxDock does not verify age), and that you accept the {betaLicence.name} ({betaLicence.id}). The
-                  form sends both to the LynxDock team, with your name, email address and community.
+                  <span className="strong">Acknowledge:</span> tick the box declaring that you are 18 or older, an
+                  affirmative self-declaration that LynxDock does not independently verify, and the box acknowledging
+                  the participation requirements. The form sends both, with your name, email address and community, to
+                  the site&rsquo;s form service, Formspree.
                 </li>
                 <li>
                   <span className="strong">Then:</span> tell the administrator who is inviting you that you have
-                  confirmed. Your confirmation goes to the LynxDock team only. It does not reach your community&rsquo;s
-                  server, and the administrator cannot see it.
+                  acknowledged them. The form sends nothing to your community&rsquo;s server or its administrator.{" "}
+                  <Unconfirmed>that acknowledgements sent through the form service reach the LynxDock team</Unconfirmed>
                 </li>
               </ol>
               <p className="small mt-5">
                 <span className="strong">If you run a community server:</span> before you invite a member who will use
-                the 0.2.6 app, send them to this section and wait until they tell you they have confirmed. The
-                requirement applies to you as well: the next release&rsquo;s Host asks you to accept the beta licence
-                before it starts services, and your acceptance covers only you, never a member.
+                the 0.2.6 app, send them to this section and wait until they tell you they have acknowledged the
+                requirements. The requirement applies to you as well: the next release&rsquo;s Host asks you to accept
+                the beta licence, ticking the 18+ declaration, before it starts services, and your acceptance covers
+                only you, never a member.
               </p>
               <p className="small mt-3">
                 <span className="strong">On the next release instead:</span> members who install the next release,
                 once it is available, don&rsquo;t use this form. Its installer and the app ask them to accept the beta
-                licence, with the same 18+ declaration, before the app signs in, and the app keeps that record on their
-                own device.
+                licence, ticking the same 18+ declaration, before the app signs in. The app won&rsquo;t record the
+                acceptance without the declaration, and keeps that record on their own device.
               </p>
             </div>
             <div className="card">

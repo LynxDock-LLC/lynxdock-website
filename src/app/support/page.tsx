@@ -45,7 +45,7 @@ export default function SupportPage() {
       <PageHero
         eyebrow="Support"
         title="Get help, or get in touch."
-        intro={<p>Choose the path that fits, so your message reaches the right place.</p>}
+        intro={<p>Choose the path that fits what you need.</p>}
       />
 
       <section aria-labelledby="paths-title" className="section-tight">

@@ -7,8 +7,7 @@ export default function PreviewNotice() {
     <div className="border-b border-[rgba(231,194,125,0.35)] bg-[rgba(231,194,125,0.07)]">
       <p className="wrap py-2 text-[0.8125rem] leading-snug text-[#ecd6a8]">
         <span className="font-semibold">Preview build.</span> This copy of the site is for review: it is not
-        indexed by search engines, and forms are only delivered where the build is connected to the site&rsquo;s
-        form service.
+        indexed by search engines, and its forms are switched off, so nothing can be sent from it.
       </p>
     </div>
   );

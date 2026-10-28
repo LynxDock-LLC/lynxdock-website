@@ -96,45 +96,69 @@ test("the push-to-talk scope is stated in the approved wording", () => {
   );
 });
 
-test("beta eligibility is 18+ for everyone, self-declared, and never presented as verified", () => {
+test("beta eligibility is 18+ for everyone, an affirmative self-declaration, and never presented as verified", () => {
   const form = readFileSync(join(src, "components", "site", "EnquiryForm.tsx"), "utf8");
-  // Owner decision 2026-10-26: everyone in the beta, not only people who apply on the site.
+  // Owner decision 2026-10-26: everyone in the beta, not only people who apply on the site. Licence draft r5
+  // (2026-10-27): an affirmative self-declaration, not age verification; only the making of the declaration is checked.
   assert.ok(status.includes('statement: "Everyone in the LynxDock beta must be 18 or older."'), "the eligibility statement");
-  assert.match(status, /people a community invites directly, and people who run a community server with LynxDock Host/, "the scope");
-  assert.ok(!/Testers must be 18/.test(status + page + form), "no applicant-only wording remains");
-  assert.match(status, /LynxDock asks you to confirm that you are 18 or older and does not verify age/, "self-declared, not verified");
-  assert.ok(
-    status.includes("Nothing in the apps, the installers or community servers checks it"),
-    "apps, installers and servers are named as not checking age",
+  assert.match(
+    status,
+    /people a community invites directly, people who run a community server with LynxDock Host, and members who join with the older 0\.2\.6 app/,
+    "the scope",
   );
+  assert.ok(!/Testers must be 18/.test(status + page + form), "no applicant-only wording remains");
+  assert.match(status, /Age is an affirmative self-declaration, not age verification/, "an affirmative self-declaration");
+  assert.match(status, /check only that the declaration was made; LynxDock does not independently verify age/, "what is checked");
+  assert.match(status, /nothing asks for a date of birth or proof of age/, "no date of birth or proof of age");
+  assert.ok(!/Nothing in the apps, the installers or community servers checks it/.test(status), "the r2 wording is gone");
+  assert.ok(!/nobody could verify/i.test(status + page + form), "no 'nobody could verify' wording");
   assert.match(page, /s\.eligibility\.statement/, "the tester hub shows it");
   assert.match(page, /id="requirements"/, "the hub has the beta requirements section operators can send people to");
-  assert.match(page, /<EnquiryForm kind="acknowledgement" \/>/, "older-app users can confirm the requirements on the hub");
-  // Both self-declaration boxes start unticked and must be ticked to send; only the two intake forms ask.
+  assert.match(page, /<EnquiryForm kind="acknowledgement" \/>/, "older-app members can acknowledge the requirements on the hub");
+  // Both boxes start unticked and must be ticked to send; only the two intake forms ask.
   assert.match(form, /name="ageConfirmed"[\s\S]{0,80}required/, "the 18+ box is required");
-  assert.match(form, /name="termsAcknowledged"[\s\S]{0,80}required/, "the requirements box is required");
+  assert.match(form, /name="requirementsAcknowledged"[\s\S]{0,80}required/, "the requirements box is required");
   assert.ok(!/defaultChecked|checked=\{true\}|\schecked\b/.test(form), "no box is ever pre-ticked");
-  assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 2, "only beta access and the confirmation ask");
-  assert.match(form, /self-declared 18 or older \(not verified\)/, "what the service receives says it is not verified");
-  assert.match(form, /\$\{betaLicence\.id\}/, "an acceptance records which licence version was accepted");
+  assert.equal((form.match(/ageDeclaration: true/g) ?? []).length, 2, "only beta access and the acknowledgement ask");
+  assert.match(form, /affirmative self-declaration: 18 or older \(not independently verified\)/, "the service is told it is not verified");
+  assert.ok(!/betaLicence/.test(form), "the older-app acknowledgement does not accept the licence");
   // Validation messages only appear after interaction, so the build guard cannot see them; pin them here.
-  for (const key of ["ageConfirmed", "termsAcknowledged"]) {
+  for (const key of ["ageConfirmed", "requirementsAcknowledged"]) {
     const message = (form.match(new RegExp(`next\\.${key} =\\s*"([^"]+)"`)) ?? [])[1] ?? "";
     assert.ok(message.length > 0, `the ${key} validation message exists`);
-    assert.ok(!/verif|enforc|prove|proof/i.test(message), `the ${key} message implies no verification`);
+    assert.ok(!/verif|enforc|prove|proof|licen/i.test(message), `the ${key} message implies no verification and no licence`);
   }
 });
 
-test("older-app (0.2.6) members get complete acceptance instructions, and privacy matches what is sent", () => {
-  const privacy = readFileSync(join(src, "app", "privacy", "page.tsx"), "utf8");
-  assert.match(page, /id="confirm"/, "the hub has the older-app confirmation");
-  for (const step of ["Who:", "When:", "Read:", "Confirm:", "Then:"]) {
+test("older-app (0.2.6) members acknowledge the participation requirements; privacy matches what is sent", () => {
+  const privacy = readFileSync(join(src, "app", "privacy", "page.tsx"), "utf8").replace(/\s+/g, " ");
+  assert.match(page, /id="confirm"/, "the hub has the older-app acknowledgement");
+  for (const step of ["Who:", "When:", "Read:", "Acknowledge:", "Then:"]) {
     assert.ok(page.includes(step + "</span>"), "the hub states " + step);
   }
-  assert.ok(page.includes("wait until they tell you they have confirmed"), "operators wait for the member to confirm");
-  assert.equal((page.match(/<LicenceTextLink \/>/g) ?? []).length, 2, "the licence text link is on the card and in the steps");
-  assert.match(privacy, /\{betaLicence\.id\}/, "privacy names the version identifier the confirmation sends");
+  assert.ok(page.includes("wait until they tell you they have acknowledged the"), "operators wait for the member");
+  assert.ok(page.includes("does not license, replace or change the terms of"), "the 0.2.6 app's own terms are left alone");
+  assert.equal((page.match(/<ParticipationDocumentLink \/>/g) ?? []).length, 2, "the participation document is on the card and in the steps");
+  assert.equal((page.match(/<LicenceTextLink \/>/g) ?? []).length, 1, "the licence link is for the next release only");
+  assert.ok(!/betaLicence/.test(privacy), "privacy does not name the licence or its ID");
   assert.ok(privacy.includes("never sent to LynxDock or to any server"), "privacy describes the device-only in-app record");
+  assert.ok(privacy.includes("by default Google&rsquo;s public STUN server"), "privacy discloses the apps' default STUN server");
+});
+
+test("delivery and routing claims are not made without evidence", () => {
+  const form = readFileSync(join(src, "components", "site", "EnquiryForm.tsx"), "utf8");
+  // A success state shows only that the form service answered with 2xx; it is not evidence of delivery.
+  for (const claim of [
+    /was delivered/,
+    /delivered to the LynxDock team/,
+    /team will reply/,
+    /goes to the LynxDock team/,
+    /shares the details above with the LynxDock team/,
+  ]) {
+    assert.ok(!claim.test(form) && !claim.test(page), `no unevidenced claim: ${claim}`);
+  }
+  assert.match(form, /The form service accepted your message\./, "success says only what the 2xx shows");
+  assert.match(page, /<Unconfirmed>/, "the hub marks where an acknowledgement ends up as unconfirmed");
 });
 
 test("the stale installer checklist is gone", () => {

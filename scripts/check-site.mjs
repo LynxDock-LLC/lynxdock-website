@@ -154,7 +154,7 @@ for (const [route, html] of pages) {
 // The push-to-talk scope, in body text, where members and testers read it.
 const PTT = "Push-to-talk is foreground-only. The LynxDock window must have focus.";
 for (const route of ["/beta/", "/products/lynxdock/", "/docs/getting-started/", "/releases/"]) {
-  const text = (pages.get(route) || "").replace(/<[^>]+>/g, "").replace(/&#x27;|&rsquo;/g, "'");
+  const text = (pages.get(route) || "").replace(/<[^>]+>/g, "").replace(/&#x27;|&rsquo;|\u2019/g, "'");
   if (!text.includes(PTT)) fail(route, "the push-to-talk scope statement is missing");
 }
 
@@ -179,7 +179,8 @@ for (const [route, raw] of pages) {
 }
 
 // Owner-only facts: visible [OWNER: ...] fields are expected in review builds and must all be filled before a
-// production build can pass.
+// production build can pass. So must [UNCONFIRMED: ...] claims about where a submission or an email ends up (owner
+// instruction 2026-10-27): each needs evidence, or rewording, before production.
 for (const [route, raw] of pages) {
   const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
   const owner = text.match(/\[OWNER:/g) ?? [];
@@ -187,39 +188,69 @@ for (const [route, raw] of pages) {
     if (PREVIEW) warn.push(`${route}: ${owner.length} [OWNER] field(s) still to fill before production`);
     else fail(route, `${owner.length} [OWNER] field(s) unfilled in a production build`);
   }
+  const unconfirmed = text.match(/\[UNCONFIRMED:/g) ?? [];
+  if (unconfirmed.length) {
+    if (PREVIEW) warn.push(`${route}: ${unconfirmed.length} [UNCONFIRMED] claim(s) to evidence before production`);
+    else fail(route, `${unconfirmed.length} [UNCONFIRMED] claim(s) in a production build`);
+  }
 }
 
-// Beta eligibility (owner decision 2026-10-26): 18+ for EVERYONE in the beta, self-declared, never presented as
-// verified, and never worded as if it applied only to people who apply through this site.
+// Beta eligibility (owner decision 2026-10-26; licence draft r5 wording, 2026-10-27): 18+ for EVERYONE in the beta,
+// an affirmative self-declaration, never presented as verified, and never worded as if it applied only to people who
+// apply through this site.
 const ELIGIBILITY = "Everyone in the LynxDock beta must be 18 or older.";
-const SCOPE = "people a community invites directly, and people who run a community server with LynxDock Host";
+const SCOPE =
+  "people a community invites directly, people who run a community server with LynxDock Host, and members who join with the older 0.2.6 app";
 for (const route of ["/beta/", "/download/", "/privacy/", "/docs/getting-started/"]) {
-  const text = (pages.get(route) || "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'").replace(/\s+/g, " ");
+  const text = (pages.get(route) || "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
   if (!text.includes(ELIGIBILITY)) fail(route, "the 18+ eligibility statement is missing");
-  if (!/(does not|doesn't) verify age/.test(text)) fail(route, "the page does not say that age is not verified");
-  if (!text.includes(SCOPE)) fail(route, "the eligibility scope (invited members and server operators) is missing");
+  if (!/(does not|doesn't) (independently )?verify age/.test(text)) fail(route, "the page does not say that age is not verified");
+  if (!/affirmative self-declaration/.test(text)) fail(route, "the 18+ declaration is not called an affirmative self-declaration");
+  if (!text.includes(SCOPE)) fail(route, "the eligibility scope (invited members, server operators, older-app members) is missing");
   if (/Testers must be 18/.test(text)) fail(route, "old applicant-only wording is back");
+  if (/Nothing in the apps, the installers or community servers checks it/.test(text))
+    fail(route, "the r2 age wording that licence draft r5 corrects is back");
 }
 {
   const hub = pages.get("/beta/") || "";
   if (!/id="requirements"/.test(hub)) fail("/beta/", "the beta requirements section is missing");
-  if (!/name="termsAcknowledged"/.test(hub) || !/name="ageConfirmed"/.test(hub))
-    fail("/beta/", "the beta requirements confirmation form is missing its two self-declaration boxes");
+  if (!/name="requirementsAcknowledged"/.test(hub) || !/name="ageConfirmed"/.test(hub))
+    fail("/beta/", "the beta participation acknowledgement form is missing its two boxes");
 }
 {
-  // Older-app (0.2.6) acceptance on the hub (owner request 2026-10-27): the steps and the operator's part are there.
+  // Older-app (0.2.6) members (licence draft r5 sections 12, 13 and 17): they acknowledge the participation
+  // requirements, which leaves the terms of their app unchanged, and the operator waits until they have.
   const hub = (pages.get("/beta/") || "").replace(/<script[\s\S]*?<\/script>/g, "");
-  const text = hub.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'").replace(/\s+/g, " ");
-  if (!/id="confirm"/.test(hub) || !/id="licence"/.test(hub)) fail("/beta/", "the older-app confirmation or the licence card is missing");
-  if (!text.includes("wait until they tell you they have confirmed")) fail("/beta/", "the operator's step for older-app members is missing");
+  const text = hub.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
+  if (!/id="confirm"/.test(hub) || !/id="licence"/.test(hub)) fail("/beta/", "the older-app acknowledgement or the licence card is missing");
+  if (!text.includes("wait until they tell you they have acknowledged the requirements"))
+    fail("/beta/", "the operator's step for older-app members is missing");
+  if (!text.includes("does not license, replace or change the terms of"))
+    fail("/beta/", "the hub does not say the acknowledgement leaves the 0.2.6 app's terms unchanged");
 }
 {
-  // Privacy (owner direction 2026-10-25): nothing about licensing; the in-app acceptance record is described as
-  // kept on the device and never sent.
+  // Privacy (owner direction 2026-10-25): nothing about licensing; the in-app record is described as kept on the
+  // device and never sent; the apps' default STUN contact is disclosed (owner instruction 2026-10-27).
   const privacy = (pages.get("/privacy/") || "").replace(/<script[\s\S]*?<\/script>/g, "");
-  const text = privacy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const text = privacy.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
   if (/licen[cs]/i.test(text)) fail("/privacy/", "the privacy notice must not mention licensing");
-  if (!text.includes("never sent to LynxDock or to any server")) fail("/privacy/", "the device-only in-app acceptance record is not described");
+  if (!text.includes("never sent to LynxDock or to any server")) fail("/privacy/", "the device-only in-app record is not described");
+  if (!text.includes("by default Google's public STUN server")) fail("/privacy/", "the apps' default STUN contact is not disclosed");
+}
+{
+  // External contacts (owner instruction 2026-10-27: describe the effective configuration of the pinned SDK and
+  // LiveKit versions). No page may say the apps connect only to the community's server: by default they also ask
+  // Google's public STUN server. The Host page states LiveKit's own STUN lookups as documented behaviour.
+  for (const [route, raw] of pages) {
+    const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
+    if (/apps? (connects?|talks?) only to/i.test(text)) fail(route, "says the apps connect only to the community's own server");
+  }
+  const hostRaw = pages.get("/products/lynxdock-host/") || "";
+  const host = hostRaw.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'").replace(/\s+/g, " ");
+  if (!/id="connects"/.test(hostRaw)) fail("/products/lynxdock-host/", "the 'What Host connects to' section is missing");
+  for (const must of ["Google's public STUN server", "According to LiveKit's documentation", "Twilio"]) {
+    if (!host.includes(must)) fail("/products/lynxdock-host/", `the external contacts do not mention: ${must}`);
+  }
 }
 // Previews never send a form or count a page view (owner instruction 2026-10-27: keep previews disconnected from
 // production submissions). Whether this build is a preview is read from its own robots.txt, so a production build
@@ -264,7 +295,7 @@ const CONTROL_WORD = /\bverif\w*|\benforc\w*|\bcheck(s|ed|ing)?\b|\bvalidat\w*|\
 const NEGATION = /\b(not|no|never|nothing|doesn't|cannot|can't)\b/i;
 let sentencesChecked = 0;
 for (const [route, raw] of pages) {
-  const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;/g, "'");
+  const text = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|\u2019/g, "'");
   for (const sentence of text.split(/(?<=[.!?])\s+/)) {
     if (!AGE_CONTEXT.test(sentence)) continue;
     sentencesChecked++;

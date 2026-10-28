@@ -37,7 +37,7 @@ export default function DownloadPage() {
               <ol className="num-list body mt-5">
                 <li>
                   You request access with the form on this page. {siteStatus.eligibility.statement}{" "}
-                  {siteStatus.eligibility.scope} {siteStatus.eligibility.selfDeclaration} Here, you confirm it by
+                  {siteStatus.eligibility.scope} {siteStatus.eligibility.selfDeclaration} Here, you declare it by
                   ticking a box.
                 </li>
                 <li>
@@ -73,7 +73,10 @@ export default function DownloadPage() {
                 </div>
                 <div>
                   <dt>Who can take part</dt>
-                  <dd>Everyone 18 or older, including invited members and server operators (self-declared; not verified)</dd>
+                  <dd>
+                    Everyone 18 or older, including invited members, server operators and members on the older app (an
+                    affirmative self-declaration, not age verification)
+                  </dd>
                 </div>
                 <div>
                   <dt>Next tester release</dt>

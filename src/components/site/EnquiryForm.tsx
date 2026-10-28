@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { supportEmail } from "@/data/siteShell";
-import { betaLicence, eligibility } from "@/data/siteStatus";
+import { eligibility, participationDocument } from "@/data/siteStatus";
 
 // The site's existing form service (a Formspree form that accepts a JSON POST). next.config.mjs passes the endpoint
 // to this bundle for PRODUCTION builds only (src/lib/buildEnv.mjs); a preview build gets none, whatever its
@@ -14,7 +14,7 @@ const CONNECTED = !PREVIEW_BUILD && ENDPOINT !== "";
 
 export type EnquiryKind = "demo" | "beta" | "business" | "acknowledgement";
 
-type FieldName = "name" | "email" | "organisation" | "interest" | "message" | "ageConfirmed" | "termsAcknowledged";
+type FieldName = "name" | "email" | "organisation" | "interest" | "message" | "ageConfirmed" | "requirementsAcknowledged";
 
 const COPY: Record<
   EnquiryKind,
@@ -28,8 +28,8 @@ const COPY: Record<
     interest?: { label: string; options: string[] };
     /** An unticked 18+ self-declaration that must be ticked to send. It is not age verification. */
     ageDeclaration?: boolean;
-    /** An unticked confirmation that the sender read and agrees to the beta requirements (tester hub). */
-    termsAcknowledgement?: boolean;
+    /** An unticked acknowledgement of the beta participation requirements (tester hub, older-app members). */
+    requirementsAcknowledgement?: boolean;
     organisationRequired?: boolean;
     /** Defaults to true. */
     showMessage?: boolean;
@@ -57,11 +57,12 @@ const COPY: Record<
       options: ["As a member", "Running our community's server", "Not sure yet"],
     },
   },
-  // Beta requirements confirmation (tester hub): for people who will use the older 0.2.6 app, which has no
-  // first-start terms screen. A record that the person confirmed the requirements, not proof of age or identity.
+  // Beta participation acknowledgement (tester hub): for members who will join with the older 0.2.6 app, which has no
+  // first-start licence screen (licence draft r5 section 17). A record of the person's own declaration and
+  // acknowledgement: not proof of age or identity, and not acceptance of the licence.
   acknowledgement: {
-    subject: "LynxDock beta requirements confirmation",
-    submit: "Send my confirmation",
+    subject: "LynxDock beta participation acknowledgement",
+    submit: "Send my acknowledgement",
     organisationLabel: "Community you are joining",
     organisationRequired: true,
     messageLabel: "",
@@ -69,8 +70,8 @@ const COPY: Record<
     messageRequired: false,
     showMessage: false,
     ageDeclaration: true,
-    termsAcknowledgement: true,
-    deliveredText: "Your confirmation was delivered to the LynxDock team. Let your community’s administrator know you have sent it.",
+    requirementsAcknowledgement: true,
+    deliveredText: "Let your community’s administrator know you have sent it.",
   },
   business: {
     subject: "LynxDock business enquiry",
@@ -130,9 +131,9 @@ export default function EnquiryForm({
     if (copy.organisationRequired && !String(data.get("organisation") ?? "").trim())
       next.organisation = "Enter the community you are joining.";
     if (copy.ageDeclaration && data.get("ageConfirmed") !== "yes")
-      next.ageConfirmed = "Everyone in the beta must be 18 or older. Tick the box to confirm, or don’t send this.";
-    if (copy.termsAcknowledgement && data.get("termsAcknowledged") !== "yes")
-      next.termsAcknowledged = "Tick the box to accept the beta licence, or don’t send this.";
+      next.ageConfirmed = "Everyone in the beta must be 18 or older. Tick the box to declare it, or don’t send this.";
+    if (copy.requirementsAcknowledgement && data.get("requirementsAcknowledged") !== "yes")
+      next.requirementsAcknowledged = "Tick the box to acknowledge the beta participation requirements, or don’t send this.";
     return next;
   }
 
@@ -168,9 +169,15 @@ export default function EnquiryForm({
           organisation: String(data.get("organisation") ?? "").trim(),
           interest: String(data.get("interest") ?? ""),
           message: String(data.get("message") ?? "").trim(),
-          ...(copy.ageDeclaration ? { ageConfirmed: "self-declared 18 or older (not verified)" } : {}),
-          ...(copy.termsAcknowledgement
-            ? { termsAcknowledged: `accepted ${betaLicence.name} (${betaLicence.id}) after reading the beta requirements` }
+          ...(copy.ageDeclaration
+            ? { ageConfirmed: "affirmative self-declaration: 18 or older (not independently verified)" }
+            : {}),
+          ...(copy.requirementsAcknowledgement
+            ? {
+                requirementsAcknowledged: participationDocument.title
+                  ? `acknowledged the beta participation requirements (${participationDocument.title})`
+                  : "acknowledged the beta participation requirements",
+              }
             : {}),
           source: `lynxdock.app ${window.location.pathname}`,
         }),
@@ -195,8 +202,10 @@ export default function EnquiryForm({
   if (status === "delivered") {
     return (
       <div ref={statusRef} tabIndex={-1} role="status" className="card-2">
-        <p className="strong">Thank you. Your message was delivered.</p>
-        <p className="small mt-2">{copy.deliveredText ?? "The LynxDock team will reply by email."}</p>
+        {/* A 2xx from the form service shows only that it accepted the submission, not that anyone has received it,
+            so this says no more than that (owner instruction 2026-10-27). */}
+        <p className="strong">Thank you. The form service accepted your message.</p>
+        {copy.deliveredText && <p className="small mt-2">{copy.deliveredText}</p>}
         {onDone && (
           <button type="button" className="btn btn-secondary btn-sm mt-4" onClick={onDone}>
             Close
@@ -344,21 +353,21 @@ export default function EnquiryForm({
           {err("ageConfirmed")}
         </div>
       )}
-      {copy.termsAcknowledgement && (
+      {copy.requirementsAcknowledgement && (
         <div className="field">
           <label className="flex min-h-[44px] cursor-pointer items-start gap-3 text-[0.9375rem] font-semibold text-ink">
             <input
               type="checkbox"
-              name="termsAcknowledged"
+              name="requirementsAcknowledged"
               value="yes"
               required
               className="mt-0.5 h-[18px] w-[18px] flex-none accent-[#5ce1df]"
-              aria-invalid={errors.termsAcknowledged ? true : undefined}
-              aria-describedby={errors.termsAcknowledged ? id("termsAcknowledged-error") : undefined}
+              aria-invalid={errors.requirementsAcknowledged ? true : undefined}
+              aria-describedby={errors.requirementsAcknowledged ? id("requirementsAcknowledged-error") : undefined}
             />
-            {eligibility.termsCheckboxLabel}
+            {eligibility.requirementsCheckboxLabel}
           </label>
-          {err("termsAcknowledged")}
+          {err("requirementsAcknowledged")}
         </div>
       )}
       {/* Spam trap for the form service; hidden from people and assistive technology. */}
@@ -367,7 +376,7 @@ export default function EnquiryForm({
         <input id={id("gotcha")} type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
       </div>
       <p className="hint small">
-        Sending this form shares the details above with the LynxDock team through the site&rsquo;s form service.
+        Sending this form sends the details above to the site&rsquo;s form service, Formspree.
         See the{" "}
         <a className="text-link" href="/privacy/">
           privacy page
@@ -388,7 +397,7 @@ export default function EnquiryForm({
           <div className="card-notice small" role="status">
             <p className="strong text-[#ecd6a8]">Not sent.</p>
             <p className="mt-1">
-              This build isn&rsquo;t connected to the form service, so nothing was delivered. Email{" "}
+              This build isn&rsquo;t connected to the form service, so nothing was sent. Email{" "}
               <a className="text-link" href={`mailto:${supportEmail}`}>
                 {supportEmail}
               </a>{" "}
@@ -398,9 +407,9 @@ export default function EnquiryForm({
         )}
         {status === "failed" && (
           <div className="card-notice small" role="alert">
-            <p className="strong text-[#ecd6a8]">Your message was not delivered.</p>
+            <p className="strong text-[#ecd6a8]">The form service did not accept your message.</p>
             <p className="mt-1">
-              Nothing was sent. Please try again in a moment, or email{" "}
+              It may not have been received. Please try again in a moment, or email{" "}
               <a className="text-link" href={`mailto:${supportEmail}`}>
                 {supportEmail}
               </a>
