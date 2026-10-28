@@ -206,8 +206,8 @@ export default function PrivacyPage() {
             happens in the app, not on this website. The app keeps the record on your device only, for your Windows
             account: the identifier and version of what you accepted, a fingerprint of its text, your 18+ declaration,
             the time and the app version. When the app starts, it compares this record with the build; nothing is
-            checked online. The record contains nothing that identifies you and is never sent to LynxDock or to any
-            server.
+            checked online. The record is kept in your Windows user profile; it contains no name, account, email address
+            or device identifier, and it is never sent to LynxDock or to any server.
           </p>
           <p>
             <OwnerField>
@@ -223,6 +223,12 @@ export default function PrivacyPage() {
             run by the communities that use them: their accounts, messages, voice and records stay on infrastructure
             each community controls, and LynxDock LLC has no access to them unless someone sends us information, for
             example in a problem report.
+          </p>
+          <p>
+            The LynxDock apps send no unsolicited usage or crash telemetry. The app&rsquo;s bug-report feature sends a
+            report only after you have reviewed and approved it, and only if a report destination has been set on that
+            PC; none is set by default. An approved report that has not yet been delivered is retried when the app next
+            starts, at most five attempts in all, and goes to the destination set at that time.
           </p>
           <p>
             When a member joins voice, their app also contacts the connection helpers the community server gives it:
