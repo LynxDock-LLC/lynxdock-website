@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
 import OwnerField from "@/components/site/OwnerField";
 import { eligibility } from "@/data/siteStatus";
+import { supportEmail } from "@/data/siteShell";
 import Unconfirmed from "@/components/site/Unconfirmed";
 
 // Privacy notice for the website (owner direction, 2026-10-25: an accurate update before any public beta intake or
@@ -76,8 +77,11 @@ export default function PrivacyPage() {
         <Section id="who" title="Who we are">
           <p>
             This website is run by LynxDock LLC <OwnerField>registered address, if it should be shown</OwnerField>.
-            For questions about privacy, contact <OwnerField>privacy contact address; the site&rsquo;s other pages
-            use admin@lynxdock.app</OwnerField>.
+            For questions about privacy, contact{" "}
+            <a href={`mailto:${supportEmail}`} className="text-link">
+              {supportEmail}
+            </a>
+            .
           </p>
         </Section>
 
@@ -167,13 +171,8 @@ export default function PrivacyPage() {
           <p>
             Links that start an email only open your own email app; nothing is sent until you send it. Email sent to
             a lynxdock.app address is received by Cloudflare Email Routing: the domain&rsquo;s mail (MX) records point
-            there.{" "}
-            <Unconfirmed>
-              which lynxdock.app addresses, including admin@lynxdock.app, are forwarded, and that they reach a
-              monitored mailbox
-            </Unconfirmed>{" "}
-            It is forwarded to <OwnerField>the mailbox and provider it is forwarded to</OwnerField>, where it is kept
-            for <OwnerField>retention</OwnerField>.
+            there. {supportEmail}, the only address this site gives, is forwarded to a monitored mailbox at Google
+            (Gmail), where it is kept for <OwnerField>retention</OwnerField>.
           </p>
         </Section>
 
@@ -245,7 +244,10 @@ export default function PrivacyPage() {
         <Section id="requests" title="Your requests">
           <p>
             You can ask us to see, correct or delete an enquiry you sent by contacting{" "}
-            <OwnerField>privacy contact address</OwnerField>.{" "}
+            <a href={`mailto:${supportEmail}`} className="text-link">
+              {supportEmail}
+            </a>
+            .{" "}
             <OwnerField>response time, and any rights for particular jurisdictions you choose to state</OwnerField>
           </p>
         </Section>
