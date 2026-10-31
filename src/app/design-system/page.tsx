@@ -8,6 +8,7 @@ import FeatureCard from "@/components/FeatureCard";
 import ScreenshotShowcase, { type Shot } from "@/components/ScreenshotShowcase";
 import { products } from "@/data/products";
 import { principles } from "@/data/features";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "Genesis Design System",
@@ -145,6 +146,9 @@ export default function DesignSystemPage() {
         title="Style guide"
         description="A living reference for the LynxDock look and feel. Every element below is rendered from the same tokens and components the site ships with - so what you see here is what you get everywhere else."
       />
+      <div className="wrap pt-8">
+        <HistoryNote era="July 2026">This is the Genesis design system of the first website. The October 2026 redesign uses a newer palette and type, so colours below no longer match every page.</HistoryNote>
+      </div>
 
       <div className="mx-auto max-w-6xl px-5 pb-20">
         {/* 1. Color Tokens */}

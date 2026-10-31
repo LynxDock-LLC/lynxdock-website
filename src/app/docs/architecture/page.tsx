@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "Architecture",
@@ -11,6 +12,9 @@ export default function DocsArchitecture() {
     <div>
       <span className="hud-label">Reference</span>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Architecture</h1>
+      <div className="mt-5">
+        <HistoryNote era="July 2026">This page describes the monorepo as it was planned in July 2026.</HistoryNote>
+      </div>
       <div className="doc-prose mt-6">
         <p>
           LynxDock is spec-driven and polyglot. A versioned specification feeds an

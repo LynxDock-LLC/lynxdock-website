@@ -1,29 +1,15 @@
-import type { Metadata } from "next";
-import PageHeader from "@/components/PageHeader";
-import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import MovedPage, { movedMetadata } from "@/components/site/MovedPage";
 
-export const metadata: Metadata = {
-  title: "Products",
-  description:
-    "LynxDock, LynxDock Studio, and LynxDock Bootstrap - a privacy-first ecosystem for communication, development, and automation.",
-};
+// Moved in the October 2026 redesign (docs/REDESIGN-2026-10-MIGRATION.md). public/_redirects sends a 301 first.
+export const metadata = movedMetadata("LynxDock products", "/products/lynxdock/");
 
-export default function ProductsPage() {
+export default function Moved() {
   return (
-    <>
-      <PageHeader
-        eyebrow="The ecosystem"
-        title="Products"
-        description="Three products, one philosophy: privacy-first, performance-focused software that serves the people using it."
-      />
-      <section className="mx-auto max-w-6xl px-5 py-16">
-        <div className="grid gap-5 md:grid-cols-3">
-          {products.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
-      </section>
-    </>
+    <MovedPage
+      title="LynxDock products"
+      to="/products/lynxdock/"
+      toLabel="the LynxDock app"
+      why="There is now one product page: the LynxDock app, with LynxDock Host on its own page."
+    />
   );
 }

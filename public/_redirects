@@ -1,0 +1,23 @@
+# Intentional redirects from the October 2026 redesign (docs/REDESIGN-2026-10-MIGRATION.md).
+# Cloudflare Pages applies these before serving static files. Each old URL also has a static
+# fallback page that links to its new address. No blanket redirects.
+/products/ /products/lynxdock/ 301
+/products /products/lynxdock/ 301
+/mission-control/ /products/lynxdock/ 301
+/mission-control /products/lynxdock/ 301
+/compare/ /products/lynxdock/ 301
+/compare /products/lynxdock/ 301
+/architecture/ /technology/#architecture 301
+/architecture /technology/#architecture 301
+/features/ /roadmap/ 301
+/features /roadmap/ 301
+/vision/ /company/ 301
+/vision /company/ 301
+/community/ /support/ 301
+/community /support/ 301
+/docs/self-hosting/ /products/lynxdock-host/ 301
+/docs/self-hosting /products/lynxdock-host/ 301
+/docs/communities/ /products/lynxdock/ 301
+/docs/communities /products/lynxdock/ 301
+/docs/faq/ /products/lynxdock/#faq 301
+/docs/faq /products/lynxdock/#faq 301

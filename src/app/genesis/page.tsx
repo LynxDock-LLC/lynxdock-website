@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GlowButton from "@/components/GlowButton";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "LynxDock Genesis",
@@ -49,6 +50,9 @@ export default function GenesisPage() {
           </GlowButton>
         </div>
       </PageHeader>
+      <div className="wrap pt-8">
+        <HistoryNote era="July 2026">Genesis was the first build of this website and its design system.</HistoryNote>
+      </div>
 
       <section className="mx-auto flex max-w-4xl flex-col gap-8 px-5 py-16">
         {/* 1. What is Genesis? */}

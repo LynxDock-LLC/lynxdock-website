@@ -1,50 +1,109 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import GlassPanel from "@/components/GlassPanel";
 
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Documentation for LynxDock - the privacy-first, Rust-powered communication platform. Architecture, developer setup, and guides.",
+    "LynxDock documentation: the quickstart for invited testers, the product and Host pages, the technical overview and the engineering background.",
 };
 
-const cards = [
-  { href: "/docs/getting-started/", title: "Quickstart", text: "What the alpha desktop app does today and how to try it." },
-  { href: "/guides/operations/", title: "Plan, deploy & coordinate an operation", text: "The illustrated V5 guide: one convoy operation from draft to debrief, as commander and as member." },
-  { href: "/docs/architecture/", title: "Architecture", text: "How the spec, infrastructure, and product monorepo fit together." },
-  { href: "/docs/developers/", title: "Developers", text: "The monorepo, the packages, and how the Rust ↔ TypeScript bridge works." },
-  { href: "/docs/self-hosting/", title: "Self-hosting", text: "Where self-hosting is headed (Epic 3+) and the philosophy behind it." },
+const start = [
+  {
+    href: "/docs/getting-started/",
+    title: "Quickstart",
+    text: "Install the app, join your community's server with an invitation, and check your voice setup.",
+  },
+  {
+    href: "/beta/",
+    title: "Tester hub",
+    text: "Installers, SHA-256 values, release notes and known limitations for invited testers.",
+  },
+  {
+    href: "/products/lynxdock-host/",
+    title: "Running the server",
+    text: "What LynxDock Host does for an administrator, and what stays the administrator's job.",
+  },
+  {
+    href: "/technology/",
+    title: "Technology & capabilities",
+    text: "The desktop stack, the application server, the separate media service and the system's limits.",
+  },
+];
+
+const background = [
+  {
+    href: "/guides/operations/",
+    title: "Plan, deploy & coordinate an operation",
+    text: "The illustrated V5 walkthrough (September 2026): one convoy operation from draft to debrief.",
+  },
+  {
+    href: "/docs/architecture/",
+    title: "Monorepo architecture",
+    text: "How the specification, infrastructure and product monorepo fitted together in July 2026.",
+  },
+  {
+    href: "/docs/developers/",
+    title: "Developers",
+    text: "Packages, Rust crates and the Rust to TypeScript bridge, as documented in July 2026.",
+  },
+  {
+    href: "/docs/bootstrap/",
+    title: "Bootstrap basics",
+    text: "How GSpec and Bootstrap generate ecosystem artifacts, including parts of this site.",
+  },
+  {
+    href: "/genesis/",
+    title: "Genesis",
+    text: "The record of the first LynxDock website build and its design system.",
+  },
+  {
+    href: "/products/studio/",
+    title: "LynxDock Studio and Bootstrap",
+    text: "The company's development tools, kept for attribution and history.",
+  },
 ];
 
 export default function DocsOverview() {
   return (
     <div>
-      <span className="hud-label">Documentation</span>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Overview</h1>
-      <div className="doc-prose mt-5">
-        <p>
-          LynxDock is a privacy-first, Rust-powered communication platform in active
-          Version 2 development. The infrastructure layer is complete, and a desktop
-          application is under construction: today it runs a local workspace, identity,
-          settings, and a local-only chat client.
-        </p>
-        <p>
-          These guides track the real state of the project. Start with the quickstart,
-          then dig into the architecture and the developer setup. The full plan lives on
-          the <Link href="/roadmap/">roadmap</Link>.
-        </p>
-      </div>
+      <p className="eyebrow">Documentation</p>
+      <h1 className="h-page mt-3">Find what you need.</h1>
+      <p className="lead mt-4 max-w-2xl">
+        Start with the quickstart if you have been invited to test. The engineering background below is kept for
+        history; each page says which period it describes.
+      </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {cards.map((c) => (
-          <Link key={c.href} href={c.href} className="block">
-            <GlassPanel hover className="h-full p-5">
-              <h2 className="text-base font-semibold text-white">{c.title}</h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-[#9fb2ba]">{c.text}</p>
-            </GlassPanel>
-          </Link>
+      <h2 className="h-card mt-10 text-[1.3rem]">Start here</h2>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+        {start.map((c) => (
+          <li key={c.href}>
+            <Link href={c.href} className="card block h-full transition-colors hover:border-[#3a4b55]">
+              <span className="h-card block">{c.title}</span>
+              <span className="small mt-1.5 block">{c.text}</span>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
+
+      <h2 className="h-card mt-12 text-[1.3rem]">Engineering background and history</h2>
+      <p className="small mt-2 max-w-2xl">
+        Implementation detail from earlier stages: Studio, Bootstrap, GSpec and the Genesis design system. Some of it
+        describes plans that changed; the current architecture is on the{" "}
+        <Link href="/technology/" className="text-link">
+          technology page
+        </Link>
+        .
+      </p>
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+        {background.map((c) => (
+          <li key={c.href}>
+            <Link href={c.href} className="card-quiet block h-full transition-colors hover:border-[#3a4b55]">
+              <span className="block font-semibold text-ink">{c.title}</span>
+              <span className="small mt-1 block">{c.text}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
