@@ -8,8 +8,8 @@ import Unconfirmed from "@/components/site/Unconfirmed";
 
 // Privacy notice for the website (owner direction, 2026-10-25: an accurate update before any public beta intake or
 // announcement). It describes what this site actually processes, as verified on 2026-10-26 and 2026-10-27: Cloudflare
-// hosting and downloads (with Cloudflare's network error reports), Cloudflare Web Analytics (loaded twice on the live
-// site: the site's own beacon and the one Cloudflare Pages adds), the Formspree enquiry form and email. It says nothing about accounts or
+// hosting and downloads (with Cloudflare's network error reports), Cloudflare Web Analytics (one beacon, the site's own;
+// the Cloudflare Pages automatic beacon is switched off, owner 2026-10-30), the Formspree enquiry form and email. It says nothing about accounts or
 // licensing, which do not exist. Every fact only the owner can supply is an <OwnerField>; a production build that
 // still contains one fails scripts/check-site.mjs.
 export const metadata: Metadata = {
@@ -111,12 +111,11 @@ export default function PrivacyPage() {
             visitors&rsquo; personal data. We use the totals to understand which pages are read.
           </p>
           <p>
-            At present each page loads the script twice: once from the website&rsquo;s own code and once added by
-            Cloudflare Pages, the service that hosts the website. Each copy counts the page view in a separate Cloudflare
-            Web Analytics report.{" "}
+            Each page loads the script once, from the website&rsquo;s own code; the hosting service does not add a
+            second copy. Copies of the site made for review before publication load no analytics at all.{" "}
             <OwnerField>
-              keep one analytics script or both; if one is removed, replace this paragraph with one sentence naming the
-              one that remains
+              whether page views from visitors in the European Union are counted; Cloudflare&rsquo;s earlier automatic
+              setup excluded them, and the website&rsquo;s own script counts every visitor unless that is changed
             </OwnerField>
           </p>
           <p>

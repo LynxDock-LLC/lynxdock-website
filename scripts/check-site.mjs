@@ -292,6 +292,20 @@ if (builtAsPreview) {
     }
   }
   console.log(`Preview guard: checked ${previewFormsChecked} form(s), and every file in out/ for a form endpoint or the beacon${given.length ? " (endpoint/token were set in the environment)" : ""}.`);
+} else {
+  // A production build loads EXACTLY ONE analytics beacon: the site's own (src/components/Analytics.tsx, token from
+  // NEXT_PUBLIC_CF_BEACON_TOKEN). Owner decision 2026-10-30: one production beacon, none on previews; the Cloudflare
+  // Pages automatic beacon is switched off in the dashboard. So no page may hard-code a second beacon <script>, and
+  // the built pages must carry exactly one distinct beacon token: none would make the privacy notice's "each page
+  // loads the script once" false. (A beacon Cloudflare adds after the build is not in out/; check the
+  // deployed pages for that after a production deployment.)
+  const tokens = new Set();
+  for (const [route, raw] of pages) {
+    if (/<script\b[^>]*beacon\.min\.js/.test(raw)) fail(route, "a production page hard-codes a beacon <script> besides the site's own");
+    for (const m of raw.matchAll(/token\\*"\s*:\s*\\*"([0-9a-zA-Z-]{6,})/g)) tokens.add(m[1]);
+  }
+  if (tokens.size !== 1) fail("/", `a production build carries ${tokens.size} distinct analytics beacon tokens; it must carry exactly one (the site's own; set NEXT_PUBLIC_CF_BEACON_TOKEN)`);
+  console.log(`Analytics: the production build carries ${tokens.size} beacon token(s) (exactly one is required: the site's own).`);
 }
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so

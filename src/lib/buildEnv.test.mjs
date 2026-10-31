@@ -91,3 +91,14 @@ test("the production build runs the production check, so placeholders cannot be 
   assert.match(gate, /"scripts\/check-site\.mjs", "--production"/, "it runs the production check");
   assert.match(gate, /process\.exit\(r\.status \|\| 1\)/, "a failed check fails the build");
 });
+
+test("one analytics beacon: the site's own, rendered once, production only", () => {
+  // Owner decision 2026-10-30: one production beacon, none on previews.
+  const layout = read("src", "app", "layout.tsx");
+  assert.equal((layout.match(/<Analytics \/>/g) ?? []).length, 1, "the layout renders the site's beacon once");
+  const analytics = read("src", "components", "Analytics.tsx").replace(/^\s*\/\/.*$/gm, "");
+  assert.equal((analytics.match(/beacon\.min\.js/g) ?? []).length, 1, "one beacon script");
+  const check = read("scripts", "check-site.mjs");
+  assert.match(check, /if \(tokens\.size !== 1\) fail\(/, "check-site requires exactly one token: none or a second one fails");
+  assert.match(check, /hard-codes a beacon <script>/, "check-site refuses a hard-coded beacon");
+});
