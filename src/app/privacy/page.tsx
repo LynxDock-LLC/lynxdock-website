@@ -128,9 +128,11 @@ export default function PrivacyPage() {
 
         <Section id="forms" title="Forms: demo, beta access, business enquiries and the beta participation acknowledgement">
           <p>
-            When you send one of these forms, what you enter is sent to Formspree, a form-handling service.{" "}
+            When you send one of these forms, what you enter is sent to Formspree, a form-handling service, which
+            stores the submission in LynxDock&rsquo;s Formspree account and emails a notification of it to
+            LynxDock&rsquo;s monitored mailbox.{" "}
             <Unconfirmed>
-              that Formspree stores each submission in LynxDock&rsquo;s account and emails it to the LynxDock team
+              that a beta participation acknowledgement, with its own fields, is stored and notified the same way
             </Unconfirmed>{" "}
             Each submission also says which form
             it came from and the page you sent it from. Depending on the form, what you enter can include your name,
