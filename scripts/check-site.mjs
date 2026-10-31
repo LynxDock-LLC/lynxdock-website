@@ -294,18 +294,28 @@ if (builtAsPreview) {
   console.log(`Preview guard: checked ${previewFormsChecked} form(s), and every file in out/ for a form endpoint or the beacon${given.length ? " (endpoint/token were set in the environment)" : ""}.`);
 } else {
   // A production build loads EXACTLY ONE analytics beacon: the site's own (src/components/Analytics.tsx, token from
-  // NEXT_PUBLIC_CF_BEACON_TOKEN). Owner decision 2026-10-30: one production beacon, none on previews; the Cloudflare
-  // Pages automatic beacon is switched off in the dashboard. So no page may hard-code a second beacon <script>, and
-  // the built pages must carry exactly one distinct beacon token: none would make the privacy notice's "each page
-  // loads the script once" false. (A beacon Cloudflare adds after the build is not in out/; check the
-  // deployed pages for that after a production deployment.)
-  const tokens = new Set();
+  // NEXT_PUBLIC_CF_BEACON_TOKEN), and only in the browser on lynxdock.app or www.lynxdock.app (owner decisions
+  // 2026-10-30 and 2026-10-30/31: one production beacon, none on previews, and a hostname boundary). So:
+  // - no server-rendered page carries a beacon at all (no <script> for it, no preload, no data-cf-beacon);
+  // - exactly one script chunk references beacon.min.js, exactly once, and it holds the production-host list;
+  // - that chunk carries the build's token. A production build without NEXT_PUBLIC_CF_BEACON_TOKEN fails: with no
+  //   token the privacy notice's "each page loads the script once" would be false.
+  // (A beacon Cloudflare adds after the build is not in out/: check the deployed pages after a production deployment.)
   for (const [route, raw] of pages) {
-    if (/<script\b[^>]*beacon\.min\.js/.test(raw)) fail(route, "a production page hard-codes a beacon <script> besides the site's own");
-    for (const m of raw.matchAll(/token\\*"\s*:\s*\\*"([0-9a-zA-Z-]{6,})/g)) tokens.add(m[1]);
+    if (/<(script|link)\b[^>]*(beacon\.min\.js|cloudflareinsights)|data-cf-beacon/.test(raw)) fail(route, "a production page's HTML carries an analytics beacon; it may load only from the site's script, after the hostname check");
   }
-  if (tokens.size !== 1) fail("/", `a production build carries ${tokens.size} distinct analytics beacon tokens; it must carry exactly one (the site's own; set NEXT_PUBLIC_CF_BEACON_TOKEN)`);
-  console.log(`Analytics: the production build carries ${tokens.size} beacon token(s) (exactly one is required: the site's own).`);
+  const chunks = files.filter((f) => /\.js$/.test(f)).map((f) => [f, readFileSync(f, "utf8")]).filter(([, b]) => /beacon\.min\.js/.test(b));
+  const token = (process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ?? "").trim();
+  if (chunks.length !== 1) fail("/", `${chunks.length} script chunks reference the beacon; exactly one (the site's own) is allowed`);
+  else {
+    const [file, body] = chunks[0];
+    const where = "/" + relative(OUT, file).split(sep).join("/");
+    if ((body.match(/beacon\.min\.js/g) ?? []).length !== 1) fail(where, "the beacon is referenced more than once");
+    if (!body.includes('["lynxdock.app","www.lynxdock.app"]')) fail(where, "the beacon's script does not carry the production-host list");
+    if (!token) fail(where, "a production build must carry the site's beacon token (set NEXT_PUBLIC_CF_BEACON_TOKEN)");
+    else if (!body.includes(JSON.stringify(token))) fail(where, "the beacon's script does not carry this build's token");
+  }
+  console.log(`Analytics: ${chunks.length} script chunk(s) reference the beacon (exactly one is required); token ${token ? "set" : "NOT set"}; hostname boundary checked.`);
 }
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so

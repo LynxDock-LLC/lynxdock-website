@@ -30,3 +30,19 @@ export function browserBuildValues(env) {
     LYNXDOCK_CF_BEACON_TOKEN: production ? (env.NEXT_PUBLIC_CF_BEACON_TOKEN ?? "").trim() : "",
   };
 }
+
+/**
+ * The hosts that serve the production site. The analytics beacon runs only on these, checked in the browser, so a
+ * production build served anywhere else (localhost, a Cloudflare Pages *.pages.dev address, including a production
+ * deployment's own alias) never loads it. Owner instruction 2026-10-30/31: the hostname boundary as well as the build
+ * environment.
+ */
+export const PRODUCTION_HOSTS = ["lynxdock.app", "www.lynxdock.app"];
+
+/**
+ * @param {string | undefined | null} hostname
+ * @returns {boolean}
+ */
+export function isProductionHost(hostname) {
+  return PRODUCTION_HOSTS.includes(String(hostname ?? "").toLowerCase());
+}

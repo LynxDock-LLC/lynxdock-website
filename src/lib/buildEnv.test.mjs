@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { browserBuildValues, resolveSiteEnv } from "./buildEnv.mjs";
+import { browserBuildValues, isProductionHost, PRODUCTION_HOSTS, resolveSiteEnv } from "./buildEnv.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..");
@@ -78,7 +78,7 @@ test("a form that is not connected cannot send: no action, no fetch, send button
 test("the site's analytics beacon only loads with a token, which previews never get", () => {
   const analytics = read("src", "components", "Analytics.tsx");
   assert.match(analytics, /const TOKEN = process\.env\.LYNXDOCK_CF_BEACON_TOKEN \?\? "";/);
-  assert.match(analytics, /if \(!TOKEN\) return null;/);
+  assert.match(analytics, /if \(!TOKEN \|\| !onProductionHost\) return null;/);
 });
 
 test("the production build runs the production check, so placeholders cannot be deployed", () => {
@@ -99,6 +99,30 @@ test("one analytics beacon: the site's own, rendered once, production only", () 
   const analytics = read("src", "components", "Analytics.tsx").replace(/^\s*\/\/.*$/gm, "");
   assert.equal((analytics.match(/beacon\.min\.js/g) ?? []).length, 1, "one beacon script");
   const check = read("scripts", "check-site.mjs");
-  assert.match(check, /if \(tokens\.size !== 1\) fail\(/, "check-site requires exactly one token: none or a second one fails");
-  assert.match(check, /hard-codes a beacon <script>/, "check-site refuses a hard-coded beacon");
+  assert.match(check, /script chunks reference the beacon; exactly one \(the site's own\) is allowed/, "check-site allows one beacon chunk");
+  assert.match(check, /a production build must carry the site's beacon token/, "check-site refuses a production build with no token");
+  assert.match(check, /a production page's HTML carries an analytics beacon/, "check-site refuses a beacon in server-rendered HTML");
+});
+
+test("the beacon runs only on the production hosts, decided in the browser", () => {
+  // Owner instruction 2026-10-30/31: the hostname boundary as well as the build environment.
+  assert.deepEqual(PRODUCTION_HOSTS, ["lynxdock.app", "www.lynxdock.app"]);
+  for (const h of ["lynxdock.app", "www.lynxdock.app", "LYNXDOCK.APP", "WWW.lynxdock.app"]) assert.equal(isProductionHost(h), true, h);
+  for (const h of [
+    "localhost",
+    "127.0.0.1",
+    "lynxdock-website.pages.dev",
+    "b69b6f82.lynxdock-website.pages.dev",
+    "site-privacy-and-18plus.lynxdock-website.pages.dev",
+    "lynxdock.app.example.com",
+    "evil-lynxdock.app",
+    "app.lynxdock.app",
+    "",
+    null,
+    undefined,
+  ]) assert.equal(isProductionHost(h), false, String(h));
+  const analytics = read("src", "components", "Analytics.tsx");
+  assert.match(analytics, /^"use client";/, "the beacon component runs in the browser");
+  assert.match(analytics, /setOnProductionHost\(isProductionHost\(window\.location\.hostname\)\)/, "it checks the page's own hostname");
+  assert.match(analytics, /useState\(false\)/, "nothing loads before the check");
 });

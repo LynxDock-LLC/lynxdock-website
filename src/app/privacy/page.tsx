@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 const CLOUDFLARE_POLICY = "https://www.cloudflare.com/privacypolicy/";
 const FORMSPREE_POLICY = "https://formspree.io/legal/privacy-policy/";
+const CLOUDFLARE_WEB_ANALYTICS_FAQ = "https://developers.cloudflare.com/web-analytics/faq/";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -118,9 +119,9 @@ export default function PrivacyPage() {
             </OwnerField>
           </p>
           <p>
-            Retention:{" "}
-            <OwnerField>retention shown in the Cloudflare Web Analytics account, for each report that is kept</OwnerField>.
-            The site works
+            Retention: Cloudflare keeps the unsampled data for 7 days, then aggregates it to about a tenth and keeps
+            the reports available for the previous six months, as its{" "}
+            <External href={CLOUDFLARE_WEB_ANALYTICS_FAQ}>Web Analytics FAQ</External> describes. The site works
             normally if a content blocker stops the script.
           </p>
         </Section>
@@ -147,10 +148,8 @@ export default function PrivacyPage() {
           <p>
             We use what you send to reply to you, to handle your request and to keep a record that you acknowledged
             the beta participation requirements.{" "}
-            <OwnerField>
-              confirm no other use, for example no mailing list, and whether an acknowledgement is ever shared with the
-              community&rsquo;s administrator
-            </OwnerField>{" "}
+            We do not use it for anything else and keep no mailing list. An acknowledgement is not shared with the
+            community&rsquo;s administrator.{" "}
             Retention:{" "}
             <OwnerField>
               how long submissions, including beta participation acknowledgements, are kept in Formspree and in email
@@ -168,7 +167,7 @@ export default function PrivacyPage() {
             Links that start an email only open your own email app; nothing is sent until you send it. Email sent to
             a lynxdock.app address is received by Cloudflare Email Routing: the domain&rsquo;s mail (MX) records point
             there. {supportEmail}, the only address this site gives, is forwarded to a monitored mailbox at Google
-            (Gmail), where it is kept for <OwnerField>retention</OwnerField>.
+            (Gmail), where it is kept as long as needed to deal with it, then deleted.
           </p>
         </Section>
 
@@ -205,10 +204,8 @@ export default function PrivacyPage() {
             or device identifier, and it is never sent to LynxDock or to any server.
           </p>
           <p>
-            <OwnerField>
-              what you do if you learn that a request or acknowledgement came from someone under 18, for example
-              delete it and ask the community not to invite them
-            </OwnerField>
+            If we learn that a request or acknowledgement came from someone under 18, we delete it and ask the
+            community not to invite them.
           </p>
         </Section>
 
@@ -244,7 +241,7 @@ export default function PrivacyPage() {
               {supportEmail}
             </a>
             .{" "}
-            <OwnerField>response time, and any rights for particular jurisdictions you choose to state</OwnerField>
+            We respond within 30 days.
           </p>
         </Section>
 
