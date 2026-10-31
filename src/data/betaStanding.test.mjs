@@ -158,7 +158,13 @@ test("delivery and routing claims are not made without evidence", () => {
     assert.ok(!claim.test(form) && !claim.test(page), `no unevidenced claim: ${claim}`);
   }
   assert.match(form, /The form service accepted your message\./, "success says only what the 2xx shows");
-  assert.match(page, /<Unconfirmed>/, "the hub marks where an acknowledgement ends up as unconfirmed");
+  // Where an acknowledgement ends up is now evidenced: a technical test of the exact acknowledgement payload produced a
+  // stored entry in the form service's inbox and the matching notification in the monitored mailbox (2026-10-31).
+  assert.match(
+    page,
+    /your acknowledgement reaches the LynxDock team through the site&rsquo;s form service\./,
+    "the hub states the evidenced route, and nothing more",
+  );
 });
 
 test("the stale installer checklist is gone", () => {

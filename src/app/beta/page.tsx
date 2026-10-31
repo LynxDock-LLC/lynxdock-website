@@ -15,7 +15,6 @@ import { v6Candidate } from "@/data/v6Candidate";
 import { closedBetaBuild, closedBetaServer, closedBetaResiduals, supersededInstallers } from "@/data/closedBeta";
 import EnquiryForm from "@/components/site/EnquiryForm";
 import OwnerField from "@/components/site/OwnerField";
-import Unconfirmed from "@/components/site/Unconfirmed";
 
 // The invited-tester hub. noindex/nofollow, absent from the sitemap and from the primary navigation; reached from
 // /download/, the quickstart, /releases/ and /support/. It is an unlisted page, not an access-controlled one.
@@ -278,8 +277,8 @@ export default function BetaPage() {
                 </li>
                 <li>
                   <span className="strong">Then:</span> tell the administrator who is inviting you that you have
-                  acknowledged them. The form sends nothing to your community&rsquo;s server or its administrator.{" "}
-                  <Unconfirmed>that acknowledgements sent through the form service reach the LynxDock team</Unconfirmed>
+                  acknowledged them. The form sends nothing to your community&rsquo;s server or its administrator;
+                  your acknowledgement reaches the LynxDock team through the site&rsquo;s form service.
                 </li>
               </ol>
               <p className="small mt-5">

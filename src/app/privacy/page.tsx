@@ -4,7 +4,6 @@ import PageHero from "@/components/site/PageHero";
 import OwnerField from "@/components/site/OwnerField";
 import { eligibility } from "@/data/siteStatus";
 import { supportEmail } from "@/data/siteShell";
-import Unconfirmed from "@/components/site/Unconfirmed";
 
 // Privacy notice for the website (owner direction, 2026-10-25: an accurate update before any public beta intake or
 // announcement). It describes what this site actually processes, as verified on 2026-10-26 and 2026-10-27: Cloudflare
@@ -130,11 +129,7 @@ export default function PrivacyPage() {
           <p>
             When you send one of these forms, what you enter is sent to Formspree, a form-handling service, which
             stores the submission in LynxDock&rsquo;s Formspree account and emails a notification of it to
-            LynxDock&rsquo;s monitored mailbox.{" "}
-            <Unconfirmed>
-              that a beta participation acknowledgement, with its own fields, is stored and notified the same way
-            </Unconfirmed>{" "}
-            Each submission also says which form
+            LynxDock&rsquo;s monitored mailbox. Each submission also says which form
             it came from and the page you sent it from. Depending on the form, what you enter can include your name,
             email address, organisation or community, the option you chose and your message. A beta access request
             also includes your confirmation that you are 18 or older.
