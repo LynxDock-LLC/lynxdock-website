@@ -76,8 +76,7 @@ export default function PrivacyPage() {
 
         <Section id="who" title="Who we are">
           <p>
-            This website is run by LynxDock LLC <OwnerField>registered address, if it should be shown</OwnerField>.
-            For questions about privacy, contact{" "}
+            This website is run by LynxDock LLC. For questions about privacy, contact{" "}
             <a href={`mailto:${supportEmail}`} className="text-link">
               {supportEmail}
             </a>
@@ -99,8 +98,8 @@ export default function PrivacyPage() {
             Like any request, it reaches Cloudflare with your IP address.
           </p>
           <p>
-            Retention of these request records: <OwnerField>as set in the Cloudflare account</OwnerField>.
-            Cloudflare&rsquo;s own handling is described in its <External href={CLOUDFLARE_POLICY}>privacy policy</External>.
+            Cloudflare handles these request records as its{" "}
+            <External href={CLOUDFLARE_POLICY}>privacy policy</External> describes.
           </p>
         </Section>
 
@@ -112,11 +111,8 @@ export default function PrivacyPage() {
           </p>
           <p>
             Each page loads the script once, from the website&rsquo;s own code; the hosting service does not add a
-            second copy. Copies of the site made for review before publication load no analytics at all.{" "}
-            <OwnerField>
-              whether page views from visitors in the European Union are counted; Cloudflare&rsquo;s earlier automatic
-              setup excluded them, and the website&rsquo;s own script counts every visitor unless that is changed
-            </OwnerField>
+            second copy. Copies of the site made for review before publication load no analytics at all. Page views
+            are counted for all visitors, including visitors in the European Union and the European Economic Area.
           </p>
           <p>
             Retention: Cloudflare keeps the unsampled data for 7 days, then aggregates it to about a tenth and keeps
@@ -150,11 +146,10 @@ export default function PrivacyPage() {
             the beta participation requirements.{" "}
             We do not use it for anything else and keep no mailing list. An acknowledgement is not shared with the
             community&rsquo;s administrator.{" "}
-            Retention:{" "}
-            <OwnerField>
-              how long submissions, including beta participation acknowledgements, are kept in Formspree and in email
-            </OwnerField>
-            .
+            Retention: demo, beta access and business enquiries, including their email notifications, are deleted
+            within 90 days after the enquiry is resolved. A beta participation acknowledgement is kept while your
+            participation is active, and afterwards for{" "}
+            <OwnerField>the period after participation ends, set together with the beta agreement</OwnerField>.
           </p>
           <p>
             Nothing is sent until you press the form&rsquo;s send button. A form that is not connected to the
@@ -174,11 +169,10 @@ export default function PrivacyPage() {
         <Section id="not-used" title="What this website does not do">
           <ul className="tick-list">
             <li>
-              It does not set cookies of its own, and none were seen on ordinary requests to the site.{" "}
-              <OwnerField>
-                confirm whether Cloudflare bot or security protection is on for the domain: a security challenge can set
-                a cookie such as __cf_bm or cf_clearance; if it can, name it here as a strictly necessary security cookie
-              </OwnerField>
+              It does not set cookies of its own. Cloudflare&rsquo;s bot protection, challenge rules and rate-limiting
+              rules are not turned on for this site, and no cookies were seen on requests to the site during testing.
+              If Cloudflare ever shows a visitor a security check, it sets strictly necessary cookies, such as
+              cf_clearance, which records that the check was passed.
             </li>
             <li>It does not show advertising or load advertising or social-media trackers.</li>
             <li>It loads its fonts from this site, not from a third-party font service.</li>
