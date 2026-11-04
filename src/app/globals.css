@@ -3,127 +3,675 @@
 @tailwind utilities;
 
 /*
- * Genesis Design System tokens (see src/styles/tokens.css for the portable
- * copy and docs/GENESIS-DESIGN-SYSTEM.md for the spec). The website consumes
- * these CSS variables directly and via tailwind.config.ts utilities.
+ * Visual system of the October 2026 redesign. Graphite backgrounds, restrained cyan accents, fine borders and
+ * quiet teal gradients. The --ld-* variables of the Genesis design system (src/styles/tokens.css, generated
+ * from GSpec and not imported) are remapped onto the same palette so the pages kept from it match.
  */
 :root {
-  --ld-bg: #05090c;
-  --ld-bg-elevated: #080d11;
-  --ld-panel: #0d141a;
-  --ld-panel-strong: #141d25;
-  --ld-border: rgba(94, 242, 242, 0.14);
-  --ld-border-strong: rgba(94, 242, 242, 0.35);
-  --ld-text: #cdd9de;
-  --ld-text-strong: #ffffff;
-  --ld-muted: #9fb2ba;
-  --ld-muted-2: #7f939b;
-  --ld-cyan: #35e0e0;
-  --ld-cyan-bright: #5ef2f2;
+  --bg: #090e12;
+  --panel: #10191f;
+  --panel-2: #142027;
+  --line: #27343c;
+  --line-strong: #3a4b55;
+  --text: #f2f7f9;
+  --muted: #a4b2bb;
+  --accent: #5ce1df;
+  --accent-ink: #04201f;
+  --content-max: 1240px;
+
+  /* The contrasting company mission panel. */
+  --paper: #edf3ed;
+  --paper-tint: #d8e8dd;
+  --paper-ink: #0c3a39;
+
+  --warn: #e7c27d;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --gutter: 20px;
+  --section-y: 52px;
+
+  --ld-bg: var(--bg);
+  --ld-bg-elevated: #0c1317;
+  --ld-panel: var(--panel);
+  --ld-panel-strong: var(--panel-2);
+  --ld-border: var(--line);
+  --ld-border-strong: var(--line-strong);
+  --ld-text: #d7e1e5;
+  --ld-text-strong: var(--text);
+  --ld-muted: var(--muted);
+  --ld-muted-2: #8d9da6;
+  --ld-cyan: var(--accent);
+  --ld-cyan-bright: #8eebe9;
   --ld-blue: #3b82f6;
   --ld-blue-deep: #1d4ed8;
   --ld-warning: #f5b544;
   --ld-success: #34d399;
   --ld-danger: #f87171;
-  --ld-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas,
-    "Liberation Mono", monospace;
+  --ld-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --ld-radius-lg: 1rem;
-  --ld-glow: 0 0 24px rgba(53, 224, 224, 0.25);
-  --ld-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 20px 50px -20px rgba(0, 0, 0, 0.8);
-  /* alias kept for existing var(--font-mono) references */
+  --ld-glow: none;
+  --ld-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 50px -24px rgba(0, 0, 0, 0.8);
   --font-mono: var(--ld-font-mono);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 24px;
+    --section-y: 68px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 36px;
+    --section-y: 86px;
+  }
 }
 
 @layer base {
   html {
+    color-scheme: dark;
     scroll-behavior: smooth;
+    scroll-padding-top: 84px;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--ld-bg);
+    background-color: var(--bg);
     color: var(--ld-text);
-    font-feature-settings: "ss01", "cv01";
+    font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+      Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: rgba(53, 224, 224, 0.25);
-    color: #eafcff;
+    background: rgba(92, 225, 223, 0.28);
+    color: #f2f7f9;
   }
 
   :focus-visible {
-    outline: 2px solid var(--ld-cyan-bright);
-    outline-offset: 2px;
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
     border-radius: 4px;
   }
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
     letter-spacing: -0.02em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
 
 @layer components {
-  .glass {
-    background: linear-gradient(
-      180deg,
-      rgba(20, 29, 37, 0.55),
-      rgba(10, 16, 21, 0.55)
-    );
-    border: 1px solid var(--ld-border);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  /* ---------------------------------------------------------------- layout */
+  .wrap {
+    width: 100%;
+    max-width: calc(var(--content-max) + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .wrap-narrow {
+    width: 100%;
+    max-width: calc(820px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .section {
+    padding-block: var(--section-y);
+  }
+  .section-tight {
+    padding-block: calc(var(--section-y) * 0.6);
+  }
+  .section-band {
+    background: linear-gradient(180deg, rgba(20, 32, 39, 0.55), rgba(9, 14, 18, 0) 70%);
+    border-top: 1px solid var(--line);
   }
 
+  /* ------------------------------------------------------------ typography */
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--accent);
+  }
+  .h-display {
+    font-size: clamp(2.35rem, 5.2vw, 4.1rem);
+    line-height: 1.04;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+  .h-page {
+    font-size: clamp(2.05rem, 4.2vw, 3.2rem);
+    line-height: 1.08;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.025em;
+  }
+  .h-section {
+    font-size: clamp(1.65rem, 3vw, 2.35rem);
+    line-height: 1.14;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .h-card {
+    font-size: 1.125rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .lead {
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .small {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .mono {
+    font-family: var(--ld-font-mono);
+  }
+  .text-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(92, 225, 223, 0.45);
+    text-underline-offset: 3px;
+  }
+  .text-link:hover {
+    text-decoration-color: var(--accent);
+  }
+  .arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .arrow-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* --------------------------------------------------------------- buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+    padding: 0 1.25rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-primary:hover {
+    background: #86ebe9;
+  }
+  .btn-secondary {
+    background: var(--panel);
+    border-color: var(--line-strong);
+    color: var(--text);
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+  }
+  .btn-quiet {
+    min-height: 44px;
+    padding: 0 0.75rem;
+    color: var(--muted);
+  }
+  .btn-quiet:hover {
+    color: var(--text);
+  }
+  .btn-sm {
+    min-height: 40px;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+  }
+  .btn[aria-disabled="true"],
+  .btn:disabled {
+    background: transparent;
+    border: 1px dashed var(--line-strong);
+    color: #8d9da6;
+    cursor: not-allowed;
+  }
+
+  /* ----------------------------------------------------------------- cards */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+  .card-2 {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .card-quiet {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .card-teal {
+    background: radial-gradient(120% 140% at 0% 0%, rgba(92, 225, 223, 0.09), rgba(16, 25, 31, 0) 55%),
+      var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+  }
+  .card-notice {
+    background: rgba(231, 194, 125, 0.06);
+    border: 1px solid rgba(231, 194, 125, 0.4);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+  }
+  .paper {
+    background: radial-gradient(110% 120% at 100% 0%, var(--paper-tint), rgba(216, 232, 221, 0) 60%), var(--paper);
+    color: var(--paper-ink);
+    border-radius: var(--radius-lg);
+  }
+
+  /* ---------------------------------------------------------------- badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(20, 32, 39, 0.7);
+  }
+  .badge-accent {
+    border-color: rgba(92, 225, 223, 0.45);
+    color: var(--accent);
+  }
+  .badge-warn {
+    border-color: rgba(231, 194, 125, 0.55);
+    color: var(--warn);
+  }
+  .dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: currentColor;
+    flex: none;
+  }
+
+  /* -------------------------------------------------------------- figures */
+  .shot {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: #0b1216;
+    box-shadow: 0 24px 60px -36px rgba(0, 0, 0, 0.95);
+  }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .caption {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: #8d9da6;
+  }
+  .label-chip {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(9, 14, 18, 0.82);
+    border: 1px solid var(--line-strong);
+  }
+
+  /* ----------------------------------------------------------------- lists */
+  .tick-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .tick-list > li {
+    position: relative;
+    padding-left: 1.4rem;
+    line-height: 1.6;
+  }
+  .tick-list > li::before {
+    content: "";
+    position: absolute;
+    left: 0.1rem;
+    top: 0.62em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+  }
+  .num-list {
+    counter-reset: num;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .num-list > li {
+    counter-increment: num;
+    position: relative;
+    padding-left: 2.6rem;
+    line-height: 1.6;
+  }
+  .num-list > li::before {
+    content: counter(num);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(92, 225, 223, 0.5);
+    color: var(--accent);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ------------------------------------------------------------------ tabs */
+  /* Two columns on phones so every tab stays visible; one row from 640px. */
+  .tablist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.3rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(16, 25, 31, 0.7);
+  }
+  @media (min-width: 640px) {
+    .tablist {
+      display: flex;
+    }
+  }
+  .tab {
+    flex: 1 0 auto;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border-radius: 9px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .tab:hover {
+    color: var(--text);
+  }
+  .tab[aria-selected="true"] {
+    background: var(--panel-2);
+    color: var(--text);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  /* ---------------------------------------------------------- FAQ (details) */
+  .faq {
+    border-top: 1px solid var(--line);
+  }
+  .faq > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 56px;
+    padding-block: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .faq > summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq > summary::after {
+    content: "+";
+    flex: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .faq[open] > summary::after {
+    content: "\2212";
+  }
+
+  /* ------------------------------------------------------------- key/value */
+  .kv {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .kv > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+    padding: 0.8rem 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .kv > div:first-child {
+    border-top: 0;
+  }
+  .kv dt {
+    font-size: 0.8125rem;
+    color: #8d9da6;
+  }
+  .kv dd {
+    font-size: 0.9375rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+  @media (min-width: 640px) {
+    .kv > div {
+      grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.2fr);
+      gap: 1rem;
+      align-items: baseline;
+    }
+  }
+
+  /*
+   * Release tables. Below 768px each row stacks into labelled blocks (cells carry data-label), so nothing,
+   * the SHA-256 included, sits off-screen in a sideways scroll. The markup keeps explicit table roles because
+   * changing a table's display can drop its semantics in some browsers.
+   */
+  @media (max-width: 767px) {
+    .rtable thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .rtable,
+    .rtable tbody,
+    .rtable tr,
+    .rtable th,
+    .rtable td {
+      display: block;
+      width: 100%;
+    }
+    .rtable tr {
+      padding-block: 0.5rem;
+    }
+    .rtable th,
+    .rtable td {
+      padding-block: 0.4rem !important;
+    }
+    .rtable td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 0.15rem;
+      font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #8d9da6;
+    }
+  }
+
+  /* An owner-supplied fact still missing (src/components/site/OwnerField.tsx). */
+  .owner-field {
+    background: rgba(231, 194, 125, 0.16);
+    color: #ecd6a8;
+    border: 1px dashed rgba(231, 194, 125, 0.65);
+    border-radius: 4px;
+    padding: 0 0.3em;
+    font-weight: 600;
+  }
+
+  /* ----------------------------------------------------------------- forms */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .field .hint {
+    font-size: 0.8125rem;
+    color: #8d9da6;
+  }
+  .input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.6rem 0.85rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-strong);
+    background: #0c1317;
+    color: var(--text);
+    font-size: 1rem;
+  }
+  .input::placeholder {
+    color: #6f8089;
+  }
+  .input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  .input[aria-invalid="true"] {
+    border-color: #f0a3a3;
+  }
+  .field-error {
+    font-size: 0.8125rem;
+    color: #f4b4b4;
+  }
+
+  /* ---------------------------------------------------------------- dialog */
+  .dialog {
+    width: min(560px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--panel);
+    color: var(--ld-text);
+    overflow: auto;
+  }
+  .dialog::backdrop {
+    background: rgba(4, 8, 10, 0.72);
+  }
+
+  /* --------------------------------------------------------- one-time entry */
+  .enter {
+    animation: enter 0.5s ease-out both;
+  }
+  .enter-delay {
+    animation: enter 0.5s ease-out 0.12s both;
+  }
+
+  /* ---------------------------------------------------- Genesis (legacy) -- */
+  .glass {
+    background: var(--panel);
+    border: 1px solid var(--line);
+  }
   .glass-hover {
-    transition: border-color 0.25s ease, box-shadow 0.25s ease,
-      transform 0.25s ease;
+    transition: border-color 0.2s ease;
   }
   .glass-hover:hover {
-    border-color: var(--ld-border-strong);
-    box-shadow: 0 0 40px -10px rgba(53, 224, 224, 0.25);
+    border-color: var(--line-strong);
   }
-
   .hud-label {
     font-family: var(--ld-font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--ld-cyan-bright);
+    color: var(--accent);
   }
-
   .text-gradient {
-    background: linear-gradient(120deg, #eafcff 0%, #7fecf0 55%, #5aa6ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--text);
   }
-
   .hairline {
-    border-color: var(--ld-border);
+    border-color: var(--line);
   }
 
   /* Documentation prose */
   .doc-prose {
-    color: #b7c5cb;
-    font-size: 15px;
+    color: #c3ced3;
+    font-size: 1rem;
     line-height: 1.75;
   }
   .doc-prose h2 {
-    color: var(--ld-text-strong);
-    font-size: 1.35rem;
-    font-weight: 600;
+    color: var(--text);
+    font-size: 1.4rem;
+    font-weight: 700;
     margin-top: 2.5rem;
     margin-bottom: 0.75rem;
     scroll-margin-top: 6rem;
   }
   .doc-prose h3 {
-    color: #eef6f8;
-    font-size: 1.05rem;
-    font-weight: 600;
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 700;
     margin-top: 1.75rem;
     margin-bottom: 0.5rem;
   }
@@ -153,28 +701,28 @@
     width: 5px;
     height: 5px;
     border-radius: 9999px;
-    background: rgba(94, 242, 242, 0.7);
+    background: var(--accent);
   }
   .doc-prose ol {
     list-style: decimal;
   }
   .doc-prose a {
-    color: var(--ld-cyan-bright);
+    color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
   .doc-prose code {
     font-family: var(--ld-font-mono);
     font-size: 0.85em;
-    background: rgba(94, 242, 242, 0.08);
-    border: 1px solid rgba(94, 242, 242, 0.15);
+    background: rgba(92, 225, 223, 0.07);
+    border: 1px solid var(--line);
     border-radius: 5px;
     padding: 0.1rem 0.4rem;
-    color: #cdeff0;
+    color: #d6f1f1;
   }
   .doc-prose pre {
-    background: rgba(8, 13, 17, 0.9);
-    border: 1px solid rgba(94, 242, 242, 0.14);
+    background: #0c1317;
+    border: 1px solid var(--line);
     border-radius: 10px;
     padding: 1rem 1.1rem;
     overflow-x: auto;
@@ -184,15 +732,15 @@
     background: none;
     border: none;
     padding: 0;
-    color: #b7c5cb;
+    color: #c3ced3;
     font-size: 0.85rem;
   }
   .doc-prose strong {
-    color: #eef6f8;
+    color: var(--text);
     font-weight: 600;
   }
 
-  /* Illustrated guides: numbered steps with a HUD-style counter */
+  /* Illustrated guides: numbered steps */
   .doc-prose ol.guide-steps {
     counter-reset: guide-step;
     list-style: none;
@@ -212,9 +760,9 @@
     width: 1.75rem;
     height: 1.75rem;
     border-radius: 9999px;
-    border: 1px solid rgba(94, 242, 242, 0.3);
-    background: rgba(94, 242, 242, 0.08);
-    color: var(--ld-cyan-bright);
+    border: 1px solid rgba(92, 225, 223, 0.45);
+    background: rgba(92, 225, 223, 0.06);
+    color: var(--accent);
     font-family: var(--ld-font-mono);
     font-size: 0.72rem;
     display: flex;
@@ -226,13 +774,25 @@
   }
 }
 
+/*
+ * Progressive enhancement. The root layout sets data-js on <html> before the page paints. Without it (no
+ * JavaScript), interactive controls that would do nothing are hidden and every tab panel and callout text is
+ * shown in full, so the content stays readable.
+ */
+html:not([data-js]) .js-only {
+  display: none !important;
+}
+html[data-js] .nojs-only {
+  display: none !important;
+}
+html:not([data-js]) [data-tabpanel][hidden] {
+  display: block;
+}
+
 @layer utilities {
   .bg-hud-grid {
-    background-image: linear-gradient(
-        rgba(94, 242, 242, 0.045) 1px,
-        transparent 1px
-      ),
-      linear-gradient(90deg, rgba(94, 242, 242, 0.045) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(164, 178, 187, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(164, 178, 187, 0.035) 1px, transparent 1px);
     background-size: 56px 56px;
   }
 
@@ -242,12 +802,24 @@
   }
 }
 
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }

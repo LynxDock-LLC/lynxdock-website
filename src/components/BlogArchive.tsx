@@ -63,11 +63,12 @@ export default function BlogArchive({ posts }: { posts: Post[] }) {
     }`;
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pb-20">
+    <section className="wrap pb-20">
       {/* ---- Filters, kept at the top where they're findable ---- */}
-      <div className="flex flex-col gap-3 border-b border-line/60 py-6">
+      {/* Filters need JavaScript; without it every article is listed. */}
+      <div className="js-only flex flex-col gap-3 border-b border-line/60 py-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="hud-label mr-1 w-14 shrink-0 text-[#5b6f77]">Type</span>
+          <span className="hud-label mr-1 w-14 shrink-0 text-[#8d9da6]">Type</span>
           {KINDS.map((k) => (
             <button
               key={k.id}
@@ -82,7 +83,7 @@ export default function BlogArchive({ posts }: { posts: Post[] }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <span className="hud-label mr-1 w-14 shrink-0 text-[#5b6f77]">Topics</span>
+          <span className="hud-label mr-1 w-14 shrink-0 text-[#8d9da6]">Topics</span>
           <button
             type="button"
             onClick={() => setTopic(null)}

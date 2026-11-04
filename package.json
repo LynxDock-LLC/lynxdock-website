@@ -5,9 +5,12 @@
   "description": "Public website for LynxDock LLC - built for people, not platforms.",
   "scripts": {
     "dev": "next dev -p 4300",
-    "build": "next build",
+    "build": "next build && node scripts/production-gate.mjs",
     "start": "next start -p 4300",
-    "preview": "npx serve@latest out -l 4300"
+    "preview": "npx serve@latest out -l 4300",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/data/betaSigning.test.mjs src/data/betaStanding.test.mjs src/lib/buildEnv.test.mjs",
+    "check": "node scripts/check-site.mjs"
   },
   "dependencies": {
     "next": "^15.1.9",

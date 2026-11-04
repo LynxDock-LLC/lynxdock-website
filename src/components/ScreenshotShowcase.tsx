@@ -50,13 +50,7 @@ export default function ScreenshotShowcase({ shots }: { shots: Shot[] }) {
     <div className="flex flex-col gap-6">
       {primary && (
         <div className="relative">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -inset-6 rounded-3xl bg-signal-cyan/5 blur-3xl"
-          />
-          <div className="relative">
-            <Frame shot={primary} priority />
-          </div>
+          <Frame shot={primary} priority />
         </div>
       )}
       {rest.length > 0 && (

@@ -7,8 +7,10 @@ import {
   SeriesBadge,
   SeriesFooter,
 } from "@/components/PostMeta";
+import { isPreview } from "@/lib/siteEnv";
 import {
   posts,
+  draftPosts,
   getPost,
   formatDate,
   relatedPosts,
@@ -16,8 +18,11 @@ import {
   postAuthorRole,
 } from "@/data/posts";
 
+// Drafts are built only in preview builds; a production build has no page for them until they are published.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+  return [...posts, ...(isPreview ? draftPosts : [])].map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -31,6 +36,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    ...(post.draft ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -49,10 +55,10 @@ export default async function PostPage({
   const post = getPost(slug);
   if (!post) notFound();
 
-  const related = relatedPosts(slug);
+  const related = post.draft ? [] : relatedPosts(slug);
 
   return (
-    <article className="mx-auto max-w-3xl px-5 pb-20 pt-16 sm:pt-20">
+    <article className="wrap-narrow pb-20 pt-12 sm:pt-16">
       <Link
         href="/blog/"
         className="inline-flex items-center gap-1.5 text-sm text-[#9fb2ba] transition-colors hover:text-signal-bright"
@@ -70,6 +76,21 @@ export default async function PostPage({
           {post.readingTime}
         </span>
       </div>
+
+      {post.draft ? (
+        <p className="card-notice small mt-6">
+          <span className="strong text-[#ecd6a8]">Draft, not published.</span> This article is shown only in preview
+          builds for review. It is not indexed and not in the feed.
+        </p>
+      ) : (
+        <p className="small mt-6 border-l-2 border-line pl-3">
+          Written {formatDate(post.date)}. It describes LynxDock as it was then; for where things stand now, see{" "}
+          <Link href="/releases/" className="text-link">
+            release status
+          </Link>
+          .
+        </p>
+      )}
 
       <SeriesBadge post={post} className="mt-4" />
 

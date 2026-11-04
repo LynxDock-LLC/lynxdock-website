@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "Developers",
@@ -11,6 +12,9 @@ export default function DocsDevelopers() {
     <div>
       <span className="hud-label">Reference</span>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Developers</h1>
+      <div className="mt-5">
+        <HistoryNote era="July 2026">This page describes the V2 monorepo as documented in July 2026.</HistoryNote>
+      </div>
       <div className="doc-prose mt-6">
         <p>
           LynxDock V2 is a single product monorepo: a pnpm + Turborepo workspace for TypeScript

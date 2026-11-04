@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "Bootstrap basics",
@@ -14,6 +15,9 @@ export default function BootstrapDoc() {
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
         Bootstrap basics
       </h1>
+      <div className="mt-5">
+        <HistoryNote era="July 2026">This page describes Bootstrap, the generator behind parts of this site, as of July 2026.</HistoryNote>
+      </div>
 
       <div className="doc-prose mt-6">
         <p>

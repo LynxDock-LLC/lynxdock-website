@@ -24,6 +24,11 @@ export type Post = {
    * go stale the moment a post is inserted, reordered, or unpublished.
    */
   series?: string;
+  /**
+   * A draft is built only in preview builds (noindex, never in the RSS feed, the sitemap or production) until
+   * the owner publishes it by removing this flag.
+   */
+  draft?: boolean;
   body: string[]; // paragraphs
 };
 
@@ -135,7 +140,29 @@ export function latestPosts(limit = 3): Post[] {
   return [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
 }
 
-export const posts: Post[] = [
+/** Every post, drafts included. Pages use `posts` (published only) unless they deal with drafts on purpose. */
+export const allPosts: Post[] = [
+  {
+    slug: "a-clearer-path-to-beta",
+    title: "A clearer path to the beta",
+    date: "2026-10-21",
+    readingTime: "3 min read",
+    tag: "Founder Update",
+    kind: "founder",
+    topics: ["Release"],
+    draft: true,
+    excerpt:
+      "We rebuilt lynxdock.app around two questions: does LynxDock fit your community, and if you are already testing, what applies to you today? Here is what changed, and where the beta stands.",
+    body: [
+      "We have rebuilt lynxdock.app around two questions. Does LynxDock fit your community? And if you are already testing, what applies to you today?",
+      "The old site grew in layers: banners from earlier generations, a download page that listed platforms we do not ship, three separate screenshot galleries and two different explanations of LynxDock Host. The new site has one product tour, one Host page and one place for release status, and the pages that mention the beta's status all read it from the same record.",
+      "Here is where things stand. LynxDock is a closed beta on Windows, for invited communities that run their own servers. V8 is the current development generation, not a version number. The next tester release is in qualification and is not yet available for distribution. It is the V8 generation, provisionally numbered 0.3.0, and it will be offered to testers only once it is approved. Earlier published releases stay in a dated archive in the tester hub.",
+      "Push-to-talk is foreground-only. The LynxDock window must have focus; switching away releases a held press, and after you switch back you release the key and press it again. Background push-to-talk is separate development work and is not part of the next release.",
+      "We also now separate four kinds of request. A demo is a walkthrough with demonstration data. Beta access is for communities that would like to test. Business enquiries cover pilots, partnerships, investment and acquisition. Support is for testers who are already using LynxDock. Each has its own form or page, so a message reaches the right place.",
+      "And we label what you see. The screenshots come from earlier development builds running simulated demonstration data, and their captions say so. The capabilities on the technology page describe the development record; what a particular tester release includes is listed with that release.",
+      "If you run a community that plays and plans together, we would like to hear from you.",
+    ],
+  },
   {
     slug: "v5-overlay-catalog-actions-closed-beta",
     title: "V5: an in-game overlay, a Verse Catalog, and one honest action system — cleared for closed beta",
@@ -590,8 +617,14 @@ export const posts: Post[] = [
   },
 ];
 
+/** Published posts only: the blog index, RSS, the sitemap and related reading use these. */
+export const posts: Post[] = allPosts.filter((p) => !p.draft);
+
+/** Drafts, rendered only in preview builds. */
+export const draftPosts: Post[] = allPosts.filter((p) => p.draft);
+
 export function getPost(slug: string): Post | undefined {
-  return posts.find((p) => p.slug === slug);
+  return allPosts.find((p) => p.slug === slug);
 }
 
 export function formatDate(iso: string): string {

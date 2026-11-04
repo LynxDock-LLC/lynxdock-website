@@ -1,363 +1,273 @@
 import Link from "next/link";
-import Image from "next/image";
-import GlassPanel from "@/components/GlassPanel";
-import GlowButton from "@/components/GlowButton";
-import SectionHeader from "@/components/SectionHeader";
-import FeatureCard from "@/components/FeatureCard";
-import EpicRoadmap from "@/components/EpicRoadmap";
-import DesktopMockup from "@/components/DesktopMockup";
-import ArchitectureFlow from "@/components/ArchitectureFlow";
-import LatestUpdates from "@/components/LatestUpdates";
-import V5Gallery from "@/components/V5Gallery";
-import { epics } from "@/data/epics";
-import type { Feature } from "@/data/features";
-import { releases } from "@/data/releases";
+import HeroCallouts, { type Callout } from "@/components/site/HeroCallouts";
+import Tabs from "@/components/site/Tabs";
+import Shot from "@/components/site/Shot";
+import RouteLine from "@/components/site/RouteLine";
+import HostingIllustration from "@/components/site/HostingIllustration";
+import TechFoundation from "@/components/site/TechFoundation";
+import DemoCta from "@/components/site/DemoCta";
+import { shots } from "@/data/screenshots";
+import { demoLink } from "@/data/siteShell";
+import siteStatus from "@/data/siteStatus";
 
-const heroCtas = [
-  { label: "Download Alpha", href: "/download/", variant: "primary" as const, external: false },
-  { label: "Roadmap", href: "/roadmap/", variant: "secondary" as const, external: false },
-  { label: "GitHub", href: "https://github.com/LynxDock-LLC", variant: "ghost" as const, external: true },
-  { label: "Documentation", href: "/docs/", variant: "ghost" as const, external: false },
+const callouts: Callout[] = [
+  {
+    title: "Assigned comms",
+    text: "Each member is told which voice net their assignment uses and can join it muted in one step, so nobody has to ask where to be.",
+    x: 61.5,
+    y: 10,
+  },
+  {
+    title: "One shared board",
+    text: "Units, wings, zones, routes and waypoints on a board the whole operation sees, with the current phase and how many units report ready.",
+    x: 46,
+    y: 47,
+  },
+  {
+    title: "Objectives and progress",
+    text: "Objectives are grouped by unit with their status (complete, active or pending), so leaders can see what is left at a glance.",
+    x: 84.5,
+    y: 57,
+  },
 ];
 
-const stack = ["Rust core", "Tauri desktop", "Local-first", "Self-hostable", "Privacy-first", "Lightweight"];
-
-// The desktop application — grounded in what is built today.
-const desktopFeatures: Feature[] = [
-  { title: "Squadron Control", description: "A live tactical board: units, wings, routes with waypoints, zones, objectives, orders, alerts, replay, and undo — synced to every client.", icon: "layers" },
-  { title: "Messaging", description: "Server-synced channels with replies, reactions, rich formatting, search, and an offline outbox that delivers exactly once on reconnect.", icon: "message" },
-  { title: "Voice", description: "Voice rooms with mute/deafen, device selection, and screen sharing over a self-hosted media plane — with NAT traversal handled for you, no LiveKit or TURN setup required.", icon: "users" },
-  { title: "Roles & channels", description: "Server-wide roles with capability tokens, custom colors and ordering, multiple roles per member, and first-class text/voice/tactical channels grouped into categories.", icon: "shield" },
-  { title: "Settings", description: "A 20-category, searchable settings system — server-persisted per account, privacy-first defaults, Basic and Advanced modes.", icon: "cog" },
-  { title: "Genesis UI", description: "LynxDock's own component framework: design tokens, a theme engine, and a Tailwind preset.", icon: "palette" },
-  { title: "Rust core", description: "A protocol-first Rust server and Tauri desktop shell; TypeScript types are generated from the Rust protocol so client and server can't drift.", icon: "server" },
-  { title: "Server Host", description: "A dedicated owner console: guided setup, an Overview command center, members, roles, channels, invites, backups, connectivity, and diagnostics — self-hosting without config files.", icon: "code" },
-  { title: "In-game overlay", description: "A Windows overlay that stays click-through while passive so the game keeps your keyboard and mouse. Micro and Compact decks, a Quick Action control, a Pointer / Menu control, Escape to hand input back — no game injection, borderless or windowed.", icon: "bolt" },
-  { title: "Verse Catalog", description: "A patch-aware Star Citizen reference catalog — ships, vehicles, locations, commodities, missions — with provenance, search, compare, and a coverage dashboard that never claims more than it has.", icon: "layers" },
-  { title: "Canonical actions", description: "Quick actions derived on the server from canonical state, role, and revision. A repeated press replays instead of applying twice; a stale press is refused with a reason. One action registry for the app, the overlay, and paired devices.", icon: "cog" },
-  { title: "Tested seriously", description: "Reconnect, offline replay, multi-client convergence, undo, and permissions covered by automated tests and live multi-account verification — and the V5 overlay qualified live on Star Citizen before its closed beta.", icon: "sparkles" },
-  { title: "Studio", description: "GSpec Studio validates a specification entirely in the browser using the shared core.", icon: "cpu" },
+const pillars = [
+  {
+    title: "Stay connected.",
+    sub: "Text, voice and shared context.",
+    text: "Channels, voice nets and screen sharing sit beside the work they are about.",
+    href: "/products/lynxdock/#tour",
+    link: "The product tour",
+  },
+  {
+    title: "Coordinate the operation.",
+    sub: "Rosters, assignments, routes, orders and review.",
+    text: "One record carries an operation from the first draft to the debrief.",
+    href: "/#how-it-works",
+    link: "How it works",
+  },
+  {
+    title: "Run your own space.",
+    sub: "Community server and Host administrator companion.",
+    text: "Your community's server runs where you choose, and Host helps the person who looks after it.",
+    href: "/products/lynxdock-host/",
+    link: "LynxDock Host",
+  },
 ];
 
-const principles: Feature[] = [
-  { title: "Own your data", description: "Local-first today, self-hostable tomorrow. Your accounts, messages, and files stay with infrastructure you control.", icon: "lock" },
-  { title: "Performance matters", description: "A Rust core and a lightweight desktop shell. Fast to launch, calm to use, light on resources.", icon: "bolt" },
-  { title: "Open architecture", description: "Spec-driven and generated end to end. Wire types come from Rust; the site comes from the spec.", icon: "layers" },
-  { title: "Privacy by default", description: "No ads, no tracking, no telemetry required. Restraint is a feature.", icon: "shield" },
+const steps = [
+  {
+    id: "plan",
+    label: "Plan",
+    shot: shots.boardPlanning,
+    title: "Plan the operation",
+    text: "Draft objectives, routes, waypoints and zones on a shared board, decide the phases, and place the units that will carry them out.",
+  },
+  {
+    id: "organise",
+    label: "Organise",
+    shot: shots.roster,
+    title: "Organise the people",
+    text: "Members RSVP, check in and report their unit, status, location and readiness. Leaders see the roster grouped by unit, and who is ready.",
+  },
+  {
+    id: "coordinate",
+    label: "Coordinate",
+    shot: shots.comms,
+    title: "Coordinate as it happens",
+    text: "Operation channels and voice nets follow the assignments. Orders, alerts and support requests stay attached to the operation they belong to.",
+  },
+  {
+    id: "debrief",
+    label: "Debrief",
+    shot: shots.debrief,
+    title: "Debrief and learn",
+    text: "Compare the plan with what members reported: attendance, orders and acknowledgments, resolved requests and the operation's timeline.",
+  },
 ];
 
-const ecosystem = [
-  { name: "Architecture", text: "How the spec, infrastructure, and product monorepo fit together.", href: "/architecture/" },
-  { name: "LynxDock Studio", text: "GSpec Studio and the engineering environment.", href: "/products/studio/" },
-  { name: "LynxDock Genesis", text: "The design system and component framework behind everything.", href: "/genesis/" },
-];
-
-function Section({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
-  return (
-    <section id={id} className={`mx-auto max-w-6xl px-5 ${className}`}>
-      {children}
-    </section>
-  );
-}
-
-export default function Home() {
+export default function HomePage() {
+  const s = siteStatus;
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html:
-            "@keyframes ld-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.ld-float{animation:ld-float 6s ease-in-out infinite}",
-        }}
-      />
-
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-hud-grid mask-fade-b opacity-60" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-radial-fade" />
-        <div aria-hidden className="pointer-events-none absolute left-1/2 top-[-8%] h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-signal-cyan/10 blur-[130px]" />
-
-        <div className="relative mx-auto flex max-w-4xl flex-col items-center px-5 pb-20 pt-20 text-center sm:pt-28">
-          <div className="ld-float animate-fade-up">
-            <Image src="/logo/lynxdock-icon.png" alt="LynxDock logo" width={520} height={545} priority className="mx-auto h-24 w-auto drop-shadow-[0_0_45px_rgba(53,224,224,0.45)] sm:h-28" />
+      <section aria-labelledby="hero-title" className="relative overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_70%_at_15%_0%,rgba(92,225,223,0.1),transparent_65%)]"
+        />
+        <div className="wrap relative pb-10 pt-12 sm:pt-16 lg:pt-20">
+          <div className="enter max-w-[52rem]">
+            <p className="eyebrow">Built for communities that play together.</p>
+            <h1 id="hero-title" className="h-display mt-4">
+              Voice, chat and operations. Your server.
+            </h1>
+            <p className="lead mt-6 max-w-2xl">
+              Keep the conversation and the plan in one place. LynxDock brings your community together in a
+              desktop workspace, on a server you control.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href={demoLink.href} data-demo-open="" className="btn btn-primary">
+                Request a demo
+              </a>
+              <Link href="/products/lynxdock/" className="btn btn-secondary">
+                Explore the product
+              </Link>
+            </div>
+            <p className="small mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="badge badge-accent">
+                <span className="dot" aria-hidden="true" />
+                Windows {s.stage.toLowerCase()}
+              </span>
+              <span>
+                For invited testers. {s.nextRelease.statement}{" "}
+                <Link href="/download/" className="text-link">
+                  Request beta access
+                </Link>
+              </span>
+            </p>
           </div>
-
-          <span className="hud-label mt-8 flex items-center gap-2 animate-fade-up">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan animate-pulse-soft" />
-            Version 2 · Active development
-          </span>
-
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white animate-fade-up sm:text-5xl md:text-6xl">
-            Your comms. Your ops. Your server.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba] animate-fade-up sm:text-lg">
-            LynxDock is a self-hosted communication and tactical operations platform for gaming organizations —
-            chat, voice, and a live tactical command board in one deployable unit, running on hardware your
-            community owns.
-          </p>
-
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3 animate-fade-up">
-            {heroCtas.map((c) => (
-              <GlowButton key={c.label} href={c.href} external={c.external} variant={c.variant}>
-                {c.label}
-              </GlowButton>
-            ))}
+          <div className="enter-delay mt-12">
+            <HeroCallouts shot={shots.board} callouts={callouts} />
           </div>
         </div>
       </section>
 
-      {/* STACK BAR */}
-      <Section className="pb-8 pt-2">
-        <GlassPanel className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 px-6 py-5">
-          {stack.map((t) => (
-            <span key={t} className="flex items-center gap-2 text-sm text-[#9fb2ba]">
-              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan/70" />
-              {t}
-            </span>
-          ))}
-        </GlassPanel>
-      </Section>
+      <RouteLine variant="a" className="my-2" />
 
-      {/* OPERATIONS — the flagship, paired with real product imagery */}
-      <Section className="py-16 sm:py-24">
-        <SectionHeader
-          align="center"
-          eyebrow="Squadron Control"
-          title="A live tactical operations center."
-          description="Zones, unit nodes, routes, objectives, orders, and readiness — synchronized in real time across every connected member. Fleet admirals run the op from the board; wings see orders as they're issued."
-          className="mb-10"
-        />
-        <GlassPanel glow className="overflow-hidden p-2 sm:p-3">
-          <Image
-            src="/screenshots/tactical-operations-board.png"
-            alt="LynxDock Squadron Control — live tactical operations board with a command tree, wings, zones, routes, and objectives"
-            width={3168}
-            height={1742}
-            className="w-full rounded-lg"
-          />
-          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
-            A staged operation on the live board: a command tree over two wings, rally / danger / attack / exfil
-            zones, and three operation routes — assault, recon, and medical — each with its own symbology.
-          </p>
-        </GlassPanel>
-
-        {/* Detail shots stay full-width on purpose: tactical UI text must remain readable at site scale. */}
-        <GlassPanel className="mt-6 overflow-hidden p-2 sm:p-3">
-          <Image
-            src="/screenshots/tactical-routes-waypoints.png"
-            alt="Operation routes up close — named waypoints, live progress, and the commander's route rollup panel"
-            width={3168}
-            height={1742}
-            className="w-full rounded-lg"
-          />
-          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
-            Routes up close: named waypoints with types and statuses, waypoint-by-waypoint progress, and the
-            commander&apos;s rollup tracking every route on the board.
-          </p>
-        </GlassPanel>
-
-        <GlassPanel className="mt-6 overflow-hidden p-2 sm:p-3">
-          <Image
-            src="/screenshots/tactical-orders.png"
-            alt="The same operation with the orders panel open — issued orders beside the live board"
-            width={3168}
-            height={1742}
-            className="w-full rounded-lg"
-          />
-          <p className="px-2 pb-2 pt-3 text-xs leading-relaxed text-[#7d919a]">
-            Orders are issued from the board and land beside the picture they describe — objectives, wings, and
-            routes each get their own panel on the same surface.
-          </p>
-        </GlassPanel>
-
-        {/* Comms screenshot pulled for now — retake with clean briefing content
-            before restoring the paired image layout. */}
-        <div className="mt-14 max-w-2xl">
-          <span className="hud-label flex items-center gap-2">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
-            Comms built for operations
-          </span>
-          <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            Briefings, wing channels, and comms discipline.
-          </h3>
-          <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
-            Channels, multi-party voice, and presence with your command structure visible at a glance — in the
-            same app as the tactical board.
-          </p>
-        </div>
-
-        <div className="mt-14">
-          <span className="hud-label flex items-center gap-2">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
-            Self-hosting without the pain
-          </span>
-          <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            One process. One file. Your hardware.
-          </h3>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-            The Server Host is a dedicated owner console. A calm first-run wizard creates your server without config
-            files or terminal commands, then an Overview command center gives you a health verdict, a readiness score,
-            and one-click fixes. Manage members, roles, channels, invites, backups, and voice; check reachability with
-            a real round-trip proof; and read plain-language connection help — for local testing, LAN parties, or
-            friends over the internet.
-          </p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {[
-              ["/screenshots/server-host-setup.png", "Server Host guided setup wizard"],
-              ["/screenshots/server-host-dashboard.png", "Server Host dashboard"],
-              ["/screenshots/server-host-admin.png", "Server Host admin controls"],
-              ["/screenshots/server-host-logs.png", "Server Host live logs"],
-            ].map(([src, alt]) => (
-              <GlassPanel key={src} className="overflow-hidden p-2">
-                <Image src={src!} alt={alt!} width={1400} height={900} className="w-full rounded-lg" />
-              </GlassPanel>
+      {/* THREE PILLARS */}
+      <section aria-labelledby="pillars-title" className="section">
+        <div className="wrap">
+          <h2 id="pillars-title" className="sr-only">
+            What LynxDock brings together
+          </h2>
+          <ul className="grid gap-4 md:grid-cols-3">
+            {pillars.map((p) => (
+              <li key={p.title} className="card flex flex-col">
+                <h3 className="h-card text-[1.3rem]">{p.title}</h3>
+                <p className="mt-1 font-semibold text-accent">{p.sub}</p>
+                <p className="small mt-3 flex-1">{p.text}</p>
+                <Link href={p.href} className="arrow-link mt-3 text-[0.9375rem]">
+                  {p.link} <span aria-hidden="true">→</span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-      </Section>
+      </section>
 
-      {/* V5 IN PRACTICE — authentic captures of the qualified closed-beta build on a staged demo server. */}
-      <Section id="v5-gallery" className="py-16 sm:py-24">
-        <SectionHeader
-          align="center"
-          eyebrow="V5 closed beta · in practice"
-          title="One staged operation, every V5 surface."
-          description="A convoy escort and recovery run on an isolated demo server: the tactical board, orders and routes, participation and readiness, the personal dock, missions, logistics, comms, the Verse Catalog and the in-game overlay — as the qualified build actually renders them."
-          className="mb-10"
-        />
-        <V5Gallery />
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <GlowButton href="/guides/operations/" variant="primary">Read the guide: plan, deploy &amp; coordinate an operation</GlowButton>
-          <GlowButton href="/docs/" variant="ghost">Documentation</GlowButton>
-        </div>
-      </Section>
-
-      {/* DESKTOP APPLICATION */}
-      <Section className="py-16 sm:py-24">
-        <SectionHeader
-          align="center"
-          eyebrow="The desktop application"
-          title="A real application, under active construction."
-          description="Infrastructure is complete and the desktop app is taking shape. Here's what runs today — and the framework the rest is built on."
-          className="mb-12"
-        />
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <DesktopMockup />
-          <div>
-            <span className="hud-label flex items-center gap-2">
-              <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-signal-cyan shadow-glow" />
-              Working today
-            </span>
-            <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Chat, voice, presence, a live tactical board — and now an in-game overlay.
-            </h3>
-            <p className="mt-5 text-[15px] leading-relaxed text-[#9fb2ba]">
-              The desktop app runs against a real self-hosted server: synced channels with replies and search,
-              multi-party voice, live presence with custom status, and Squadron Control — a tactical operations
-              board with routes, orders, and replay, consistent across every connected member. The V5 line adds
-              the Verse Catalog, canonical quick actions, a local control-surface bridge, and a Windows in-game
-              overlay — engineering closure complete and cleared for a closed beta on 2026-09-20. All of it is
-              verified end to end as it lands.
+      {/* OPERATION WALKTHROUGH */}
+      <section id="how-it-works" aria-labelledby="how-title" className="section section-band">
+        <div className="wrap">
+          <div className="max-w-3xl">
+            <p className="eyebrow">How it works</p>
+            <h2 id="how-title" className="h-section mt-3">
+              From the first plan to the debrief, in one place.
+            </h2>
+            <p className="lead mt-4">
+              Follow one operation through four steps. Choose a step to see it in the app.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <GlowButton href="/download/" variant="primary">Download Alpha</GlowButton>
-              <GlowButton href="/architecture/" variant="secondary">See the architecture</GlowButton>
-            </div>
+          </div>
+          <div className="mt-8">
+            <Tabs
+              label="Operation walkthrough"
+              idBase="walkthrough"
+              staticHeadings={false}
+              items={steps.map((st, i) => ({
+                id: st.id,
+                label: `${i + 1}. ${st.label}`,
+                panel: (
+                  <div className="grid gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.6fr)] lg:items-start">
+                    <div>
+                      <h3 className="h-card text-[1.35rem]">{st.title}</h3>
+                      <p className="body mt-3">{st.text}</p>
+                    </div>
+                    <Shot shot={st.shot} sizes="(min-width: 1024px) 760px, 100vw" />
+                  </div>
+                ),
+              }))}
+            />
           </div>
         </div>
+      </section>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {desktopFeatures.map((f) => (
-            <FeatureCard key={f.title} feature={f} />
-          ))}
-        </div>
-      </Section>
-
-      {/* PRINCIPLES */}
-      <Section className="py-16 sm:py-24">
-        <SectionHeader
-          align="center"
-          eyebrow="What we stand for"
-          title="Communication you actually own."
-          description="The constraints we design LynxDock around — the reason it feels different to run."
-          className="mb-12"
-        />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {principles.map((f) => (
-            <FeatureCard key={f.title} feature={f} />
-          ))}
-        </div>
-      </Section>
-
-      {/* ARCHITECTURE TEASER */}
-      <Section className="py-16 sm:py-20">
-        <SectionHeader
-          eyebrow="How it's built"
-          title="Spec-driven, polyglot, generated end to end."
-          description="A versioned specification feeds the infrastructure layer, which supports one product monorepo spanning Rust and TypeScript."
-          className="mb-10"
-        />
-        <ArchitectureFlow />
-        <div className="mt-8">
-          <GlowButton href="/architecture/" variant="secondary">Read the architecture</GlowButton>
-        </div>
-      </Section>
-
-      {/* ROADMAP - EPICS */}
-      <Section className="py-16 sm:py-24">
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <SectionHeader
-            eyebrow="The roadmap"
-            title="From foundation to a full platform"
-            description="LynxDock is built in the open, tracked as epics. Foundation, messaging, networking, voice, tactical operations, and the Server Host are done; communities and roles are landing; the V5 operations layer is cleared for closed beta; release distribution is in progress."
-          />
-          <EpicRoadmap epics={epics} />
-        </div>
-      </Section>
-
-      {/* ECOSYSTEM */}
-      <Section className="py-12">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="hud-label text-[#7f939b]">Explore more</span>
-          <span aria-hidden className="h-px flex-1 bg-line" />
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {ecosystem.map((e) => (
-            <Link key={e.href} href={e.href} className="block">
-              <GlassPanel hover className="flex h-full flex-col p-5">
-                <h3 className="text-sm font-semibold text-white">{e.name}</h3>
-                <p className="mt-1.5 flex-1 text-sm leading-relaxed text-[#9fb2ba]">{e.text}</p>
-                <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-signal-bright">
-                  Learn more <span aria-hidden>&rarr;</span>
-                </span>
-              </GlassPanel>
-            </Link>
-          ))}
-        </div>
-      </Section>
-
-      {/* Latest journal entries - self-updating from posts.ts */}
-      <LatestUpdates />
-
-      {/* CTA */}
-      <Section className="pb-24 pt-8">
-        <GlassPanel glow className="relative overflow-hidden p-10 text-center sm:p-16">
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-signal-cyan/10 blur-[100px]" />
-          <div className="relative mx-auto flex max-w-xl flex-col items-center">
-            <span className="hud-label">Get started</span>
-            <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">Follow along as LynxDock takes shape.</h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-[#9fb2ba]">
-              The alpha desktop app is in active development (internal build {releases.current.version}). Grab it,
-              watch the roadmap, and follow the work on GitHub.
+      {/* HOSTING ILLUSTRATION */}
+      <section aria-labelledby="hosting-title" className="section">
+        <div className="wrap">
+          <div className="max-w-3xl">
+            <p className="eyebrow">Hosting</p>
+            <h2 id="hosting-title" className="h-section mt-3">
+              Members use the app. The administrator uses Host.
+            </h2>
+            <p className="lead mt-4">
+              Your community&rsquo;s server is yours to run. Members connect to it with the LynxDock app; whoever
+              looks after it manages it with LynxDock Host.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <GlowButton href="/download/" variant="primary">Download Alpha</GlowButton>
-              <GlowButton href="/roadmap/" variant="secondary">Roadmap</GlowButton>
-              <GlowButton href="https://github.com/LynxDock-LLC" external variant="ghost">GitHub</GlowButton>
-            </div>
           </div>
-        </GlassPanel>
-      </Section>
+          <div className="mt-10">
+            <HostingIllustration />
+          </div>
+          <Link href="/products/lynxdock-host/" className="arrow-link mt-4">
+            What running a server involves <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </section>
+
+      <RouteLine variant="b" />
+
+      <TechFoundation />
+
+      {/* BETA STATUS */}
+      <section aria-labelledby="beta-status-title" className="section section-band">
+        <div className="wrap">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+            <div>
+              <p className="eyebrow">Beta status</p>
+              <h2 id="beta-status-title" className="h-section mt-3">
+                A closed beta, on Windows, by invitation.
+              </h2>
+              <p className="body mt-4">
+                LynxDock is tested by invited communities that run their own servers.{" "}
+                {s.nextRelease.statement}
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Link href="/download/" className="btn btn-secondary">
+                  Request beta access
+                </Link>
+                <Link href="/releases/" className="btn btn-quiet">
+                  Release status <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+            <dl className="kv">
+              <div>
+                <dt>Current stage</dt>
+                <dd>
+                  {s.stage}, {s.audience.toLowerCase()}
+                </dd>
+              </div>
+              <div>
+                <dt>Platform</dt>
+                <dd>{s.platform}</dd>
+              </div>
+              <div>
+                <dt>Hosting</dt>
+                <dd>Run by each community, on infrastructure it controls</dd>
+              </div>
+              <div>
+                <dt>Next approved tester release</dt>
+                <dd>In qualification; not yet available for distribution</dd>
+              </div>
+              <div>
+                <dt>Push-to-talk</dt>
+                <dd>Foreground-only: the LynxDock window must have focus</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <DemoCta />
     </>
   );
 }

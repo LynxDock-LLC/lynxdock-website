@@ -10,20 +10,17 @@ export default function DocsSidebar() {
     <nav aria-label="Documentation" className="flex flex-col gap-6">
       {docsNav.map((section) => (
         <div key={section.title} className="flex flex-col gap-2">
-          <p className="hud-label text-[#7f939b]">{section.title}</p>
-          <ul className="flex flex-col gap-1">
+          <p className="text-[0.8125rem] font-bold text-muted">{section.title}</p>
+          <ul className="flex flex-col">
             {section.links.map((link) => {
-              const active =
-                pathname === link.href || pathname === link.href.replace(/\/$/, "");
+              const active = pathname === link.href || pathname === link.href.replace(/\/$/, "");
               return (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className={`block rounded-md px-3 py-1.5 text-sm transition-colors ${
-                      active
-                        ? "bg-signal-cyan/10 text-signal-bright"
-                        : "text-[#9fb2ba] hover:bg-graphite-700/40 hover:text-white"
+                    className={`flex min-h-[40px] items-center rounded-lg px-3 py-1.5 text-[0.9375rem] transition-colors ${
+                      active ? "bg-panel-2 font-semibold text-ink" : "text-muted hover:bg-panel hover:text-ink"
                     }`}
                   >
                     {link.label}

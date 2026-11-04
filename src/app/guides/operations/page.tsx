@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import PageHeader from "@/components/PageHeader";
 import GlassPanel from "@/components/GlassPanel";
 import GuideFigure from "@/components/GuideFigure";
+import HistoryNote from "@/components/site/HistoryNote";
 
 export const metadata: Metadata = {
   title: "Plan, Deploy, and Coordinate an Operation",
@@ -101,6 +102,9 @@ export default function OperationsGuide() {
           <span>The current beta candidate (0.1.0+2ca6589) differs only by the catalog attribution line added for members.</span>
         </div>
       </PageHeader>
+      <div className="wrap pt-8">
+        <HistoryNote era="September 2026">This guide was captured on the V5 closed beta (build 0.1.0+5a53bff) with simulated demonstration data. Later releases changed parts of the interface.</HistoryNote>
+      </div>
 
       <div className="mx-auto max-w-6xl px-5 py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[230px_1fr]">
@@ -125,8 +129,8 @@ export default function OperationsGuide() {
                 <Link href="/docs/" className="underline underline-offset-2 hover:text-white">
                   ← All documentation
                 </Link>
-                <Link href="/#v5-gallery" className="underline underline-offset-2 hover:text-white">
-                  V5 gallery
+                <Link href="/products/lynxdock/#tour" className="underline underline-offset-2 hover:text-white">
+                  Product tour
                 </Link>
               </div>
             </nav>
@@ -1313,7 +1317,7 @@ export default function OperationsGuide() {
                 API (CC BY-SA 4.0).
               </p>
               <p className="mb-0">
-                See the <Link href="/#v5-gallery">V5 gallery</Link> for the feature overview, or go back to{" "}
+                See the <Link href="/products/lynxdock/#tour">product tour</Link> for the feature overview, or go back to{" "}
                 <Link href="/docs/">Documentation</Link>.
               </p>
             </GlassPanel>

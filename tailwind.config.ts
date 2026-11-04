@@ -4,25 +4,49 @@ const config: Config = {
   content: ["./src/**/*.{ts,tsx,mdx}"],
   theme: {
     extend: {
+      // October 2026 redesign tokens (see src/app/globals.css :root). The graphite and signal scales are
+      // remapped onto them so the pages kept from the previous design share the same palette.
       colors: {
+        bg: "#090e12",
+        panel: "#10191f",
+        "panel-2": "#142027",
+        ink: "#f2f7f9",
+        muted: "#a4b2bb",
+        accent: "#5ce1df",
+        paper: "#edf3ed",
         graphite: {
-          950: "#05090c",
-          900: "#080d11",
-          850: "#0a1015",
-          800: "#0d141a",
-          700: "#141d25",
-          600: "#1c2732",
+          950: "#090e12",
+          900: "#0c1317",
+          850: "#0e161b",
+          800: "#10191f",
+          700: "#142027",
+          600: "#1c2b33",
         },
         signal: {
-          cyan: "#35e0e0",
-          bright: "#5ef2f2",
+          cyan: "#5ce1df",
+          bright: "#8eebe9",
           blue: "#3b82f6",
           deep: "#1d4ed8",
         },
-        line: "rgba(94, 242, 242, 0.14)",
+        line: "#27343c",
+      },
+      maxWidth: {
+        content: "1240px",
       },
       fontFamily: {
         sans: [
+          "var(--font-body)",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
+        heading: [
+          "var(--font-heading)",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
@@ -41,17 +65,18 @@ const config: Config = {
           "monospace",
         ],
       },
+      // Quieter than the Genesis glow: the redesign uses fine borders and modest depth.
       boxShadow: {
-        glow: "0 0 24px rgba(53, 224, 224, 0.25)",
-        "glow-lg": "0 0 60px rgba(53, 224, 224, 0.18)",
+        glow: "0 0 0 1px rgba(92, 225, 223, 0.10)",
+        "glow-lg": "0 18px 48px -28px rgba(0, 0, 0, 0.9)",
         panel:
-          "0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 50px -20px rgba(0,0,0,0.8)",
+          "0 1px 0 rgba(255,255,255,0.03) inset, 0 20px 50px -24px rgba(0,0,0,0.8)",
       },
       backgroundImage: {
         "grid-faint":
-          "linear-gradient(rgba(94,242,242,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(94,242,242,0.05) 1px, transparent 1px)",
+          "linear-gradient(rgba(164,178,187,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(164,178,187,0.04) 1px, transparent 1px)",
         "radial-fade":
-          "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(53,224,224,0.10), transparent 70%)",
+          "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(92,225,223,0.07), transparent 70%)",
       },
       backgroundSize: {
         grid: "56px 56px",
@@ -78,12 +103,14 @@ const config: Config = {
           "50%": { opacity: "0.25" },
         },
       },
+      // Only short one-time entry motion: the looping Genesis animations (pulse, radar sweep, ping, blink)
+      // are switched off so no page kept from the previous design pulses.
       animation: {
-        "fade-up": "fade-up 0.6s ease-out both",
-        "pulse-soft": "pulse-soft 2.8s ease-in-out infinite",
-        "radar-sweep": "radar-sweep 6s linear infinite",
-        "ping-ring": "ping-ring 2.4s ease-out infinite",
-        blink: "blink 1.6s ease-in-out infinite",
+        "fade-up": "fade-up 0.5s ease-out both",
+        "pulse-soft": "none",
+        "radar-sweep": "none",
+        "ping-ring": "none",
+        blink: "none",
       },
     },
   },

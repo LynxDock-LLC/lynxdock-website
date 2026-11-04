@@ -1,412 +1,132 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHeader from "@/components/PageHeader";
-import GlassPanel from "@/components/GlassPanel";
-import GlowButton from "@/components/GlowButton";
-import { launch } from "@/data/launch";
-import { releaseManifest } from "@/lib/releaseManifest";
-import { releases } from "@/data/releases";
+import PageHero from "@/components/site/PageHero";
+import EnquiryForm from "@/components/site/EnquiryForm";
+import siteStatus from "@/data/siteStatus";
 
+// For visitors who are NOT invited. There is deliberately no installer on this page: the beta is closed, and
+// the installers an invited tester needs are on /beta/ with their checksums and notes.
 export const metadata: Metadata = {
-  title: "Download",
+  title: "Beta access",
   description:
-    "The download center for LynxDock. Desktop builds for Windows, Linux, macOS, and self-hosted servers are in active development - follow the roadmap and GitHub to know the moment they land.",
+    "LynxDock is in a closed Windows beta for invited communities. Request access here; there is no public installer.",
 };
-
-const preview = launch.downloadStatus;
-const current = releaseManifest.current;
-const released = current.released;
-
-type IconName = "windows" | "linux" | "apple" | "server";
-const PLATFORM_META: Record<string, { label: string; icon: IconName; requirement: string }> = {
-  windows: { label: "Windows", icon: "windows", requirement: "Windows 10 / 11, 64-bit" },
-  linux: { label: "Linux", icon: "linux", requirement: "Modern 64-bit distribution" },
-  macos: { label: "macOS", icon: "apple", requirement: "Apple silicon & Intel" },
-  server: { label: "Self-hosted server", icon: "server", requirement: "Linux host or container" },
-};
-const platformLabel = (id: string) => PLATFORM_META[id]?.label ?? id;
-
-const releasePhilosophy = [
-  {
-    title: "Stable releases",
-    text: "Thoroughly tested builds recommended for everyday use once LynxDock reaches general availability.",
-  },
-  {
-    title: "Preview builds",
-    text: "Early access to upcoming features for people who want to help shape LynxDock before stable.",
-  },
-  {
-    title: "Nightly builds",
-    text: "Bleeding-edge automated builds for testing the very latest changes - expect rough edges.",
-  },
-  {
-    title: "Security updates",
-    text: "Fixes for security issues shipped promptly across supported channels.",
-  },
-  {
-    title: "Long-term support",
-    text: "A future LTS track for teams that value stability over the newest features.",
-  },
-];
-
-const installPhilosophy = [
-  { title: "Fast installs", text: "Small, quick downloads that get you running in moments." },
-  {
-    title: "No unnecessary background services",
-    text: "LynxDock runs when you use it - it doesn't quietly camp in the background.",
-  },
-  { title: "Easy updates", text: "Straightforward, predictable updates with no drama." },
-  {
-    title: "Portable where practical",
-    text: "Portable builds where the platform allows, so you can run without installing.",
-  },
-  { title: "Privacy first", text: "No telemetry required to use the app. Your data stays yours." },
-];
-
-const systemRequirements = [
-  { component: "OS", detail: "Windows 10/11, modern Linux, or macOS (finalized near release)" },
-  { component: "CPU", detail: "Any modern 64-bit processor" },
-  { component: "RAM", detail: "Lightweight - modest memory footprint" },
-  { component: "GPU", detail: "Not required; hardware acceleration used when available" },
-  { component: "Disk", detail: "A few hundred MB for the app" },
-  { component: "Network", detail: "Broadband for calls; LAN supported for self-hosted use" },
-];
-
-const faqs = [
-  {
-    q: "When will downloads be available?",
-    a: "LynxDock is in active development. Public downloads open in phases - private beta first, then public beta, then a stable 1.0. Follow the roadmap and GitHub for timing.",
-  },
-  {
-    q: "Will LynxDock be open source?",
-    a: "Development happens in the open on the LynxDock GitHub organization. Licensing details for each component will be published alongside the builds.",
-  },
-  {
-    q: "Will there be portable builds?",
-    a: "Where a platform allows it, yes - portable builds are part of the installation philosophy so you can run LynxDock without a full install.",
-  },
-  {
-    q: "Will there be Linux packages?",
-    a: "Linux is a first-class target. Expect common formats such as AppImage and distribution packages as builds mature.",
-  },
-  {
-    q: "Will there be Docker images?",
-    a: "Self-hosted servers are designed to run well in containers, so official images are planned for the server side.",
-  },
-];
-
-function PlatformIcon({ name }: { name: IconName }) {
-  const common = {
-    width: 28,
-    height: 28,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-  switch (name) {
-    case "windows":
-      return (
-        <svg {...common}>
-          <path d="M3 5.5 10.5 4.4v7.1H3zM10.5 12.5v7.1L3 18.5v-6zM12 4.2 21 3v8.5h-9zM12 12.5h9V21l-9-1.3z" />
-        </svg>
-      );
-    case "linux":
-      return (
-        <svg {...common}>
-          <path d="M9 4a3 3 0 0 1 6 0c0 2 1 3 1 6 0 2 2 3 2 6 0 1.5-1 2-2 2-1.5 0-2-1-4-1s-2.5 1-4 1c-1 0-2-.5-2-2 0-3 2-4 2-6 0-3 1-4 1-6z" />
-          <path d="M10 8.5h.01M14 8.5h.01" />
-        </svg>
-      );
-    case "apple":
-      return (
-        <svg {...common}>
-          <path d="M15.5 3c.2 1.3-.3 2.4-1 3.2-.8.9-1.9 1.5-3 1.4-.2-1.2.4-2.4 1.1-3.1.8-.9 2-1.5 2.9-1.5z" />
-          <path d="M18 16.5c-.6 1.4-1.3 2.8-2.4 3.8-.7.7-1.5.9-2.3.5-.8-.3-1.4-.3-2.2 0-.9.4-1.7.2-2.4-.5-1.9-1.9-3.2-5.5-1.9-8.2.7-1.4 2-2.3 3.4-2.3.9 0 1.6.5 2.3.5.6 0 1.3-.6 2.4-.5 1.2.1 2.2.6 2.9 1.6-1.9 1.3-1.7 4.1.6 5.1z" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...common}>
-          <rect x="3" y="4" width="18" height="7" rx="1.5" />
-          <rect x="3" y="13" width="18" height="7" rx="1.5" />
-          <path d="M7 7.5h.01M7 16.5h.01" />
-        </svg>
-      );
-  }
-}
 
 export default function DownloadPage() {
+  const s = siteStatus;
   return (
     <>
-      <PageHeader
-        eyebrow="Download center"
-        title="Download LynxDock"
-        description="Everything you need to get started with LynxDock. Choose your platform below."
+      <PageHero
+        eyebrow="Beta access"
+        title="Request access to the LynxDock beta."
+        intro={
+          <p>
+            LynxDock is in a closed beta on Windows. Communities join by invitation, so there is no public installer
+            to download. Tell us about your community below.
+          </p>
+        }
       />
 
-      <section className="mx-auto max-w-5xl px-5 py-16">
-        {/* CURRENT STATUS - driven by public/releases.json (authoritative) */}
-        <GlassPanel glow className="p-8 sm:p-10">
-          {released ? (
-            <>
-              <span className="hud-label flex items-center gap-2 text-signal-bright">
-                {current.channel} - {current.version}
-              </span>
-              <h2 className="mt-4 text-2xl font-semibold text-white">
-                LynxDock {current.version} is available
+      <section aria-labelledby="request-title" className="section">
+        <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
+          <div className="flex flex-col gap-8">
+            <div>
+              <h2 id="how-title" className="h-section text-[clamp(1.45rem,2.4vw,1.9rem)]">
+                How the beta works
               </h2>
-              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-                Download LynxDock for your platform below. Prefer the source?
-                Find the release on GitHub.
-              </p>
-            </>
-          ) : (
-            <>
-              <span className="hud-label flex items-center gap-2 text-signal-bright">
-                <span aria-hidden>🚧</span> {preview.title}
-              </span>
-              <h2 className="mt-4 text-2xl font-semibold text-white">
-                {preview.heading}
-              </h2>
-              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9fb2ba]">
-                {preview.message}
-              </p>
-            </>
-          )}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <GlowButton href={launch.secondaryCTA.href} variant="primary">
-              {launch.secondaryCTA.label}
-            </GlowButton>
-            <GlowButton href={launch.githubCTA.href} external variant="secondary">
-              {launch.githubCTA.label}
-            </GlowButton>
-          </div>
-        </GlassPanel>
-
-        {/* CURRENT VERSION + RELEASE CHANNELS */}
-        <div className="mt-16 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-          <GlassPanel className="p-6">
-            <span className="hud-label text-[#7f939b]">Current internal build</span>
-            <p className="mt-3 text-3xl font-semibold text-white">{releases.current.version}</p>
-            <p className="mt-1 text-sm text-[#9fb2ba]">
-              Channel: <span className="text-signal-bright">{releases.current.channel}</span>
-            </p>
-            <p className="mt-1 text-sm text-[#7f939b]">
-              {releases.current.released
-                ? `Released ${releases.current.releaseDate ?? ""}`
-                : "Not yet released — in active development"}
-            </p>
-          </GlassPanel>
-
-          <div>
-            <h2 className="mb-4 text-xl font-semibold text-white">Release channels</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {releases.channels.map((c) => {
-                const isCurrent = c.id === releases.current.channel;
-                return (
-                  <GlassPanel key={c.id} className="p-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-semibold text-white">{c.label}</span>
-                      <span
-                        className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                          isCurrent
-                            ? "border-signal-blue/50 bg-signal-blue/15 text-[#93c5fd]"
-                            : "border-line bg-graphite-700/40 text-[#9fb2ba]"
-                        }`}
-                      >
-                        {isCurrent ? "In development" : "Planned"}
-                      </span>
-                    </div>
-                    <p className="mt-1.5 text-xs leading-relaxed text-[#9fb2ba]">{c.description}</p>
-                  </GlassPanel>
-                );
-              })}
+              <ol className="num-list body mt-5">
+                <li>
+                  You request access with the form on this page. {siteStatus.eligibility.statement}{" "}
+                  {siteStatus.eligibility.scope} {siteStatus.eligibility.selfDeclaration} Here, you declare it by
+                  ticking a box.
+                </li>
+                <li>
+                  Testers join a <span className="strong">community server</span> through an invitation from whoever
+                  runs it. That can be your own administrator, using{" "}
+                  <Link href="/products/lynxdock-host/" className="text-link">
+                    LynxDock Host
+                  </Link>
+                  .
+                </li>
+                <li>
+                  Invited testers get the installers, checksums and first steps from the{" "}
+                  <Link href="/beta/" className="text-link">
+                    tester hub
+                  </Link>
+                  .
+                </li>
+              </ol>
             </div>
-          </div>
-        </div>
 
-        {/* PLATFORMS - driven by public/releases.json downloads */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Platforms</h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {releaseManifest.downloads.map((d) => {
-            const meta = PLATFORM_META[d.platform];
-            const canDownload = released && d.available && d.url !== "";
-            return (
-              <GlassPanel key={d.platform} className="flex h-full flex-col p-6">
-                <div
-                  aria-hidden
-                  className="flex h-12 w-12 items-center justify-center rounded-xl border border-signal-cyan/25 bg-signal-cyan/10 text-signal-bright"
-                >
-                  <PlatformIcon name={meta?.icon ?? "server"} />
+            <div className="card-2">
+              <h2 className="h-card">Where the beta stands</h2>
+              <dl className="kv mt-4">
+                <div>
+                  <dt>Stage</dt>
+                  <dd>
+                    {s.stage}, {s.audience.toLowerCase()}
+                  </dd>
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-white">
-                  {platformLabel(d.platform)}
-                </h3>
-                <span className="mt-1 w-fit rounded-full border border-line bg-graphite-800/40 px-2.5 py-0.5 text-[11px] font-medium text-[#9fb2ba]">
-                  {canDownload ? (d.size ? `Available - ${d.size}` : "Available") : "Coming soon"}
-                </span>
-                <p className="mt-3 flex-1 text-xs leading-relaxed text-[#7f939b]">
-                  {meta?.requirement ?? d.filename}
-                </p>
-                {canDownload ? (
-                  <GlowButton href={d.url} variant="primary" className="mt-5">
-                    {launch.primaryCTA.label}
-                  </GlowButton>
-                ) : (
-                  <span
-                    aria-disabled="true"
-                    className="mt-5 inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-line px-4 py-2 text-sm text-[#6f838b]"
-                  >
-                    Not yet available
-                  </span>
-                )}
-              </GlassPanel>
-            );
-          })}
-        </div>
-
-        <p className="mt-6 text-sm text-[#7f939b]">
-          Looking for older builds?{" "}
-          <Link href="/releases/" className="text-signal-bright hover:underline">
-            See the full release history
-          </Link>
-          .
-        </p>
-
-        {/* INTEGRITY & UPDATES */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">Integrity &amp; updates</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <GlassPanel className="p-6">
-            <h3 className="text-base font-semibold text-white">Verified checksums</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
-              Every published build ships with a SHA-256 checksum in the releases manifest so you can verify a
-              download before you run it. Checksums are generated by the release pipeline, not by hand.
-            </p>
-          </GlassPanel>
-          <GlassPanel className="p-6">
-            <h3 className="text-base font-semibold text-white">Auto updates</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
-              The desktop app is built on Tauri, which supports signed automatic updates. When builds open up,
-              LynxDock will update itself safely in the background — no background services camping when you're not using it.
-            </p>
-          </GlassPanel>
-        </div>
-
-        {/* RELEASE PHILOSOPHY */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">
-          Release philosophy
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {releasePhilosophy.map((r) => (
-            <GlassPanel key={r.title} className="p-6">
-              <h3 className="text-base font-semibold text-white">{r.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
-                {r.text}
+                <div>
+                  <dt>Platform</dt>
+                  <dd>{s.platform}</dd>
+                </div>
+                <div>
+                  <dt>Who can take part</dt>
+                  <dd>
+                    Everyone 18 or older, including invited members, server operators and members on the older app (an
+                    affirmative self-declaration, not age verification)
+                  </dd>
+                </div>
+                <div>
+                  <dt>Next tester release</dt>
+                  <dd>In qualification; not yet available for distribution</dd>
+                </div>
+              </dl>
+              <p className="small mt-4">
+                Before you ask: push-to-talk works only while the LynxDock window has focus, the apps are Windows
+                only, and your community runs its own server.{" "}
+                <Link href="/beta/#limitations" className="text-link">
+                  All known limitations
+                </Link>
+                .
               </p>
-            </GlassPanel>
-          ))}
-        </div>
+            </div>
 
-        {/* INSTALLATION PHILOSOPHY */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">
-          Installation philosophy
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {installPhilosophy.map((r) => (
-            <GlassPanel key={r.title} className="p-6">
-              <h3 className="text-base font-semibold text-white">{r.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#9fb2ba]">
-                {r.text}
+            <div className="card-quiet">
+              <h2 className="h-card">Already invited?</h2>
+              <p className="small mt-2">
+                Go to the tester hub for the installers your community uses, their SHA-256 values and the first
+                steps.
               </p>
-            </GlassPanel>
-          ))}
-        </div>
-
-        {/* SYSTEM REQUIREMENTS */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">
-          System requirements
-        </h2>
-        <p className="mb-4 max-w-2xl text-sm leading-relaxed text-[#7f939b]">
-          Intentionally generic for now - exact requirements will be finalized
-          closer to the first public build.
-        </p>
-        <GlassPanel className="overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[480px] text-left text-sm">
-              <caption className="sr-only">
-                Preliminary LynxDock system requirements
-              </caption>
-              <thead>
-                <tr className="border-b border-line/70 text-[#7f939b]">
-                  <th scope="col" className="px-5 py-3 font-medium">Component</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Requirement</th>
-                </tr>
-              </thead>
-              <tbody>
-                {systemRequirements.map((s) => (
-                  <tr key={s.component} className="border-b border-line/40 last:border-b-0">
-                    <th scope="row" className="px-5 py-3 font-medium text-white">
-                      {s.component}
-                    </th>
-                    <td className="px-5 py-3 text-[#9fb2ba]">{s.detail}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </GlassPanel>
-
-        {/* FAQ */}
-        <h2 className="mb-6 mt-16 text-xl font-semibold text-white">
-          Frequently asked questions
-        </h2>
-        <div className="flex flex-col gap-3">
-          {faqs.map((f) => (
-            <GlassPanel key={f.q} as="details" className="group p-0">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-[15px] font-medium text-white [&::-webkit-details-marker]:hidden marker:content-['']">
-                {f.q}
-                <span
-                  aria-hidden
-                  className="text-signal-bright transition-transform group-open:rotate-45"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="px-6 pb-5 text-sm leading-relaxed text-[#9fb2ba]">
-                {f.a}
-              </p>
-            </GlassPanel>
-          ))}
-        </div>
-
-        {/* BOTTOM CTA */}
-        <GlassPanel glow className="mt-16 p-10 text-center sm:p-14">
-          <div className="mx-auto flex max-w-xl flex-col items-center">
-            <span className="hud-label">Get involved</span>
-            <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl">
-              Interested in testing?
-            </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-[#9fb2ba]">
-              Follow development, watch the roadmap, and register interest so
-              you&rsquo;re first in line when builds open up.
-            </p>
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-              <GlowButton href={launch.githubCTA.href} external variant="primary">
-                {launch.githubCTA.label}
-              </GlowButton>
-              <GlowButton href={launch.secondaryCTA.href} variant="secondary">
-                {launch.secondaryCTA.label}
-              </GlowButton>
-              <GlowButton href={launch.earlyAccessCTA.href} variant="ghost">
-                {launch.earlyAccessCTA.label}
-              </GlowButton>
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <Link href="/beta/" className="btn btn-secondary btn-sm">
+                  Open the tester hub
+                </Link>
+                <Link href="/docs/getting-started/" className="btn btn-quiet btn-sm">
+                  Quickstart <span aria-hidden="true">→</span>
+                </Link>
+              </div>
             </div>
           </div>
-        </GlassPanel>
+
+          <div className="card">
+            <h2 id="request-title" className="h-card text-[1.35rem]">
+              Request beta access
+            </h2>
+            <p className="small mt-2">
+              This is for communities and testers. For a guided walkthrough, request a demo; for partnerships or
+              investment, use{" "}
+              <Link href="/company/#contact" className="text-link">
+                business enquiries
+              </Link>
+              .
+            </p>
+            <div className="mt-5">
+              <EnquiryForm kind="beta" />
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );
