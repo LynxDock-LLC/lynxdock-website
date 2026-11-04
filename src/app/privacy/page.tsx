@@ -147,8 +147,11 @@ export default function PrivacyPage() {
             We do not use it for anything else and keep no mailing list. An acknowledgement is not shared with the
             community&rsquo;s administrator.{" "}
             Retention: demo, beta access and business enquiries, including their email notifications, are deleted
-            within 90 days after the enquiry is resolved. A beta participation acknowledgement is kept while your
-            participation is active, and afterwards for{" "}
+            within 90 days after the enquiry is resolved. We delete each submission from Formspree within 30 days of
+            its arrival and keep the email notification as our record. Formspree removes a deleted submission from its
+            active systems within minutes, and its backups can keep a copy for up to 30 more days. A beta
+            participation acknowledgement is kept, as its email notification, while your participation is active, and
+            afterwards for{" "}
             <OwnerField>the period after participation ends, set together with the beta agreement</OwnerField>.
           </p>
           <p>
