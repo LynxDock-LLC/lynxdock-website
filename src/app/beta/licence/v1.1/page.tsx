@@ -49,7 +49,7 @@ export default function BetaLicenceV11Page() {
             <Link href="/beta/#keys" className="text-link">
               beta access key
             </Link>
-            . Version 1.0 ({betaLicence.id}), for the 0.3.0 beta builds, stays published unchanged at{" "}
+            . Version 1.0 ({betaLicence.id}), for the beta builds that need no key, stays published unchanged at{" "}
             <Link href="/beta/licence/" className="text-link">
               its own address
             </Link>

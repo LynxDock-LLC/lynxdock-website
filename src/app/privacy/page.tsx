@@ -169,6 +169,16 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
+        <Section id="beta-keys" title="Beta access key records">
+          <p>
+            <Fixture>
+              the reviewed disclosure goes here: the issuance records LynxDock keeps when the owner emails a
+              participant a key (what they link the key to, how long they and the issuance correspondence are kept, and
+              when they are deleted), and what a keyed app or Host stores on the device for the key
+            </Fixture>
+          </p>
+        </Section>
+
         <Section id="email" title="Email">
           <p>
             Links that start an email only open your own email app; nothing is sent until you send it. Email sent to
@@ -212,22 +222,6 @@ export default function PrivacyPage() {
           <p>
             If we learn that a request or acknowledgement came from someone under 18, we delete it and ask the
             community not to invite them.
-          </p>
-        </Section>
-
-        <Section id="beta-keys" title="Beta access key records">
-          <p>
-            <Fixture>
-              the reviewed disclosure of the beta access key issuance records goes here: what LynxDock keeps when the
-              owner emails a participant a key, what it links the key to, how long it and the issuance correspondence
-              are kept, and when they are deleted
-            </Fixture>
-          </p>
-          <p>
-            <Fixture>
-              if the reviewed wording covers it: what a keyed app or Host stores on the device for the key, beside the
-              record described above
-            </Fixture>
           </p>
         </Section>
 

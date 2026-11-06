@@ -96,7 +96,7 @@ test("the hub's access-key instructions follow ADR-0029", () => {
     // K6a: keys and invite codes coexist.
     "On a keyed build you need both.",
     // K7a and O1: earlier builds need no key; 0.2.6 members keep the acknowledgement unchanged.
-    "Builds released before them need no key and work as they do now: the 0.3.0 builds, used under version 1.0 of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements",
+    "Builds released before them need no key and work as they do now: the beta builds used under version 1.0 of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements",
   ]) {
     assert.ok(hubText.includes(phrase), `the hub says: ${phrase}`);
   }
@@ -107,15 +107,20 @@ test("nothing calls the beta access key activation, a purchase or an entitlement
   const section = noComments(hub.slice(hub.indexOf('<section id="keys"'), hub.indexOf("{/* APP OR HOST */}")));
   assert.ok(section.length > 1000, "the keys section was found");
   assert.ok(!/activat|purchas|entitle|licensed\b|\bsold\b|\bpaid\b/i.test(section), "no activation or sale wording in the keys section");
+  // Keyed builds may carry the same 0.3.0 version as unkeyed ones, so no version number tells them apart.
+  assert.ok(!/0\.3\.0/.test(section), "the keys section names no 0.3.0 build");
+  assert.ok(!/0\.3\.0/.test(read("src", "app", "beta", "licence", "v1.1", "page.tsx")), "neither does the version 1.1 page");
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /a sentence about the beta access key reads as activation or a sale/, "check-site guards every built page");
 });
 
 test("privacy: a key-records section that is a fixture until reviewed, and still nothing about licensing", () => {
   const privacy = read("src", "app", "privacy", "page.tsx");
-  const section = privacy.slice(privacy.indexOf('<Section id="beta-keys"'), privacy.indexOf('<Section id="apps"'));
-  assert.ok(section.includes('title="Beta access key records"'), "the section exists, before the apps section");
-  assert.equal((section.match(/<Fixture>/g) ?? []).length, 2, "its two slots are fixtures, not drafted wording");
+  const section = privacy.slice(privacy.indexOf('<Section id="beta-keys"'), privacy.indexOf('<Section id="email"'));
+  assert.ok(privacy.indexOf('<Section id="forms"') < privacy.indexOf('<Section id="beta-keys"'), "the section sits after the forms section");
+  assert.ok(section.includes('title="Beta access key records"'), "the section exists, before the email section");
+  assert.equal((section.match(/<Fixture>/g) ?? []).length, 1, "its slot is a fixture, not drafted wording");
+  assert.ok(!/<p>(?!\s*<Fixture>)/.test(section), "the section holds nothing but the fixture");
   assert.match(privacy, /import Fixture from "@\/components\/site\/Fixture";/);
   assert.ok(!/licen[cs]/i.test(noComments(privacy)), "the privacy notice says nothing about licensing");
   assert.ok(

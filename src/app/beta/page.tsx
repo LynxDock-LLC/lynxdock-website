@@ -356,7 +356,7 @@ export default function BetaPage() {
               lets you run a keyed build of the LynxDock app or LynxDock Host, and nothing else.
             </p>
             <p className="body mt-3">
-              Builds released before them need no key and work as they do now: the 0.3.0 builds, used under version 1.0
+              Builds released before them need no key and work as they do now: the beta builds used under version 1.0
               of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements{" "}
               <a href="#confirm" className="text-link">
                 above

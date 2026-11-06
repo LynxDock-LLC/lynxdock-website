@@ -179,6 +179,8 @@ export const betaLicenceKeyed = {
  * - K6a: keys and invite codes coexist: the key gates the build, the invite code the community.
  * - K7a and O1: builds at or before the 0.3.0 candidate, and every build under licence 1.0, need no key; 0.2.6 members
  *   keep the acknowledgement flow unchanged.
+ *   Keyed builds may carry the same 0.3.0 version (the v1.1 draft heads itself "keyed 0.3.0 beta builds"), so the
+ *   site tells builds apart by licence version and key, never by version number.
  * - K9a+c: keys come directly from the owner only, to early-access applicants and directly invited members, in the
  *   owner's key email. Operators never hold or relay keys, and a key never comes with a community invitation.
  * - The check is local and offline (no new network contact), and the key holds no personal data.
