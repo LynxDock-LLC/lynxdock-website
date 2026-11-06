@@ -12,9 +12,11 @@ import { supportEmail } from "@/data/siteShell";
 // licensing, which do not exist. The owner-only facts (the notice date and the acknowledgement retention period)
 // were filled from the owner's decisions of 2026-11-05; scripts/check-site.mjs still fails a production build that
 // contains an unfilled <OwnerField>.
-// Keyed-beta preparation (2026-11-06, branch site/keyed-beta-prep): the "Beta access key records" section and its
-// summary line hold INTERNAL FIXTURES until the reviewed wording arrives (like the rest of this notice it must say
-// nothing about licensing); scripts/check-site.mjs fails a production build while any fixture remains.
+// Keyed-beta preparation (2026-11-06, branch site/keyed-beta-prep): the "Beta access keys" section carries the wording
+// of record reviewed by C (R205; PRIVACY-KEYED-BETA-WORDING-PROPOSED.md, sha256 d4a2deea...), verbatim, its bold lead
+// as the section title. The owner has not approved it, so the section keeps an INTERNAL FIXTURE marker and
+// scripts/check-site.mjs fails a production build until the owner's approval removes it. Like the rest of this
+// notice, it says nothing about licensing.
 export const metadata: Metadata = {
   title: "Privacy notice",
   description:
@@ -71,11 +73,6 @@ export default function PrivacyPage() {
               visitors&rsquo; personal data.
             </li>
             <li>If you send one of our forms, what you type is sent to Formspree, the site&rsquo;s form-handling service.</li>
-            <li>
-              <Fixture>
-                a one-line summary of the beta access key records, if the reviewed wording adds one to this list
-              </Fixture>
-            </li>
             <li>We do not sell personal information.</li>
             <li>
               LynxDock community servers are run by the communities that use them. LynxDock LLC has no access to what
@@ -169,13 +166,27 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section id="beta-keys" title="Beta access key records">
+        <Section id="beta-keys" title="Beta access keys">
           <p>
             <Fixture>
-              the reviewed disclosure goes here: the issuance records LynxDock keeps when the owner emails a
-              participant a key (what they link the key to, how long they and the issuance correspondence are kept, and
-              when they are deleted), and what a keyed app or Host stores on the device for the key
+              wording of record for the keyed beta, reviewed by C (R205) but not yet approved by the owner; remove this
+              marker only on the owner&rsquo;s approval
             </Fixture>
+          </p>
+          <p>
+            If you take part in a keyed beta build, LynxDock emails your personal access key to you; a
+            community&rsquo;s administrator never receives or relays it. LynxDock keeps an issuance record linking that
+            key&rsquo;s ID to your email address — nothing else — together with the emails about your key, while your
+            participation is active and afterwards for up to one year: each record carries your participation end date,
+            and records are deleted at the monthly review in the eleventh month after that date, so no link is kept past
+            the stated year. The key stored on your device carries no name, email address or device identifier, and key
+            checks happen only on your device; nothing is verified online and no key information is sent. Replacement
+            keys come the same way: write to{" "}
+            <a href={`mailto:${supportEmail}`} className="text-link">
+              {supportEmail}
+            </a>
+            , and the replaced key stops being accepted by builds released afterwards — nothing changes on an installed
+            copy.
           </p>
         </Section>
 

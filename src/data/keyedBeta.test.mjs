@@ -25,6 +25,9 @@ const sha256 = (...p) => createHash("sha256").update(readFileSync(join(root, ...
 const ws = (s) => s.replace(/\s+/g, " ");
 const noComments = (s) => s.replace(/^\s*\/\/.*$/gm, "").replace(/\{\/\*[\s\S]*?\*\/\}/g, "").replace(/\/\*\*[\s\S]*?\*\//g, "");
 
+// The /privacy/ key disclosure, wording of record (C R205, 2026-11-06), without its bold lead, which is the section title.
+const PRIVACY_KEYS_WORDING =
+  "If you take part in a keyed beta build, LynxDock emails your personal access key to you; a community's administrator never receives or relays it. LynxDock keeps an issuance record linking that key's ID to your email address — nothing else — together with the emails about your key, while your participation is active and afterwards for up to one year: each record carries your participation end date, and records are deleted at the monthly review in the eleventh month after that date, so no link is kept past the stated year. The key stored on your device carries no name, email address or device identifier, and key checks happen only on your device; nothing is verified online and no key information is sent. Replacement keys come the same way: write to admin@lynxdock.app, and the replaced key stops being accepted by builds released afterwards — nothing changes on an installed copy.";
 const status = read("src", "data", "siteStatus.ts");
 const hub = read("src", "app", "beta", "page.tsx");
 const hubText = ws(hub);
@@ -114,17 +117,30 @@ test("nothing calls the beta access key activation, a purchase or an entitlement
   assert.match(check, /a sentence about the beta access key reads as activation or a sale/, "check-site guards every built page");
 });
 
-test("privacy: a key-records section that is a fixture until reviewed, and still nothing about licensing", () => {
+test("privacy: the key disclosure is the wording of record, still marked until the owner approves it, and nothing about licensing", () => {
   const privacy = read("src", "app", "privacy", "page.tsx");
   const section = privacy.slice(privacy.indexOf('<Section id="beta-keys"'), privacy.indexOf('<Section id="email"'));
   assert.ok(privacy.indexOf('<Section id="forms"') < privacy.indexOf('<Section id="beta-keys"'), "the section sits after the forms section");
-  assert.ok(section.includes('title="Beta access key records"'), "the section exists, before the email section");
-  assert.equal((section.match(/<Fixture>/g) ?? []).length, 1, "its slot is a fixture, not drafted wording");
-  assert.ok(!/<p>(?!\s*<Fixture>)/.test(section), "the section holds nothing but the fixture");
+  assert.ok(section.includes('title="Beta access keys"'), "the section exists, before the email section");
+  // C R205 GO (2026-11-06) on the wording of record (PRIVACY-KEYED-BETA-WORDING-PROPOSED.md, sha256 d4a2deea...); the
+  // owner has not approved it yet, so the section keeps a fixture marker and a production build fails until it goes.
+  assert.equal((section.match(/<Fixture>/g) ?? []).length, 1, "the section keeps its fixture marker until the owner approves");
+  const rendered = section
+    .replace(/<Fixture>[\s\S]*?<\/Fixture>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\{supportEmail\}/g, "admin@lynxdock.app")
+    .replace(/\{" "\}/g, " ")
+    .replace(/&rsquo;/g, "'")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([,.;:])/g, "$1");
+  assert.ok(rendered.includes(PRIVACY_KEYS_WORDING), "the paragraph is the wording of record, verbatim");
+  const summary = privacy.slice(privacy.indexOf('aria-labelledby="summary-title"'), privacy.indexOf('<Section id="who"'));
+  assert.ok(summary.length > 100 && !summary.includes("<Fixture>"), "the summary list has no fixture: the wording of record adds no line there");
   assert.match(privacy, /import Fixture from "@\/components\/site\/Fixture";/);
   assert.ok(!/licen[cs]/i.test(noComments(privacy)), "the privacy notice says nothing about licensing");
   assert.ok(
     ws(privacy).includes("Apart from the in-app record and the beta access key records described above, this notice covers the website only."),
     "the scope sentence names the key records",
   );
+  assert.match(read("scripts", "check-site.mjs"), /the beta access keys disclosure is missing or reworded/, "check-site pins the built text too");
 });
