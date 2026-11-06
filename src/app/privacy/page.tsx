@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
-import OwnerField from "@/components/site/OwnerField";
 import { eligibility } from "@/data/siteStatus";
 import { supportEmail } from "@/data/siteShell";
 
@@ -9,8 +8,9 @@ import { supportEmail } from "@/data/siteShell";
 // announcement). It describes what this site actually processes, as verified on 2026-10-26 and 2026-10-27: Cloudflare
 // hosting and downloads (with Cloudflare's network error reports), Cloudflare Web Analytics (one beacon, the site's own;
 // the Cloudflare Pages automatic beacon is switched off, owner 2026-10-30), the Formspree enquiry form and email. It says nothing about accounts or
-// licensing, which do not exist. Every fact only the owner can supply is an <OwnerField>; a production build that
-// still contains one fails scripts/check-site.mjs.
+// licensing, which do not exist. The owner-only facts (the notice date and the acknowledgement retention period)
+// were filled from the owner's decisions of 2026-11-05; scripts/check-site.mjs still fails a production build that
+// contains an unfilled <OwnerField>.
 export const metadata: Metadata = {
   title: "Privacy notice",
   description:
@@ -49,7 +49,8 @@ export default function PrivacyPage() {
         title="Privacy notice"
         intro={
           <p>
-            How this website, lynxdock.app, handles information. Last updated <OwnerField>date approved</OwnerField>.
+            {/* The notice date is the publication date (runbook step 1): set it to the actual deploy date at go. */}
+            How this website, lynxdock.app, handles information. Last updated 5 November 2026.
           </p>
         }
       />
@@ -151,8 +152,7 @@ export default function PrivacyPage() {
             its arrival and keep the email notification as our record. Formspree removes a deleted submission from its
             active systems within minutes, and its backups can keep a copy for up to 30 more days. A beta
             participation acknowledgement is kept, as its email notification, while your participation is active, and
-            afterwards for{" "}
-            <OwnerField>the period after participation ends, set together with the beta agreement</OwnerField>.
+            afterwards for one year.
           </p>
           <p>
             Nothing is sent until you press the form&rsquo;s send button. A form that is not connected to the

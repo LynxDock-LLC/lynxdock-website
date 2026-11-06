@@ -121,28 +121,32 @@ export const eligibility = {
 };
 
 /**
- * The beta licence for the next release's builds (name and ID as in licence draft r5, 2026-10-27). NOT yet approved:
- * the hub's link to its text is an [OWNER] field, and this ID must match the approved text before anything ships.
- * Members who join with the older 0.2.6 app do not accept this licence (draft r5 sections 12 and 17); they acknowledge
+ * The beta licence for the next release's builds. The text was finalized on the owner's decisions of 2026-11-05
+ * (counsel review skipped by owner decision); this ID must match the approved text before anything ships, and
+ * /beta/licence/ serves public/legal/LYNXDOCK-BETA-EVAL-1.0.txt as the document (the page links the file and shows
+ * its hash), so that file must hold the approved bytes.
+ * Members who join with the older 0.2.6 app do not accept this licence (sections 12 and 17); they acknowledge
  * the beta participation requirements instead (participationDocument).
  */
 export const betaLicence = {
   name: "LynxDock Beta Evaluation Licence",
   id: "LYNXDOCK-BETA-EVAL-1.0",
-  /** [OWNER] Where the approved licence text is published. While this is null, the hub shows an [OWNER] marker. */
-  textUrl: null as string | null,
+  /** Where the licence text is published: a stable URL on this site (owner decision 2026-11-05; whether the path
+   * itself carries the version is the open owner question O2, C R195). */
+  textUrl: "/beta/licence/" as string | null,
 };
 
 /**
- * The document that sets the beta participation requirements older-app (0.2.6) members acknowledge. Counsel's choice,
- * UNRESOLVED (licence draft r5 field PARTICIPATION_DOCUMENT): while title is null the hub shows an [OWNER] marker and
- * the acknowledgement form names no document. Never fill it with a guessed name or link.
+ * The document that sets the beta participation requirements older-app (0.2.6) members acknowledge (licence field
+ * PARTICIPATION_DOCUMENT; owner decisions 2026-11-05: option A, self-contained, hosted on this site). The
+ * acknowledgement form names this title in each submission, so it must match the published document exactly.
  */
 export const participationDocument = {
-  /** [OWNER/counsel] The document's name, as the hub should show it. */
-  title: null as string | null,
-  /** [OWNER/counsel] Where it is published. */
-  url: null as string | null,
+  /** The document's name, as the hub and the acknowledgement form show it. */
+  title: "LynxDock 0.3.0 Beta Participation Requirements, v1.0" as string | null,
+  /** Where it is published: a stable URL on this site. Licence section 17 bakes this URL into every build that
+   * ships it, so whether the path should carry the version is the open owner question O2 (C R195). */
+  url: "/beta/participation/" as string | null,
 };
 
 export type Limitation = { title: string; text: string };

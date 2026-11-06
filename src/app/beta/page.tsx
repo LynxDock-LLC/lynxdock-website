@@ -238,6 +238,18 @@ export default function BetaPage() {
                 <li>{s.eligibility.routes.olderApp}</li>
               </ul>
             </div>
+            {/* BETA NOTICES. Licence section 11 and the participation requirements both say LynxDock posts beta
+                notices on this page, so this is where they appear (C R195 W3). While none has been posted, it says
+                so plainly. A posted notice is a reviewed content change like any other. */}
+            <div id="notices" className="card">
+              <h3 className="h-card">Beta notices</h3>
+              <p className="small mt-2">
+                LynxDock posts beta notices here: an end date for the beta period, an extension of it, or an
+                immediate termination. A notice takes effect when posted unless it states a later date; an ordinary
+                end date is at least 14 days after its notice.
+              </p>
+              <p className="small mt-2">No notice has been posted.</p>
+            </div>
           </div>
 
           {/* OLDER-APP ACKNOWLEDGEMENT. Licence draft r5 sections 12, 13 and 17: members on the older 0.2.6 app

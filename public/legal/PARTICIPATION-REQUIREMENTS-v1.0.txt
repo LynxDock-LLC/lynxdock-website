@@ -1,0 +1,103 @@
+LYNXDOCK 0.3.0 BETA PARTICIPATION REQUIREMENTS
+Version 1.0
+Effective date: 2026-11-05
+
+Issued by LynxDock LLC ("LynxDock"). Questions: admin@lynxdock.app.
+
+1. WHO THESE REQUIREMENTS ARE FOR
+These requirements apply to you if you take part in a LynxDock 0.3.0
+beta community using an earlier LynxDock app build that shows no licence
+screen (for example the 0.2.6 app), however you were invited: directly
+by a community's operator, or after requesting access on LynxDock's
+website.
+   If you use a 0.3.0 beta build, you accept the LynxDock Beta
+Evaluation Licence (LYNXDOCK-BETA-EVAL-1.0) in that build instead, and
+these requirements do not apply to that build.
+
+2. WHAT YOUR ACKNOWLEDGEMENT DOES AND DOES NOT DO
+Your acknowledgement concerns your taking part in the beta only. It does
+not license, replace or change the licence or terms that govern your
+earlier build, and it does not grant or withdraw any rights you already
+have in that build. It does not bring your earlier build under the Beta
+Evaluation Licence, does not mean you accepted that licence, and does
+not apply that licence's terms - its liability cap included - to your
+earlier build. If you later install a build covered by the Beta
+Evaluation Licence, you accept that licence for that build when it first
+starts.
+
+3. ELIGIBILITY: 18 OR OLDER
+You must be at least 18 years old and able to enter a binding agreement.
+You declare this by ticking the declaration on LynxDock's tester page at
+https://lynxdock.app/beta/. This is an affirmative self-declaration, not
+age verification. LynxDock does not independently verify your age and
+asks for no date of birth or proof of age. If LynxDock learns that an
+acknowledgement came from someone under 18, it deletes that
+acknowledgement and asks the community not to invite them.
+
+4. WHEN AND HOW TO ACKNOWLEDGE
+First, before the community's operator invites you, read these
+requirements. Then, on the tester page, tick the box declaring that you
+are 18 or older and the box acknowledging these requirements, and send
+the form. It sends your name, email address and community, with both
+declarations, to the site's form service (Formspree). It sends nothing
+to the community's server or its operator. Finally, tell the operator
+who is inviting you that you have acknowledged the requirements.
+LynxDock does not confirm acknowledgements to community operators; the
+operator relies on what you tell them.
+
+5. BETA CONDITIONS THAT APPLY TO YOUR PARTICIPATION
+   A beta, free of charge, for evaluation. Features may be incomplete or
+change, and the software may contain errors. Keep your own backups. Do
+not rely on LynxDock for safety-critical or irreversible decisions.
+Taking part gives no permanent free access to Commander Tactical Mode
+and no licence to any future commercial edition; the beta is not an
+offer to sell and authorises no charge.
+   Feedback. LynxDock may use suggestions, bug reports or other feedback
+you send to improve its products, without obligation to you. Do not send
+information you are not entitled to share. Taking part imposes no
+confidentiality obligation on you.
+   Notices. LynxDock posts beta notices, including an end date, an
+extension or an immediate termination, at https://lynxdock.app/beta/,
+and may also send them through the contact by which you obtained the
+beta. A notice takes effect when posted unless it states a later date.
+An ordinary end date is at least 14 days after its notice.
+   Ending. The beta can end by notice, or immediately where needed
+because of a breach, a security problem or a legal requirement. Ending
+is contractual only, and it deletes nothing on a community server.
+   Community data. The community's records are held by its operator
+under the operator's own arrangements with its members. Ending the beta
+does not delete them and gives nobody access to them.
+   No warranty; limitation of liability. The beta programme and the
+0.3.0 beta software are provided as is, without warranty of any kind, to
+the extent the law permits; this says nothing about your earlier build,
+which keeps its own terms. For claims arising from your participation in
+the beta, LynxDock's total liability is limited to USD 100, to the
+extent the law permits. Nothing here excludes or limits liability that
+the law does not allow to be excluded or limited, including for fraud,
+gross negligence, or death or personal injury caused by negligence, or
+removes any consumer right that cannot be waived. These are this
+document's own terms about participation: they do not apply the Beta
+Evaluation Licence to your earlier build and do not claim you accepted
+it.
+   Governing law and forum. The law of the State of Oregon, United
+States governs these requirements, and disputes may be brought in the
+state and federal courts located in Oregon, in each case without
+displacing mandatory protections of the law of the place where you live.
+There is no arbitration clause and no class-action waiver.
+
+6. YOUR INFORMATION
+When you acknowledge, the tester page sends your name, email address,
+community, your 18+ declaration and your acknowledgement to Formspree,
+the site's form service, which emails a notification to LynxDock's
+monitored mailbox. LynxDock keeps your acknowledgement, as that email
+notification, while your participation is active and afterwards for one
+year. Each submission also says which form it came from and the page it
+was sent from. The LynxDock website privacy notice
+(https://lynxdock.app/privacy/) gives the details.
+
+7. QUESTIONS
+Write to admin@lynxdock.app.
+
+----------------------------------------------------------------------
+LynxDock 0.3.0 Beta Participation Requirements, v1.0
+LynxDock LLC - admin@lynxdock.app
