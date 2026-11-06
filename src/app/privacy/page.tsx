@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
+import Fixture from "@/components/site/Fixture";
 import { eligibility } from "@/data/siteStatus";
 import { supportEmail } from "@/data/siteShell";
 
@@ -11,10 +12,13 @@ import { supportEmail } from "@/data/siteShell";
 // licensing, which do not exist. The owner-only facts (the notice date and the acknowledgement retention period)
 // were filled from the owner's decisions of 2026-11-05; scripts/check-site.mjs still fails a production build that
 // contains an unfilled <OwnerField>.
+// Keyed-beta preparation (2026-11-06, branch site/keyed-beta-prep): the "Beta access key records" section and its
+// summary line hold INTERNAL FIXTURES until the reviewed wording arrives (like the rest of this notice it must say
+// nothing about licensing); scripts/check-site.mjs fails a production build while any fixture remains.
 export const metadata: Metadata = {
   title: "Privacy notice",
   description:
-    "How the LynxDock website handles information: hosting, page-view analytics, enquiry forms and email, and the 18+ self-declaration for beta participants.",
+    "How the LynxDock website handles information: hosting, page-view analytics, enquiry forms and email, the 18+ self-declaration for beta participants, and beta access key records.",
 };
 
 const CLOUDFLARE_POLICY = "https://www.cloudflare.com/privacypolicy/";
@@ -67,6 +71,11 @@ export default function PrivacyPage() {
               visitors&rsquo; personal data.
             </li>
             <li>If you send one of our forms, what you type is sent to Formspree, the site&rsquo;s form-handling service.</li>
+            <li>
+              <Fixture>
+                a one-line summary of the beta access key records, if the reviewed wording adds one to this list
+              </Fixture>
+            </li>
             <li>We do not sell personal information.</li>
             <li>
               LynxDock community servers are run by the communities that use them. LynxDock LLC has no access to what
@@ -206,10 +215,27 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
+        <Section id="beta-keys" title="Beta access key records">
+          <p>
+            <Fixture>
+              the reviewed disclosure of the beta access key issuance records goes here: what LynxDock keeps when the
+              owner emails a participant a key, what it links the key to, how long it and the issuance correspondence
+              are kept, and when they are deleted
+            </Fixture>
+          </p>
+          <p>
+            <Fixture>
+              if the reviewed wording covers it: what a keyed app or Host stores on the device for the key, beside the
+              record described above
+            </Fixture>
+          </p>
+        </Section>
+
         <Section id="apps" title="The LynxDock apps and community servers">
           <p>
-            Apart from the in-app record described above, this notice covers the website only. Community servers are
-            run by the communities that use them: their accounts, messages, voice and records stay on infrastructure
+            Apart from the in-app record and the beta access key records described above, this notice covers the
+            website only. Community servers are run by the communities that use them: their accounts, messages, voice
+            and records stay on infrastructure
             each community controls, and LynxDock LLC has no access to them unless someone sends us information, for
             example in a problem report.
           </p>

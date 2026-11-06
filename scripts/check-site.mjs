@@ -317,6 +317,59 @@ if (builtAsPreview) {
   }
   console.log(`Analytics: ${chunks.length} script chunk(s) reference the beacon (exactly one is required); token ${token ? "set" : "NOT set"}; hostname boundary checked.`);
 }
+// Internal fixtures (keyed-beta preparation, 2026-11-06): stand-ins for licence and privacy wording that has not been
+// reviewed yet (public/legal/LYNXDOCK-BETA-EVAL-1.1.txt and the <Fixture> markers). Expected in a local review build;
+// a production build must contain none, in any file.
+{
+  const withFixture = files
+    .filter((f) => /\.(html|txt|js|json)$/.test(f) && readFileSync(f, "utf8").includes("INTERNAL FIXTURE"))
+    .map((f) => "/" + relative(OUT, f).split(sep).join("/"));
+  if (withFixture.length) {
+    if (PREVIEW) warn.push(`${withFixture.length} file(s) hold an INTERNAL FIXTURE to replace before production: ${withFixture.join(", ")}`);
+    else for (const where of withFixture) fail(where, "an INTERNAL FIXTURE is in a production build");
+  }
+}
+{
+  // The licence versions (ADR-0029 O1 and K8b; O2): version 1.0 stays published at /beta/licence/ for the builds
+  // that name it, and version 1.1, for the keyed builds, has its own address. Both pages are unlisted.
+  const v10 = pages.get("/beta/licence/") || "";
+  const v11 = pages.get("/beta/licence/v1.1/") || "";
+  if (!v10.includes('href="/legal/LYNXDOCK-BETA-EVAL-1.0.txt"')) fail("/beta/licence/", "does not link the version 1.0 text");
+  if (!v11) fail("/beta/licence/v1.1/", "the version 1.1 page was not built");
+  else if (!v11.includes('href="/legal/LYNXDOCK-BETA-EVAL-1.1.txt"')) fail("/beta/licence/v1.1/", "does not link the version 1.1 text");
+  for (const [route, raw] of [["/beta/licence/", v10], ["/beta/licence/v1.1/", v11]]) {
+    if (!/<meta name="robots" content="[^"]*noindex/.test(raw)) fail(route, "a licence page must be noindex");
+  }
+}
+{
+  // Beta access keys (ADR-0029, owner decisions K1-K9 of 2026-11-06), on the tester hub: a key comes only in the
+  // owner's key email, never from a community's administrator or with an invitation, and builds before the keyed
+  // ones need no key. Across the site, no sentence about the key may call it activation, a purchase or an entitlement
+  // (ADR-0029 section d; owner rule: LynxDock and Tactical are not described as licensed, activated or sold).
+  const hub = (pages.get("/beta/") || "").replace(/<script[\s\S]*?<\/script>/g, "");
+  const text = hub.replace(/<[^>]+>/g, " ").replace(/&#x27;|&rsquo;|’/g, "'").replace(/\s+/g, " ");
+  if (!/id="keys"/.test(hub)) fail("/beta/", "the beta access keys section is missing");
+  for (const must of [
+    "Your key comes only in the owner's key email",
+    "Keys never come from a community's administrator, and never with a community invitation",
+    "Builds released before them need no key",
+  ]) {
+    if (!text.includes(must)) fail("/beta/", `the beta access keys section does not say: ${must}`);
+  }
+  // Every sentence of the keys section, whatever it calls the key, and every sentence elsewhere that names it.
+  const keysSection = (hub.match(/<section id="keys"[\s\S]*?<\/section>/) || [""])[0];
+  for (const sentence of keysSection.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").split(/(?<=[.!?])\s+/)) {
+    if (/activat|\bsold\b|purchas|entitle|licensed\b/i.test(sentence))
+      fail("/beta/", `the beta access keys section reads as activation or a sale: "${sentence.trim().slice(0, 120)}"`);
+  }
+  for (const [route, raw] of pages) {
+    const body = raw.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    for (const sentence of body.split(/(?<=[.!?])\s+/)) {
+      if (/access key|key email|LDBETA1-/i.test(sentence) && /activat|\bsold\b|purchas|entitle|licensed\b/i.test(sentence))
+        fail(route, `a sentence about the beta access key reads as activation or a sale: "${sentence.slice(0, 120)}"`);
+    }
+  }
+}
 // Every built page (all of them, legacy pages and blog posts included): a sentence about age that mentions
 // verifying, enforcing, checking, validating or proving it must be a negation. The policy is enforced nowhere, so
 // no sentence may suggest otherwise. (It reads rendered page text; messages that only appear after interaction,

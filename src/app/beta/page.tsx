@@ -8,7 +8,13 @@ import {
   ReleaseIdentity,
   fmtDate,
 } from "@/components/site/ReleaseBlocks";
-import siteStatus, { betaLicence, formatBytes, participationDocument } from "@/data/siteStatus";
+import siteStatus, {
+  betaAccessKeys,
+  betaLicence,
+  betaLicenceKeyed,
+  formatBytes,
+  participationDocument,
+} from "@/data/siteStatus";
 import { githubOrg, supportEmail } from "@/data/siteShell";
 import { betaDownloads, betaAuthenticode, betaSigningPublisher } from "@/data/betaDownloads";
 import { v6Candidate } from "@/data/v6Candidate";
@@ -109,6 +115,16 @@ function LicenceTextLink() {
   );
 }
 
+// Version 1.1 of the licence, for the keyed builds, at its own address (betaLicenceKeyed; ADR-0029 K8b). While its
+// file is an internal fixture, the version 1.1 page itself carries the fixture markers.
+function KeyedLicenceTextLink() {
+  return (
+    <a href={betaLicenceKeyed.textUrl} className="text-link">
+      read version {betaLicenceKeyed.version}
+    </a>
+  );
+}
+
 // The document that sets the beta participation requirements, or an [OWNER] marker until counsel names it
 // (participationDocument; licence draft r5 field PARTICIPATION_DOCUMENT).
 function ParticipationDocumentLink() {
@@ -149,6 +165,7 @@ export default function BetaPage() {
             {[
               ["#status", "Release status"],
               ["#requirements", "Beta requirements"],
+              ["#keys", "Access keys"],
               ["#which", "App or Host"],
               ["#first-connection", "First connection"],
               ["#limitations", "Known limitations"],
@@ -223,6 +240,15 @@ export default function BetaPage() {
               <p className="small mt-2">
                 The next release&rsquo;s app and Host are used under the {betaLicence.name} ({betaLicence.id}), which
                 you accept in the installer and when the app or Host first starts: <LicenceTextLink />.
+              </p>
+              <p className="small mt-2">
+                The keyed beta builds, which ask for a{" "}
+                <a href="#keys" className="text-link">
+                  beta access key
+                </a>
+                , are used under version {betaLicenceKeyed.version} of that licence ({betaLicenceKeyed.id}), published
+                at its own address: <KeyedLicenceTextLink />. Version 1.0 stays published unchanged for the builds that
+                use it.
               </p>
               <p className="small mt-2">
                 Members who join with the older 0.2.6 app don&rsquo;t accept that licence. They acknowledge the beta
@@ -314,6 +340,95 @@ export default function BetaPage() {
         </div>
       </section>
 
+      {/* BETA ACCESS KEYS (ADR-0029; owner decisions K1-K9 of 2026-11-06; facts and sources in siteStatus.ts at
+          betaAccessKeys). For the keyed beta builds only. Keys come only from the owner, in the owner's key email:
+          never from a community's administrator and never with an invitation. Earlier builds need no key, and 0.2.6
+          members keep the acknowledgement above unchanged. Never call the key activation, a purchase or an
+          entitlement. */}
+      <section id="keys" aria-labelledby="keys-title" className="section">
+        <div className="wrap">
+          <div className="max-w-3xl">
+            <h2 id="keys-title" className="h-section">
+              {betaAccessKeys.heading}
+            </h2>
+            <p className="lead mt-3">
+              Later beta builds ask for a personal beta access key as well as your acceptance of the licence. A key
+              lets you run a keyed build of the LynxDock app or LynxDock Host, and nothing else.
+            </p>
+            <p className="body mt-3">
+              Builds released before them need no key and work as they do now: the 0.3.0 builds, used under version 1.0
+              of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements{" "}
+              <a href="#confirm" className="text-link">
+                above
+              </a>
+              .
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <div className="card-notice">
+              <h3 className="text-lg font-bold text-[#ecd6a8]">Your key comes only in the owner&rsquo;s key email</h3>
+              <p className="small mt-2">
+                LynxDock&rsquo;s owner emails each participant their own key, personally. Keys never come from a
+                community&rsquo;s administrator, and never with a community invitation: administrators don&rsquo;t hold
+                or pass on keys. If a key reaches you any other way, tell us at{" "}
+                <a href={`mailto:${supportEmail}`} className="text-link">
+                  {supportEmail}
+                </a>
+                .
+              </p>
+              <p className="small mt-2">
+                The owner&rsquo;s key email comes from{" "}
+                <OwnerField>the address the owner&rsquo;s key email is sent from</OwnerField>.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="h-card">Who needs a key</h3>
+              <p className="small mt-2">
+                Everyone who runs a keyed build needs their own key, including people who run LynxDock Host. The owner
+                sends keys to people who requested beta access on this site and to members a community invites
+                directly: <OwnerField>how a directly invited member asks the owner for a key</OwnerField>. Your key is
+                for you alone, so don&rsquo;t share it.
+              </p>
+              <p className="small mt-2">
+                A key and an invite code do different jobs. The key, from the owner, lets you run the build; the invite
+                code, from the person who runs your community&rsquo;s server, lets you join that community. On a keyed
+                build you need both.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="h-card">Entering your key</h3>
+              <ol className="num-list small mt-3">
+                <li>The first time a keyed app or Host starts, it shows the beta licence. Accept it first.</li>
+                <li>
+                  It then asks for your key. Paste it from the owner&rsquo;s key email: it begins{" "}
+                  <span className="mono">{betaAccessKeys.keyPrefix}</span> and is too long to type.
+                </li>
+                <li>
+                  From then on, it keeps the key on your device and checks it every time it starts, together with the
+                  list of withdrawn keys built into that release.
+                </li>
+              </ol>
+              <p className="small mt-3">
+                The key is checked on your device: the check contacts no server, and the key holds no name or email
+                address. Keys don&rsquo;t expire.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="h-card">A new PC, a lost key or a replacement</h3>
+              <p className="small mt-2">
+                Reinstalling keeps your key. On a new PC, paste the key from the owner&rsquo;s key email again. If you
+                have lost it, or think someone else has it, ask the owner for a replacement:{" "}
+                <OwnerField>how participants ask the owner for a replacement key</OwnerField>.
+              </p>
+              <p className="small mt-2">
+                Once you have a replacement, your old key stops working in later builds. Withdrawing a key never affects
+                a copy that is already installed: only builds released afterwards refuse it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* APP OR HOST */}
       <section id="which" aria-labelledby="which-title" className="section-tight">
         <div className="wrap">
@@ -368,6 +483,13 @@ export default function BetaPage() {
               </li>
               <li>Join a voice channel and check that someone can hear you before an operation starts.</li>
             </ol>
+            <p className="small mt-3">
+              On a keyed build, accept the licence and paste your{" "}
+              <a href="#keys" className="text-link">
+                beta access key
+              </a>{" "}
+              when the app first starts, before step 3.
+            </p>
             <Link href="/docs/getting-started/" className="arrow-link mt-4">
               The full quickstart <span aria-hidden="true">→</span>
             </Link>

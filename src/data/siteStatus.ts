@@ -149,6 +149,49 @@ export const participationDocument = {
   url: "/beta/participation/" as string | null,
 };
 
+/**
+ * The beta licence for the KEYED beta builds (ADR-0029 decision K8b, 2026-11-06: the key clauses get their own later
+ * licence version). O1: keys never ship in a build whose licence is LYNXDOCK-BETA-EVAL-1.0, so version 1.0 (betaLicence
+ * above) stays exactly as published at /beta/licence/, and version 1.1 gets its own address (O2: a published URL keeps
+ * serving the version the shipping licence names). /beta/licence/v1.1/ serves public/legal/LYNXDOCK-BETA-EVAL-1.1.txt,
+ * which is an INTERNAL FIXTURE with no licence terms until the reviewed text replaces it byte for byte; while it is,
+ * the page shows fixture markers and scripts/check-site.mjs fails a production build.
+ */
+export const betaLicenceKeyed = {
+  name: "LynxDock Beta Evaluation Licence",
+  id: "LYNXDOCK-BETA-EVAL-1.1",
+  version: "1.1",
+  textUrl: "/beta/licence/v1.1/",
+  file: "LYNXDOCK-BETA-EVAL-1.1.txt",
+};
+
+/**
+ * Beta access keys for the keyed beta builds, as the tester hub describes them (/beta/#keys). Source: ADR-0029 in the
+ * product repository (PR #35, design of record at a0837581; the betakey crate at 4f817c8c implements the key format),
+ * owner decisions K1-K9 of 2026-11-06:
+ * - K1a: a key lets its holder run a keyed beta build, the app and the Host alike, and nothing else. The key is entered
+ *   at first start, after the licence is accepted; at EVERY start the app re-checks the stored key and the build's
+ *   compiled-in list of withdrawn keys (the denylist).
+ * - K2a: one key per participant. K3a: keys do not expire.
+ * - K4a: a key is withdrawn through the denylist of each later build: it affects later builds, never installed copies.
+ * - K5a: recovery is a replacement key from the owner; the replaced key is denylisted by default, so it stops working
+ *   in later builds. A reinstall keeps the stored key; a new PC means pasting the key from the key email again.
+ * - K6a: keys and invite codes coexist: the key gates the build, the invite code the community.
+ * - K7a and O1: builds at or before the 0.3.0 candidate, and every build under licence 1.0, need no key; 0.2.6 members
+ *   keep the acknowledgement flow unchanged.
+ * - K9a+c: keys come directly from the owner only, to early-access applicants and directly invited members, in the
+ *   owner's key email. Operators never hold or relay keys, and a key never comes with a community invitation.
+ * - The check is local and offline (no new network contact), and the key holds no personal data.
+ * Never call the key activation, a purchase or an entitlement (ADR-0029 section d; owner rule: LynxDock and Tactical
+ * are not described as licensed, activated or sold). No keyed build is released: under ADR-0029 the app gates ship
+ * only together with the revised licence version, so this content stays held until the owner releases it.
+ */
+export const betaAccessKeys = {
+  heading: "Beta access keys for keyed builds",
+  /** The first characters of every key (betakey crate, PREFIX). */
+  keyPrefix: "LDBETA1-",
+};
+
 export type Limitation = { title: string; text: string };
 
 /** Known limitations every visitor and tester should see. Pages render all of them in body text. */
