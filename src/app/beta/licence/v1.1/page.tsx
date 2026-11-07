@@ -7,7 +7,8 @@ import PageHero from "@/components/site/PageHero";
 import Fixture from "@/components/site/Fixture";
 import { betaLicence, betaLicenceKeyed } from "@/data/siteStatus";
 
-// Version 1.1 of the beta evaluation licence, for the keyed beta builds (ADR-0029 decision K8b, 2026-11-06: the key
+// Version 1.1 of the beta evaluation licence, for the keyed 0.3.0 beta builds that ship with it (licence section 1;
+// approved by the owner by hash 13a83f87... on 2026-11-06; ADR-0029 decision K8b, 2026-11-06: the key
 // clauses get their own licence version). It has its own address beside version 1.0, which stays exactly as
 // published at /beta/licence/ (O2: a published URL keeps serving the version the shipping licence names). Same
 // pattern as /beta/licence/: the page links the plain-text file rather than rendering it, and the effective date,
@@ -19,7 +20,7 @@ import { betaLicence, betaLicenceKeyed } from "@/data/siteStatus";
 export const metadata: Metadata = {
   title: "Beta evaluation licence, version 1.1",
   description:
-    "Version 1.1 of the LynxDock Beta Evaluation Licence (LYNXDOCK-BETA-EVAL-1.1), for the keyed beta builds: the full text, its version, effective date and a downloadable copy.",
+    "Version 1.1 of the LynxDock Beta Evaluation Licence (LYNXDOCK-BETA-EVAL-1.1), for the keyed LynxDock 0.3.0 beta builds that ship with it: the full text, its version, effective date and a downloadable copy.",
   robots: { index: false, follow: false },
 };
 
@@ -45,7 +46,7 @@ export default function BetaLicenceV11Page() {
           <p>
             Version {k.version} (licence ID {k.id}), effective{" "}
             {FIXTURE ? <Fixture>the effective date, from the reviewed version {k.version} text</Fixture> : effectiveDate}.
-            This version is for the keyed beta builds, the ones that ask for a{" "}
+            This version covers the keyed LynxDock 0.3.0 beta builds that ship with it, the ones that ask for a{" "}
             <Link href="/beta/#keys" className="text-link">
               beta access key
             </Link>

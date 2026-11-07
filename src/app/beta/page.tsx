@@ -115,8 +115,8 @@ function LicenceTextLink() {
   );
 }
 
-// Version 1.1 of the licence, for the keyed builds, at its own address (betaLicenceKeyed; ADR-0029 K8b). While its
-// file is an internal fixture, the version 1.1 page itself carries the fixture markers.
+// Version 1.1 of the licence, for the keyed 0.3.0 builds that ship with it (licence section 1), at its own address
+// (betaLicenceKeyed; ADR-0029 K8b). Its file is the text the owner approved by hash on 2026-11-06.
 function KeyedLicenceTextLink() {
   return (
     <a href={betaLicenceKeyed.textUrl} className="text-link">
@@ -242,13 +242,13 @@ export default function BetaPage() {
                 you accept in the installer and when the app or Host first starts: <LicenceTextLink />.
               </p>
               <p className="small mt-2">
-                The keyed beta builds, which ask for a{" "}
+                Version {betaLicenceKeyed.version} of that licence ({betaLicenceKeyed.id}) covers the keyed LynxDock
+                0.3.0 beta builds that ship with it, the ones that ask for a{" "}
                 <a href="#keys" className="text-link">
                   beta access key
                 </a>
-                , are used under version {betaLicenceKeyed.version} of that licence ({betaLicenceKeyed.id}), published
-                at its own address: <KeyedLicenceTextLink />. Version 1.0 stays published unchanged for the builds that
-                use it.
+                . It is published at its own address: <KeyedLicenceTextLink />. Version 1.0 stays published unchanged
+                for the builds that use it.
               </p>
               <p className="small mt-2">
                 Members who join with the older 0.2.6 app don&rsquo;t accept that licence. They acknowledge the beta
@@ -352,8 +352,9 @@ export default function BetaPage() {
               {betaAccessKeys.heading}
             </h2>
             <p className="lead mt-3">
-              Later beta builds ask for a personal beta access key as well as your acceptance of the licence. A key
-              lets you run a keyed build of the LynxDock app or LynxDock Host, and nothing else.
+              Keyed beta builds, the ones that ship with version {betaLicenceKeyed.version} of the licence, ask for a
+              personal beta access key as well as your acceptance of that licence. A key lets you run a keyed build of
+              the LynxDock app or LynxDock Host, and nothing else.
             </p>
             <p className="body mt-3">
               Builds released before them need no key and work as they do now: the beta builds used under version 1.0
@@ -369,8 +370,9 @@ export default function BetaPage() {
               <h3 className="text-lg font-bold text-[#ecd6a8]">Your key comes only in the owner&rsquo;s key email</h3>
               <p className="small mt-2">
                 LynxDock&rsquo;s owner emails each participant their own key, personally. Keys never come from a
-                community&rsquo;s administrator, and never with a community invitation: administrators don&rsquo;t hold
-                or pass on keys. If a key reaches you any other way, tell us at{" "}
+                community&rsquo;s administrator, and never with a community invitation: an administrator gets their own
+                key from LynxDock like everyone else, and never receives or passes on yours. If a key reaches you any
+                other way, tell us at{" "}
                 <a href={`mailto:${supportEmail}`} className="text-link">
                   {supportEmail}
                 </a>
@@ -417,8 +419,11 @@ export default function BetaPage() {
               <h3 className="h-card">A new PC, a lost key or a replacement</h3>
               <p className="small mt-2">
                 Reinstalling keeps your key. On a new PC, paste the key from the owner&rsquo;s key email again. If you
-                have lost it, or think someone else has it, ask the owner for a replacement:{" "}
-                <OwnerField>how participants ask the owner for a replacement key</OwnerField>.
+                have lost it, or think someone else has it, ask the owner for a replacement: write to{" "}
+                <a href={`mailto:${supportEmail}`} className="text-link">
+                  {supportEmail}
+                </a>
+                .
               </p>
               <p className="small mt-2">
                 Once you have a replacement, your old key stops working in later builds. Withdrawing a key never affects

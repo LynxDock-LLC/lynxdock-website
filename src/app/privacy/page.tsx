@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
-import Fixture from "@/components/site/Fixture";
 import { eligibility } from "@/data/siteStatus";
 import { supportEmail } from "@/data/siteShell";
 
@@ -12,11 +11,10 @@ import { supportEmail } from "@/data/siteShell";
 // licensing, which do not exist. The owner-only facts (the notice date and the acknowledgement retention period)
 // were filled from the owner's decisions of 2026-11-05; scripts/check-site.mjs still fails a production build that
 // contains an unfilled <OwnerField>.
-// Keyed-beta preparation (2026-11-06, branch site/keyed-beta-prep): the "Beta access keys" section carries the wording
-// of record reviewed by C (R205; PRIVACY-KEYED-BETA-WORDING-PROPOSED.md, sha256 d4a2deea...), verbatim, its bold lead
-// as the section title. The owner has not approved it, so the section keeps an INTERNAL FIXTURE marker and
-// scripts/check-site.mjs fails a production build until the owner's approval removes it. Like the rest of this
-// notice, it says nothing about licensing.
+// Keyed beta (branch site/keyed-beta-prep): the "Beta access keys" section carries the public wording the owner
+// APPROVED by hash on 2026-11-06 (PRIVACY-KEYED-BETA-WORDING-PROPOSED.md, sha256 8f8a6226...; C R205/R221),
+// verbatim, its bold lead as the section title. Only the public paragraph is published, never the approval
+// file's internal notes. Like the rest of this notice, it says nothing about licensing.
 export const metadata: Metadata = {
   title: "Privacy notice",
   description:
@@ -168,17 +166,12 @@ export default function PrivacyPage() {
 
         <Section id="beta-keys" title="Beta access keys">
           <p>
-            <Fixture>
-              wording of record for the keyed beta, reviewed by C (R205) but not yet approved by the owner; remove this
-              marker only on the owner&rsquo;s approval
-            </Fixture>
-          </p>
-          <p>
             If you take part in a keyed beta build, LynxDock emails your personal access key to you; a
-            community&rsquo;s administrator never receives or relays it. LynxDock keeps an issuance record linking that
-            key&rsquo;s ID to your email address — nothing else — together with the emails about your key, while your
-            participation is active and afterwards for up to one year: each record carries your participation end date,
-            and records are deleted at the monthly review in the eleventh month after that date, so no link is kept past
+            community&rsquo;s administrator never receives or relays it. LynxDock keeps an issuance record for your
+            key — your email address, the only contact detail in it, alongside the key&rsquo;s ID and other key and
+            retention metadata — together with the emails about your key, while your participation is active and
+            afterwards for up to one year: when your participation ends, the end date is recorded on the record, and
+            records are deleted at the monthly review in the eleventh month after that date, so no link is kept past
             the stated year. The key stored on your device carries no name, email address or device identifier, and key
             checks happen only on your device; nothing is verified online and no key information is sent. Replacement
             keys come the same way: write to{" "}

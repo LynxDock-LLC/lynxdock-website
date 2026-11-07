@@ -4,11 +4,11 @@
 // of 2026-11-06):
 // - licence version 1.0 and the participation requirements stay byte for byte as approved on 2026-11-05, at their
 //   published addresses (O1: keys never ship under version 1.0; O2: a published URL keeps serving its version);
-// - version 1.1, for the keyed builds (K8b), has its own address and file, and that file is an INTERNAL FIXTURE with
-//   no licence terms until the reviewed text replaces it; a fixture can never pass a production build;
+// - version 1.1, for the keyed builds (K8b), has its own address and file, and that file is the text the owner
+//   APPROVED by hash on 2026-11-06 (sha256 13a83f87...); a fixture can never pass a production build;
 // - the tester hub's access-key instructions say what the design says, and nothing reads as activation or a sale;
-// - the privacy notice gets a key-records section that is a fixture until the reviewed wording arrives, and still
-//   says nothing about licensing.
+// - the privacy notice's key-records section is the public wording the owner APPROVED by hash on 2026-11-06
+//   (sha256 8f8a6226...), verbatim, with no fixture marker, and still says nothing about licensing.
 // SCOPE: it reads source files and the published legal files as text. scripts/check-site.mjs checks the built out/.
 
 import { test } from "node:test";
@@ -25,9 +25,9 @@ const sha256 = (...p) => createHash("sha256").update(readFileSync(join(root, ...
 const ws = (s) => s.replace(/\s+/g, " ");
 const noComments = (s) => s.replace(/^\s*\/\/.*$/gm, "").replace(/\{\/\*[\s\S]*?\*\/\}/g, "").replace(/\/\*\*[\s\S]*?\*\//g, "");
 
-// The /privacy/ key disclosure, wording of record (C R205, 2026-11-06), without its bold lead, which is the section title.
+// The /privacy/ key disclosure as APPROVED (owner, by hash 8f8a6226..., 2026-11-06), without its bold lead (the section title).
 const PRIVACY_KEYS_WORDING =
-  "If you take part in a keyed beta build, LynxDock emails your personal access key to you; a community's administrator never receives or relays it. LynxDock keeps an issuance record linking that key's ID to your email address — nothing else — together with the emails about your key, while your participation is active and afterwards for up to one year: each record carries your participation end date, and records are deleted at the monthly review in the eleventh month after that date, so no link is kept past the stated year. The key stored on your device carries no name, email address or device identifier, and key checks happen only on your device; nothing is verified online and no key information is sent. Replacement keys come the same way: write to admin@lynxdock.app, and the replaced key stops being accepted by builds released afterwards — nothing changes on an installed copy.";
+  "If you take part in a keyed beta build, LynxDock emails your personal access key to you; a community's administrator never receives or relays it. LynxDock keeps an issuance record for your key — your email address, the only contact detail in it, alongside the key's ID and other key and retention metadata — together with the emails about your key, while your participation is active and afterwards for up to one year: when your participation ends, the end date is recorded on the record, and records are deleted at the monthly review in the eleventh month after that date, so no link is kept past the stated year. The key stored on your device carries no name, email address or device identifier, and key checks happen only on your device; nothing is verified online and no key information is sent. Replacement keys come the same way: write to admin@lynxdock.app, and the replaced key stops being accepted by builds released afterwards — nothing changes on an installed copy.";
 const status = read("src", "data", "siteStatus.ts");
 const hub = read("src", "app", "beta", "page.tsx");
 const hubText = ws(hub);
@@ -56,7 +56,9 @@ test("licence version 1.1 has its own address and its own file", () => {
   assert.ok(!/\/beta\/licence/.test(read("src", "app", "sitemap.ts")), "neither licence page is in the sitemap");
 });
 
-test("the version 1.1 file is an internal fixture until the reviewed text replaces it, and no fixture reaches production", () => {
+test("the version 1.1 file is the owner-approved text, byte for byte, and no fixture reaches production", () => {
+  // Approved by the owner by hash, effective 2026-11-06 (legal record APPROVAL-RECORD-2026-11-06-LICENCE-1.1.md).
+  assert.equal(sha256("public", "legal", "LYNXDOCK-BETA-EVAL-1.1.txt"), "13a83f87ba3317999cf30064eca782de02e60b0e5f89af4aa1e853cc27410759");
   const text = read("public", "legal", "LYNXDOCK-BETA-EVAL-1.1.txt");
   if (text.includes("INTERNAL FIXTURE")) {
     assert.equal(text.split("\n")[0], "INTERNAL FIXTURE - NOT A LICENCE - DO NOT PUBLISH", "the fixture says what it is on its first line");
@@ -80,10 +82,11 @@ test("the hub's access-key instructions follow ADR-0029", () => {
   assert.match(hub, /\["#keys", "Access keys"\]/, "the hub's page menu links it");
   assert.match(status, /keyPrefix: "LDBETA1-",/, "the key prefix matches the betakey crate");
   for (const phrase of [
-    // K9a+c: directly from the owner only, in the owner's key email; never from operators or with an invitation.
+    // K9a+c + S2 (owner, 2026-11-07T06:30:10Z): directly from LynxDock, in the owner's key email; administrators get
+    // their own key like everyone else and never relay anyone's; never with an invitation.
     "Your key comes only in the owner&rsquo;s key email",
     "LynxDock&rsquo;s owner emails each participant their own key, personally.",
-    "Keys never come from a community&rsquo;s administrator, and never with a community invitation: administrators don&rsquo;t hold or pass on keys.",
+    "Keys never come from a community&rsquo;s administrator, and never with a community invitation: an administrator gets their own key from LynxDock like everyone else, and never receives or passes on yours.",
     // K2a: per participant, Host operators included.
     "Everyone who runs a keyed build needs their own key, including people who run LynxDock Host.",
     // K1a: entry at first start, after the licence; the stored key and the build's denylist at every start.
@@ -112,19 +115,22 @@ test("nothing calls the beta access key activation, a purchase or an entitlement
   assert.ok(!/activat|purchas|entitle|licensed\b|\bsold\b|\bpaid\b/i.test(section), "no activation or sale wording in the keys section");
   // Keyed builds may carry the same 0.3.0 version as unkeyed ones, so no version number tells them apart.
   assert.ok(!/0\.3\.0/.test(section), "the keys section names no 0.3.0 build");
-  assert.ok(!/0\.3\.0/.test(read("src", "app", "beta", "licence", "v1.1", "page.tsx")), "neither does the version 1.1 page");
+  // Version 1.1's own page states its approved section 1 scope: the keyed 0.3.0 builds that ship with it (C R224 R2).
+  assert.ok(
+    ws(read("src", "app", "beta", "licence", "v1.1", "page.tsx")).includes("covers the keyed LynxDock 0.3.0 beta builds that ship with it"),
+    "the version 1.1 page ties the licence to the builds that ship with it",
+  );
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /a sentence about the beta access key reads as activation or a sale/, "check-site guards every built page");
 });
 
-test("privacy: the key disclosure is the wording of record, still marked until the owner approves it, and nothing about licensing", () => {
+test("privacy: the key disclosure is the owner-approved wording, unmarked, and nothing about licensing", () => {
   const privacy = read("src", "app", "privacy", "page.tsx");
   const section = privacy.slice(privacy.indexOf('<Section id="beta-keys"'), privacy.indexOf('<Section id="email"'));
   assert.ok(privacy.indexOf('<Section id="forms"') < privacy.indexOf('<Section id="beta-keys"'), "the section sits after the forms section");
   assert.ok(section.includes('title="Beta access keys"'), "the section exists, before the email section");
-  // C R205 GO (2026-11-06) on the wording of record (PRIVACY-KEYED-BETA-WORDING-PROPOSED.md, sha256 d4a2deea...); the
-  // owner has not approved it yet, so the section keeps a fixture marker and a production build fails until it goes.
-  assert.equal((section.match(/<Fixture>/g) ?? []).length, 1, "the section keeps its fixture marker until the owner approves");
+  // The owner approved the wording by hash on 2026-11-06 (sha256 8f8a6226...): the fixture marker is gone.
+  assert.equal((section.match(/<Fixture>/g) ?? []).length, 0, "the approved section carries no fixture marker");
   const rendered = section
     .replace(/<Fixture>[\s\S]*?<\/Fixture>/g, " ")
     .replace(/<[^>]+>/g, " ")
@@ -136,7 +142,7 @@ test("privacy: the key disclosure is the wording of record, still marked until t
   assert.ok(rendered.includes(PRIVACY_KEYS_WORDING), "the paragraph is the wording of record, verbatim");
   const summary = privacy.slice(privacy.indexOf('aria-labelledby="summary-title"'), privacy.indexOf('<Section id="who"'));
   assert.ok(summary.length > 100 && !summary.includes("<Fixture>"), "the summary list has no fixture: the wording of record adds no line there");
-  assert.match(privacy, /import Fixture from "@\/components\/site\/Fixture";/);
+  assert.ok(!/Fixture/.test(privacy), "the privacy notice has no fixture left at all");
   assert.ok(!/licen[cs]/i.test(noComments(privacy)), "the privacy notice says nothing about licensing");
   assert.ok(
     ws(privacy).includes("Apart from the in-app record and the beta access key records described above, this notice covers the website only."),
