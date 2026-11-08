@@ -89,6 +89,10 @@ test("the hub's access-key instructions follow ADR-0029", () => {
     "Keys never come from a community&rsquo;s administrator, and never with a community invitation: an administrator gets their own key from LynxDock like everyone else, and never receives or passes on yours.",
     // K2a: per participant, Host operators included.
     "Everyone who runs a keyed build needs their own key, including people who run LynxDock Host.",
+    // Direct invitees ask for their own key: the exact sentence the owner approved (2026-11-08T01:54:25Z), around the
+    // supportEmail link (asserted below to be admin@lynxdock.app).
+    "members a community invites directly. If a community invites you directly, write to{\" \"}",
+    "yourself, from the email address you want your key sent to, and ask for a beta access key. Your key is for you alone",
     // K1a: entry at first start, after the licence; the stored key and the build's denylist at every start.
     "The first time a keyed app or Host starts, it shows the beta licence. Accept it first.",
     "It then asks for your key.",
@@ -106,6 +110,8 @@ test("the hub's access-key instructions follow ADR-0029", () => {
   ]) {
     assert.ok(hubText.includes(phrase), `the hub says: ${phrase}`);
   }
+  assert.match(read("src", "data", "siteShell.ts"), /export const supportEmail = "admin@lynxdock\.app";/, "invitees write to admin@");
+  assert.ok(!hub.includes("how a directly invited member asks the owner for a key"), "the invitee [OWNER] field is filled");
   assert.match(hub, /<EnquiryForm kind="acknowledgement" \/>/, "the 0.2.6 acknowledgement form is unchanged");
 });
 

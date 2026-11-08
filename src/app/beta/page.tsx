@@ -388,7 +388,11 @@ export default function BetaPage() {
               <p className="small mt-2">
                 Everyone who runs a keyed build needs their own key, including people who run LynxDock Host. The owner
                 sends keys to people who requested beta access on this site and to members a community invites
-                directly: <OwnerField>how a directly invited member asks the owner for a key</OwnerField>. Your key is
+                directly. If a community invites you directly, write to{" "}
+                <a href={`mailto:${supportEmail}`} className="text-link">
+                  {supportEmail}
+                </a>{" "}
+                yourself, from the email address you want your key sent to, and ask for a beta access key. Your key is
                 for you alone, so don&rsquo;t share it.
               </p>
               <p className="small mt-2">

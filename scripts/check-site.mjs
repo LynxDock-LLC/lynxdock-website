@@ -358,6 +358,8 @@ if (builtAsPreview) {
     "Your key comes only in the owner's key email",
     "Keys never come from a community's administrator, and never with a community invitation",
     "Builds released before them need no key",
+    // The owner-approved sentence for direct invitees (2026-11-08), exactly as rendered.
+    "If a community invites you directly, write to admin@lynxdock.app yourself, from the email address you want your key sent to, and ask for a beta access key.",
   ]) {
     if (!text.includes(must)) fail("/beta/", `the beta access keys section does not say: ${must}`);
   }
