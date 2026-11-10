@@ -30,7 +30,11 @@ export default function ReleasesPage() {
       ? {
           date: s.currentRelease.date,
           name: `LynxDock ${s.currentRelease.version}`,
-          detail: `${s.currentRelease.reason ? `${s.currentRelease.reason} ` : ""}Signed app and Host installers, the V8 generation (source ${s.currentRelease.sourceCommit.slice(0, 7)}).`,
+          detail: `${s.currentRelease.reason ? `${s.currentRelease.reason} ` : ""}Signed app and Host installers, the V8 generation (source ${s.currentRelease.sourceCommit.slice(0, 7)}).${
+            s.replacedBuild
+              ? ` A first ${s.replacedBuild.version} build (source ${s.replacedBuild.sourceCommit.slice(0, 7)}) was published on ${fmtDate(s.replacedBuild.date)} and replaced ${s.replacedBuild.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which corrects the app’s self-reported version; its files remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
+              : ""
+          }`,
           standing: "Published · the current beta, on the tester hub",
         }
       : {

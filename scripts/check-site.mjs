@@ -169,6 +169,14 @@ if (prev.state !== "complete") {
   for (const p of prev.problems.length ? prev.problems : ["not a complete, signed manifest"]) fail(`public/${PREVIOUS_FILE}`, p);
 }
 const currentIsNew = slot.state === "complete";
+// The first 0.3.1 build (source d840ce1), frozen in public/beta-0.3.1-d840ce1.json. Once a corrected 0.3.1 build with
+// another source commit is in the slot, the first build is listed for identification only: its four SHA-256 values on
+// /beta/, a note on /releases/, and no link to it anywhere (its URLs are not in currentLinks).
+const FIRST_031 = join(process.cwd(), "public", "beta-0.3.1-d840ce1.json");
+const first031Manifest = JSON.parse(readFileSync(FIRST_031, "utf8"));
+const first031 = classifyManifest(first031Manifest, CURRENT_VERSION);
+if (first031.state !== "complete") fail("public/beta-0.3.1-d840ce1.json", "the frozen first 0.3.1 build is not a complete, signed 0.3.1 manifest");
+const replaced031 = currentIsNew && first031.state === "complete" && slot.sourceCommit !== first031.sourceCommit;
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
@@ -220,6 +228,14 @@ for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
   }
   if (currentIsNew && ["/beta/", "/releases/"].includes(route) && !text.includes(REASON_031)) {
     fail(route, `does not say why ${CURRENT_VERSION} replaces ${PREVIOUS_VERSION}`);
+  }
+  if (replaced031 && route === "/releases/" && !text.includes(`A first ${CURRENT_VERSION} build (source ${first031.sourceCommit.slice(0, 7)}) was published on`)) {
+    fail(route, `does not note the replaced first ${CURRENT_VERSION} build`);
+  }
+  if (replaced031 && route === "/beta/") {
+    for (const a of first031Manifest.artifacts) {
+      if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced first build's ${a.filename} hash`);
+    }
   }
 }
 

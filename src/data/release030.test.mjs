@@ -258,6 +258,26 @@ test("licence version 1.2 is published byte for byte at its own address (C R250)
   assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.1.txt"), "13a83f87ba3317999cf30064eca782de02e60b0e5f89af4aa1e853cc27410759");
 });
 
+test("a corrected 0.3.1 build replaces the first one: hashes kept for identification, no links", () => {
+  // Coordinator, 2026-11-10: the first 0.3.1 build's app reported its version as 0.3.0; a corrected 0.3.1 build follows.
+  const text = read("public", "beta-0.3.1-d840ce1.json");
+  assert.equal(createHash("sha256").update(lf(text)).digest("hex").slice(0, 16), "ec311d74db2c98bf", "the frozen first build is the published manifest");
+  const r = classifyManifest(JSON.parse(text));
+  assert.equal(r.state, "complete");
+  assert.equal(r.sourceCommit, "d840ce1c20f9e76be5124a4e534255b9fcc4a44e");
+  const status = read("src", "data", "siteStatus.ts");
+  assert.match(status, /release031\.sourceCommit !== release031First\.sourceCommit/, "only a different source commit counts as a replacement");
+  assert.match(ws(status), /including the SQLite fix and version \$\{betaLicenceKeyed12\.version\} of the beta licence\.`, false, \)/, "no download links for the first build");
+  const hub = ws(read("src", "app", "beta", "page.tsx"));
+  assert.ok(hub.includes('id="release-0-3-1-first-build"'));
+  assert.ok(hub.includes("which corrects the app&rsquo;s self-reported version. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  const releases = ws(read("src", "app", "releases", "page.tsx"));
+  assert.ok(releases.includes("by this build, which corrects the app’s self-reported version; its files remain at their original addresses, and their SHA-256 values are in the tester hub’s archive."));
+  const check = read("scripts", "check-site.mjs");
+  assert.match(check, /does not note the replaced first \$\{CURRENT_VERSION\} build/);
+  assert.match(check, /does not list the replaced first build's \$\{a\.filename\} hash/);
+});
+
 test("the check-site rules use the same classifier", () => {
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /import \{ classifyManifest, CURRENT_VERSION, PREVIOUS_VERSION, PREVIOUS_FILE \} from "\.\.\/src\/data\/currentRelease\.mjs";/);

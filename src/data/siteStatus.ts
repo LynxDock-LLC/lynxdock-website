@@ -13,6 +13,7 @@
 import release026, { type ReleaseDownload } from "./release026";
 import release030 from "./release030";
 import release031 from "./release031";
+import release031First from "./release031first";
 import { SIGNING_PUBLISHER } from "./betaSigning.mjs";
 import type { Round } from "./releaseRound";
 
@@ -266,6 +267,21 @@ export const release031Record: ReleaseRecord | null = release031.published
     )
   : null;
 
+/**
+ * The first 0.3.1 build (source d840ce1), once a corrected 0.3.1 build with another source commit is in the slot; null
+ * while the slot still holds the first build. Its desktop app reported its own version as 0.3.0; the corrected build
+ * fixes that. Listed for identification only: its hashes, no download links (release031first.ts).
+ */
+export const replacedBuild031: ReleaseRecord | null =
+  release031.published && release031First.published && release031.sourceCommit !== release031First.sourceCommit
+    ? roundRecord(
+        release031First,
+        betaLicenceKeyed12,
+        `The first 0.3.1 build. Its app reported its own version as 0.3.0 (in its About panel and to the server); everything else matches the current 0.3.1 build, including the SQLite fix and version ${betaLicenceKeyed12.version} of the beta licence.`,
+        false,
+      )
+    : null;
+
 /** The current release: 0.3.1 once it is in, otherwise 0.3.0. */
 export const currentReleaseRecord: ReleaseRecord | null = release031Record ?? release030Record;
 /** 0.3.0 once 0.3.1 has replaced it (identification only, no download links); null until then. */
@@ -361,6 +377,8 @@ export const siteStatus = {
   currentRelease: currentReleaseRecord,
   /** LynxDock 0.3.0 once 0.3.1 has replaced it; null until then. */
   supersededRelease,
+  /** The first 0.3.1 build once a corrected 0.3.1 build has replaced it; null until then. */
+  replacedBuild: replacedBuild031,
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,

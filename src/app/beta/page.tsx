@@ -615,6 +615,27 @@ export default function BetaPage() {
             so ask the person running your server if you need one of their files.
           </p>
           <div className="mt-6 border-b border-line">
+            {s.replacedBuild ? (
+              <ArchiveEntry
+                id="release-0-3-1-first-build"
+                date={s.replacedBuild.date}
+                title={`LynxDock ${s.replacedBuild.version}, first build (source ${s.replacedBuild.sourceCommit.slice(0, 7)})`}
+                standing={`Replaced by the current ${s.currentRelease?.version} build · identification only`}
+                round="superseded"
+                version={s.replacedBuild.version}
+              >
+                <p className="body max-w-3xl">
+                  {s.replacedBuild.summary} Published here on {fmtDate(s.replacedBuild.date)} and replaced{" "}
+                  {s.replacedBuild.date === s.currentRelease?.date
+                    ? "the same day"
+                    : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
+                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}), which corrects the app&rsquo;s
+                  self-reported version. Its files remain at their original addresses; their SHA-256 values are listed here
+                  so you can tell which build you have.
+                </p>
+                <ReleaseArtifacts r={s.replacedBuild} caption={`LynxDock ${s.replacedBuild.version} first build installers`} />
+              </ArchiveEntry>
+            ) : null}
             {s.supersededRelease ? (
               <ArchiveEntry
                 id="release-0-3-0"
