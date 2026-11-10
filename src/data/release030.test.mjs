@@ -181,6 +181,14 @@ test("every page switches on currentRelease: 0.3.0 until 0.3.1 is in, then 0.3.1
   // The superseded 0.3.0 entry: hashes, no links, the reason.
   assert.ok(hub.includes('id="release-0-3-0"') && hub.includes("Superseded by ${s.currentRelease?.version} · identification only"));
   assert.ok(hub.includes("Its installers are no longer offered for download; their SHA-256 values stay here so an install can be identified."));
+  // C R252 N1, owner choice (b): the 0.2.6 entry discloses the affected SQLite once 0.3.1 carries the fix; its links stay.
+  assert.ok(
+    hub.includes(
+      "0.2.6 bundles the SQLite version affected by RUSTSEC-2026-0459 (CVE-2026-119375) in both the app and LynxDock Host; the exposure is local and low (a crafted database and sibling -wal file in the data folder), and ${s.currentRelease?.version} carries the fix. Move to ${s.currentRelease?.version} as soon as your community’s server has.",
+    ),
+    "the 0.2.6 entry discloses the affected SQLite in the 0.3.1 state",
+  );
+  assert.ok(!/CVSS/.test(hub), "no CVSS number on the site");
 });
 
 test("the roadmap says what 0.3.0 includes, and when it applies, before and after 0.3.1", () => {

@@ -643,6 +643,11 @@ export default function BetaPage() {
             >
               <p className="body max-w-3xl">
                 {r026.summary} Published here on {fmtDate(r026.date)}.
+                {/* C R252 N1, owner choice (b) via the coordinator, 2026-11-10: disclosed once 0.3.1 carries the fix; the
+                    links stay. Facts as the 0.3.1 release notes state them; no severity score on the site. */}
+                {s.supersededRelease
+                  ? ` 0.2.6 bundles the SQLite version affected by RUSTSEC-2026-0459 (CVE-2026-119375) in both the app and LynxDock Host; the exposure is local and low (a crafted database and sibling -wal file in the data folder), and ${s.currentRelease?.version} carries the fix. Move to ${s.currentRelease?.version} as soon as your community’s server has.`
+                  : null}
               </p>
               {/* Unchanged from this release's original card: what its qualification did and did not cover. */}
               <p className="card-notice small max-w-3xl">
