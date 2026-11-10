@@ -44,7 +44,9 @@ export default function BetaLicenceV12Page() {
             <Link href="/beta/#keys" className="text-link">
               beta access key
             </Link>
-            . Version {betaLicenceKeyed.version} ({betaLicenceKeyed.id}), for the keyed 0.3.0 builds, and version 1.0 (
+            . Its terms are those of version 1.1. Only its scope changed, from the keyed 0.3.0 builds to the keyed 0.3.1
+            builds, and its references to beta communities and participants (sections 12, 13 and 17) now say 0.3.0 or
+            0.3.1. Version {betaLicenceKeyed.version} ({betaLicenceKeyed.id}), for the keyed 0.3.0 builds, and version 1.0 (
             {betaLicence.id}) stay published unchanged at their own addresses:{" "}
             <Link href={betaLicenceKeyed.textUrl} className="text-link">
               version {betaLicenceKeyed.version}

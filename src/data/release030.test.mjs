@@ -238,6 +238,13 @@ test("licence version 1.2 is published byte for byte at its own address (C R250)
   assert.match(page, /const FILE = betaLicenceKeyed12\.file;/);
   assert.match(page, /Licence ID: \$\{betaLicenceKeyed12\.id\}/, "the build fails if the file's licence ID is not 1.2");
   assert.match(page, /robots: \{ index: false, follow: false \}/);
+  // C R252 P1: the page says what changed from version 1.1, since 0.3.0 users are asked to accept again.
+  assert.ok(
+    ws(page).includes(
+      "Its terms are those of version 1.1. Only its scope changed, from the keyed 0.3.0 builds to the keyed 0.3.1 builds, and its references to beta communities and participants (sections 12, 13 and 17) now say 0.3.0 or 0.3.1.",
+    ),
+    "the v1.2 page says what changed from v1.1",
+  );
   // 1.0 and 1.1 stay as approved.
   assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.0.txt"), "ca695383376fdcc33255a9eb4ec312cc7d1398cb7e1251236c8db71e44f7d313");
   assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.1.txt"), "13a83f87ba3317999cf30064eca782de02e60b0e5f89af4aa1e853cc27410759");
