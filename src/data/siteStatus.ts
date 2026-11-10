@@ -209,7 +209,10 @@ export const releaseNow = release030Record
   ? {
       published: true,
       heading: `LynxDock ${release030Record.version}`,
-      statement: `LynxDock ${release030Record.version} is the current beta.`,
+      // Owner, 2026-11-10: the outstanding in-app voice-media test stays explicit in every release claim. Proven in
+      // qualification: voice signalling over the server's TLS proxy and TURN over TLS, on the signed bytes. Not proven:
+      // an in-app voice call with real listeners over that secure remote connection (coordinator's wording).
+      statement: `LynxDock ${release030Record.version} is the current beta. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding.`,
     }
   : { published: false, heading: nextRelease.heading, statement: nextRelease.statement };
 

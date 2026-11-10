@@ -200,7 +200,8 @@ for (const route of ["/beta/", "/products/lynxdock/", "/docs/getting-started/", 
 // until the slot holds the complete, signed 0.3.0 manifest; then "LynxDock 0.3.0 is the current beta." and the
 // next-release statement nowhere.
 const STATEMENT = "The next tester release is in qualification and is not yet available for distribution.";
-const CURRENT_STATEMENT = `LynxDock ${CURRENT_VERSION} is the current beta.`;
+// Owner, 2026-11-10: the outstanding in-app voice-media test stays explicit in every release claim.
+const CURRENT_STATEMENT = `LynxDock ${CURRENT_VERSION} is the current beta. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding.`;
 for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
   const text = (pages.get(route) || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ");
   if (!text.includes(published ? CURRENT_STATEMENT : STATEMENT)) fail(route, "the current-state statement is missing or reworded");

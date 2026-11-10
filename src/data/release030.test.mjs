@@ -134,7 +134,10 @@ test("every page switches on currentRelease, and the copy says what the keyed 0.
   const blocks = read("src", "components", "site", "ReleaseBlocks.tsx");
   const hub = lf(read("src", "app", "beta", "page.tsx")).replace(/\s+/g, " ");
   assert.match(status, /export const release030Record: ReleaseRecord \| null = release030\.published/);
-  assert.match(status, /statement: `LynxDock \$\{release030Record\.version\} is the current beta\.`/);
+  assert.match(
+    status,
+    /statement: `LynxDock \$\{release030Record\.version\} is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`/,
+  );
   assert.match(status, /: \{ published: false, heading: nextRelease\.heading, statement: nextRelease\.statement \}/);
   assert.match(status, /ship version \$\{betaLicenceKeyed\.version\} of the beta licence and ask for your beta access key/);
   for (const page of ["page.tsx", join("releases", "page.tsx")]) {
@@ -172,6 +175,21 @@ test("privacy names the release that asks for the 18+ declaration (C R247 P1)", 
     "the 18+ sentence names 0.3.0",
   );
   assert.ok(!/after 0\.2\.6 ask/.test(privacy), "the ambiguous wording is gone");
+});
+
+test("every release claim keeps the outstanding in-app voice test explicit (owner, 2026-11-10)", () => {
+  const voice = "its in-app voice test with real listeners over a secure remote connection is still outstanding";
+  for (const page of ["page.tsx", join("download", "page.tsx")]) {
+    assert.ok(read("src", "app", page).includes(`its installers are on the tester hub; ${voice}`), `${page}: the current-release line`);
+  }
+  const releases = lf(read("src", "app", "releases", "page.tsx")).replace(/\s+/g, " ");
+  assert.ok(
+    releases.includes(
+      "was published with step 3&rsquo;s hands-on voice test still outstanding for its new secure remote connection: voice signalling and TURN over TLS were verified in qualification, an in-app voice call with real listeners over that connection was not.",
+    ),
+    "/releases says which step is outstanding",
+  );
+  assert.match(read("scripts", "check-site.mjs"), /is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`;/);
 });
 
 test("the check-site rules use the same classifier", () => {

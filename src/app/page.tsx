@@ -258,7 +258,7 @@ export default function HomePage() {
                 <dt>{s.currentRelease ? "Current tester release" : "Next approved tester release"}</dt>
                 <dd>
                   {s.currentRelease
-                    ? `LynxDock ${s.currentRelease.version}, signed; its installers are on the tester hub`
+                    ? `LynxDock ${s.currentRelease.version}, signed; its installers are on the tester hub; its in-app voice test with real listeners over a secure remote connection is still outstanding`
                     : "In qualification; not yet available for distribution"}
                 </dd>
               </div>

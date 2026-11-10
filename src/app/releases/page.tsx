@@ -177,6 +177,13 @@ export default function ReleasesPage() {
               page updated.
             </li>
           </ol>
+          {s.currentRelease ? (
+            <p className="body mt-5">
+              LynxDock {s.currentRelease.version} was published with step 3&rsquo;s hands-on voice test still outstanding
+              for its new secure remote connection: voice signalling and TURN over TLS were verified in qualification, an
+              in-app voice call with real listeners over that connection was not.
+            </p>
+          ) : null}
         </div>
       </section>
     </>
