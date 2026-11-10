@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 
 const CLOUDFLARE_POLICY = "https://www.cloudflare.com/privacypolicy/";
 const FORMSPREE_POLICY = "https://formspree.io/legal/privacy-policy/";
+const RESEND_POLICY = "https://resend.com/legal/privacy-policy";
 const CLOUDFLARE_WEB_ANALYTICS_FAQ = "https://developers.cloudflare.com/web-analytics/faq/";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
@@ -54,7 +55,7 @@ export default function PrivacyPage() {
         intro={
           <p>
             {/* The notice date is the publication date (runbook step 1): set it to the actual deploy date at go. */}
-            How this website, lynxdock.app, handles information. Last updated 5 November 2026.
+            How this website, lynxdock.app, handles information. Last updated 9 November 2026.
           </p>
         }
       />
@@ -189,6 +190,12 @@ export default function PrivacyPage() {
             a lynxdock.app address is received by Cloudflare Email Routing: the domain&rsquo;s mail (MX) records point
             there. {supportEmail}, the only address this site gives, is forwarded to a monitored mailbox at Google
             (Gmail), where it is kept as long as needed to deal with it, then deleted.
+          </p>
+          <p>
+            Beta access keys are emailed from {supportEmail} through Resend, an email delivery service, which sends
+            them using Amazon Web Services in the United States. To deliver a key email, Resend processes the
+            recipient&rsquo;s email address and the message, and keeps delivery records as its{" "}
+            <External href={RESEND_POLICY}>privacy policy</External> describes.
           </p>
         </Section>
 

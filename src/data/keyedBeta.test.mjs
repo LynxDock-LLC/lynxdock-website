@@ -156,3 +156,14 @@ test("privacy: the key disclosure is the owner-approved wording, unmarked, and n
   );
   assert.match(read("scripts", "check-site.mjs"), /the beta access keys disclosure is missing or reworded/, "check-site pins the built text too");
 });
+
+test("the key email's sender is the confirmed address, and privacy names the service that sends it", () => {
+  // Owner choice (a): key emails go out as admin@lynxdock.app through Resend (Gmail "Send mail as" via smtp.resend.com).
+  const privacy = read("src", "app", "privacy", "page.tsx");
+  assert.ok(hub.includes('The owner&rsquo;s key email comes from <span className="strong">{supportEmail}</span>.'), "the hub names the sender");
+  assert.ok(!/key email is sent from<\/OwnerField>/.test(hub), "no sender placeholder remains");
+  const email = privacy.slice(privacy.indexOf('<Section id="email"'), privacy.indexOf('<Section id="not-used"'));
+  assert.ok(ws(email).includes("Beta access keys are emailed from {supportEmail} through Resend, an email delivery service"), "privacy names Resend");
+  assert.ok(ws(email).includes("using Amazon Web Services in the United States"), "and the infrastructure it sends through");
+  assert.match(privacy, /const RESEND_POLICY = "https:\/\/resend\.com\/legal\/privacy-policy";/);
+});
