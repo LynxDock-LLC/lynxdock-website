@@ -277,7 +277,7 @@ export const replacedBuild031: ReleaseRecord | null =
     ? roundRecord(
         release031First,
         betaLicenceKeyed12,
-        `The first 0.3.1 build. Its app reported its own version as 0.3.0 (in its About panel and to the server); everything else matches the current 0.3.1 build, including the SQLite fix and version ${betaLicenceKeyed12.version} of the beta licence.`,
+        "The first 0.3.1 build. Its app reported its own version as 0.3.0 (in its About panel and to the server).",
         false,
       )
     : null;

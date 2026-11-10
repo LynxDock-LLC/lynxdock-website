@@ -177,6 +177,7 @@ const first031Manifest = JSON.parse(readFileSync(FIRST_031, "utf8"));
 const first031 = classifyManifest(first031Manifest, CURRENT_VERSION);
 if (first031.state !== "complete") fail("public/beta-0.3.1-d840ce1.json", "the frozen first 0.3.1 build is not a complete, signed 0.3.1 manifest");
 const replaced031 = currentIsNew && first031.state === "complete" && slot.sourceCommit !== first031.sourceCommit;
+const FIRST_031_CHANGE = "Desktop version constant corrected; installers rebuilt and re-signed.";
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
@@ -236,6 +237,11 @@ for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
     for (const a of first031Manifest.artifacts) {
       if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced first build's ${a.filename} hash`);
     }
+    // The owner's wording for what changed (2026-11-10), exactly; nothing that could suggest the bytes are identical.
+    if (!text.includes(FIRST_031_CHANGE)) fail(route, "does not give the owner's wording for what changed in the replaced first build");
+  }
+  if (replaced031 && ["/beta/", "/releases/"].includes(route) && /everything else (matches|is identical|identical)/i.test(text)) {
+    fail(route, "says the replaced first build is otherwise identical or matching");
   }
 }
 

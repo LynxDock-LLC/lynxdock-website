@@ -629,9 +629,9 @@ export default function BetaPage() {
                   {s.replacedBuild.date === s.currentRelease?.date
                     ? "the same day"
                     : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
-                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}), which corrects the app&rsquo;s
-                  self-reported version (the LynxDock Host files were rebuilt and re-signed without change). Its files remain
-                  at their original addresses; their SHA-256 values are listed here so you can tell which build you have.
+                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Desktop version constant
+                  corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256
+                  values are listed here so you can tell which build you have.
                 </p>
                 <ReleaseArtifacts r={s.replacedBuild} caption={`LynxDock ${s.replacedBuild.version} first build installers`} />
               </ArchiveEntry>

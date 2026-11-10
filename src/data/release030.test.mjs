@@ -267,16 +267,20 @@ test("a corrected 0.3.1 build replaces the first one: hashes kept for identifica
   assert.equal(r.sourceCommit, "d840ce1c20f9e76be5124a4e534255b9fcc4a44e");
   const status = read("src", "data", "siteStatus.ts");
   assert.match(status, /release031\.sourceCommit !== release031First\.sourceCommit/, "only a different source commit counts as a replacement");
-  assert.match(ws(status), /including the SQLite fix and version \$\{betaLicenceKeyed12\.version\} of the beta licence\.`, false, \)/, "no download links for the first build");
+  assert.match(ws(status), /Its app reported its own version as 0\.3\.0 \(in its About panel and to the server\)\.", false, \)/, "no download links for the first build");
   const hub = ws(read("src", "app", "beta", "page.tsx"));
   assert.ok(hub.includes('id="release-0-3-1-first-build"'));
-  // C R252 addendum 3 N1: the Host's hashes change too, without a functional change.
-  assert.ok(hub.includes("which corrects the app&rsquo;s self-reported version (the LynxDock Host files were rebuilt and re-signed without change). Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  // Owner wording (2026-11-10), exactly; it also covers C R252 addendum 3 N1 (the Host's hashes change too).
+  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Desktop version constant corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  // Owner: never "everything else identical" or "everything else matches" (it could imply identical bytes).
+  for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
   const releases = ws(read("src", "app", "releases", "page.tsx"));
   assert.ok(releases.includes("by this build, which corrects the app’s self-reported version; its files remain at their original addresses, and their SHA-256 values are in the tester hub’s archive."));
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /does not note the replaced first \$\{CURRENT_VERSION\} build/);
   assert.match(check, /does not list the replaced first build's \$\{a\.filename\} hash/);
+  assert.ok(check.includes('const FIRST_031_CHANGE = "Desktop version constant corrected; installers rebuilt and re-signed.";'));
+  assert.match(check, /says the replaced first build is otherwise identical or matching/);
 });
 
 test("the check-site rules use the same classifier", () => {
