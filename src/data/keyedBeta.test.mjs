@@ -156,3 +156,12 @@ test("privacy: the key disclosure is the owner-approved wording, unmarked, and n
   );
   assert.match(read("scripts", "check-site.mjs"), /the beta access keys disclosure is missing or reworded/, "check-site pins the built text too");
 });
+
+test("the key email's sender is not named before it is confirmed, and the page says so", () => {
+  // Fallback (p): no key email has been sent yet; the hub names the sender before the first one goes out.
+  const privacy = read("src", "app", "privacy", "page.tsx");
+  assert.ok(ws(hub).includes("Key emails have not started yet. Before the first one is sent, this page will name the address it comes from."), "the hub says the sender is still to be named");
+  assert.ok(!/key email is sent from<\/OwnerField>/.test(hub), "no sender placeholder remains");
+  assert.ok(!/@gmail\.com/i.test(hub), "the owner's personal address is not published");
+  assert.ok(!/Resend/.test(privacy), "no provider is named for key emails that are not being sent");
+});

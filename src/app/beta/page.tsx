@@ -379,8 +379,8 @@ export default function BetaPage() {
                 .
               </p>
               <p className="small mt-2">
-                The owner&rsquo;s key email comes from{" "}
-                <OwnerField>the address the owner&rsquo;s key email is sent from</OwnerField>.
+                Key emails have not started yet. Before the first one is sent, this page will name the address it
+                comes from.
               </p>
             </div>
             <div className="card">
