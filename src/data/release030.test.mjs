@@ -190,6 +190,13 @@ test("every release claim keeps the outstanding in-app voice test explicit (owne
     "/releases says which step is outstanding",
   );
   assert.match(read("scripts", "check-site.mjs"), /is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`;/);
+  // C R247 P1 (voice): the /releases page description, its search-result and og:description text, says it too.
+  assert.ok(
+    releases.includes(
+      "Where LynxDock releases stand: LynxDock ${siteStatus.currentRelease.version} is the current beta, with its in-app voice test over a secure remote connection still outstanding; earlier published beta rounds are listed by date.",
+    ),
+    "/releases metadata description",
+  );
 });
 
 test("the check-site rules use the same classifier", () => {

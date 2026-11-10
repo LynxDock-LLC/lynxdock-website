@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Release status",
   description:
     siteStatus.currentRelease
-      ? `Where LynxDock releases stand: LynxDock ${siteStatus.currentRelease.version} is the current beta, and earlier published beta rounds are listed by date.`
+      ? `Where LynxDock releases stand: LynxDock ${siteStatus.currentRelease.version} is the current beta, with its in-app voice test over a secure remote connection still outstanding; earlier published beta rounds are listed by date.`
       : "Where LynxDock releases stand: the next tester release is in qualification, and earlier published beta rounds are listed by date.",
 };
 
