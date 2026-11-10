@@ -106,7 +106,9 @@ test("the hub's access-key instructions follow ADR-0029", () => {
     // K6a: keys and invite codes coexist.
     "On a keyed build you need both.",
     // K7a and O1: earlier builds need no key; 0.2.6 members keep the acknowledgement unchanged.
-    "Builds released before them need no key and work as they do now: the beta builds used under version 1.0 of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements",
+    "Releases before them need no key and work as they do now: the older 0.2.6 app, whose members keep acknowledging the participation requirements",
+    // Coordinator, 2026-11-10: the 0.3.0 installers are the keyed configuration; nothing under 1.0 has been released.
+    "No build has been released under version 1.0 of the licence.",
   ]) {
     assert.ok(hubText.includes(phrase), `the hub says: ${phrase}`);
   }

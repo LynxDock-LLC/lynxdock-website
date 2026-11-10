@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
 import DemoCta from "@/components/site/DemoCta";
+import siteStatus from "@/data/siteStatus";
+
+// The release-state items follow siteStatus: the next tester release until the complete, signed 0.3.0 manifest is in
+// the slot (siteStatus.currentRelease), then LynxDock 0.3.0.
+const current = siteStatus.currentRelease;
 
 export const metadata: Metadata = {
   title: "Product direction",
@@ -13,26 +18,37 @@ const columns: { id: string; title: string; summary: string; items: { title: str
   {
     id: "now",
     title: "Now",
-    summary: "In qualification for the next tester release.",
-    items: [
-      {
-        title: "The next tester release",
-        text: "The next tester release is in qualification and is not yet available for distribution. It is the V8 generation (provisionally 0.3.0), and it is checked as one candidate before anything is offered to testers.",
-      },
-      {
-        title: "Cleaner voice behaviour in operations",
-        text: "Voice rooms closed when an operation ends, a renamed live voice channel keeping everyone connected, and bans or ended sessions cutting voice reliably. These are in qualification, not released.",
-      },
-    ],
+    summary: current ? "Released to invited testers." : "In qualification for the next tester release.",
+    items: current
+      ? [
+          {
+            title: `LynxDock ${current.version}`,
+            text: `${siteStatus.releaseNow.statement} It is the V8 generation, published to invited testers as signed Windows installers for the app and LynxDock Host.`,
+          },
+          {
+            title: "Cleaner voice behaviour in operations",
+            text: `Voice rooms closed when an operation ends, a renamed live voice channel keeping everyone connected, and bans or ended sessions cutting voice reliably. These are in LynxDock ${current.version}, and take effect once your community’s server runs ${current.version}.`,
+          },
+        ]
+      : [
+          {
+            title: "The next tester release",
+            text: "The next tester release is in qualification and is not yet available for distribution. It is the V8 generation (provisionally 0.3.0), and it is checked as one candidate before anything is offered to testers.",
+          },
+          {
+            title: "Cleaner voice behaviour in operations",
+            text: "Voice rooms closed when an operation ends, a renamed live voice channel keeping everyone connected, and bans or ended sessions cutting voice reliably. These are in qualification, not released.",
+          },
+        ],
   },
   {
     id: "next",
     title: "Next",
-    summary: "In development, after the next tester release.",
+    summary: current ? `In development, after LynxDock ${current.version}.` : "In development, after the next tester release.",
     items: [
       {
         title: "Background push-to-talk",
-        text: "Push-to-talk that works while another window has focus. It is separate development work and is not part of the next tester release.",
+        text: `Push-to-talk that works while another window has focus. It is separate development work and is not part of ${current ? `LynxDock ${current.version}` : "the next tester release"}.`,
       },
       {
         title: "Member experience work in V8",
