@@ -156,3 +156,10 @@ test("privacy: the key disclosure is the owner-approved wording, unmarked, and n
   );
   assert.match(read("scripts", "check-site.mjs"), /the beta access keys disclosure is missing or reworded/, "check-site pins the built text too");
 });
+
+test("the key email's sender is the confirmed account, without publishing its address", () => {
+  // Owner choice (b): key emails go out from the owner's own Gmail account, which the privacy notice already names.
+  assert.ok(ws(hub).includes("The owner&rsquo;s key email comes from the owner&rsquo;s own Gmail account: the mailbox that mail sent to {supportEmail} is forwarded to."), "the hub names the sender");
+  assert.ok(!/key email is sent from<\/OwnerField>/.test(hub), "no sender placeholder remains");
+  assert.ok(!/@gmail\.com/i.test(hub), "the owner's personal address is not published");
+});

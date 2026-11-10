@@ -379,8 +379,8 @@ export default function BetaPage() {
                 .
               </p>
               <p className="small mt-2">
-                The owner&rsquo;s key email comes from{" "}
-                <OwnerField>the address the owner&rsquo;s key email is sent from</OwnerField>.
+                The owner&rsquo;s key email comes from the owner&rsquo;s own Gmail account: the mailbox that mail sent
+                to {supportEmail} is forwarded to.
               </p>
             </div>
             <div className="card">

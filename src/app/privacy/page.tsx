@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         intro={
           <p>
             {/* The notice date is the publication date (runbook step 1): set it to the actual deploy date at go. */}
-            How this website, lynxdock.app, handles information. Last updated 5 November 2026.
+            How this website, lynxdock.app, handles information. Last updated 9 November 2026.
           </p>
         }
       />
