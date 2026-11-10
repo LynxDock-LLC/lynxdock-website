@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import siteStatus from "@/data/siteStatus";
+import siteStatus, { betaLicenceKeyed } from "@/data/siteStatus";
 
 export const metadata: Metadata = {
   title: "Quickstart",
@@ -42,6 +42,12 @@ export default function Quickstart() {
             Ask your administrator for the <strong>server address</strong>, an <strong>invite code</strong>, and which
             release the server runs, so you install the matching app.
           </li>
+          <li>
+            A keyed beta build (one that ships with version {betaLicenceKeyed.version} of the beta licence) also needs
+            your personal <strong>beta access key</strong>. LynxDock&rsquo;s owner emails it to you; it never comes from
+            your administrator or with an invitation. See{" "}
+            <Link href="/beta/#keys">beta access keys</Link> on the tester hub.
+          </li>
         </ul>
 
         <h2 id="install">1. Install the app</h2>
@@ -63,6 +69,10 @@ export default function Quickstart() {
 
         <h2 id="join">2. Join your community&rsquo;s server</h2>
         <ol>
+          <li>
+            On a keyed build, the first time the app starts, accept the beta licence, then paste your beta access key
+            from the owner&rsquo;s key email.
+          </li>
           <li>Open LynxDock and enter the server address your administrator gave you.</li>
           <li>Enter your invite code and create your account. Your account lives on that server.</li>
           <li>You arrive in the community&rsquo;s workspace, with its channels and operations.</li>
