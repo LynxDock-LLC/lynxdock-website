@@ -1,4 +1,5 @@
-import siteStatus, { formatBytes, type ReleaseRecord } from "@/data/siteStatus";
+import Link from "next/link";
+import siteStatus, { betaLicenceKeyed, formatBytes, type ReleaseRecord } from "@/data/siteStatus";
 
 const fmtDate = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -45,6 +46,91 @@ export function NextReleaseCard({ headingLevel = 2, idBase = "next-release" }: {
         </p>
       </div>
     </div>
+  );
+}
+
+/**
+ * The current release, once its complete, signed manifest is in the slot (siteStatus.currentRelease). Its downloads are
+ * offered only on the tester hub; elsewhere the card points there.
+ */
+export function CurrentReleaseCard({
+  r,
+  headingLevel = 2,
+  withDownloads = false,
+}: {
+  r: ReleaseRecord;
+  headingLevel?: 2 | 3;
+  withDownloads?: boolean;
+}) {
+  const H = headingLevel === 2 ? "h2" : "h3";
+  return (
+    <div className="card-teal">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="badge badge-accent">
+          <span className="dot" aria-hidden="true" />
+          Current beta
+        </span>
+        <span className="badge">Signed</span>
+      </div>
+      <H className="h-card mt-4 text-[1.35rem]">{siteStatus.releaseNow.heading}</H>
+      <p className="body mt-2">
+        {siteStatus.releaseNow.statement} {r.summary}
+      </p>
+      <dl className="kv mt-5">
+        <div>
+          <dt>Generation</dt>
+          <dd>V8 (a development generation, not a version number)</dd>
+        </div>
+        <div>
+          <dt>Version</dt>
+          <dd>
+            {r.version}, published on <time dateTime={r.date}>{fmtDate(r.date)}</time>
+          </dd>
+        </div>
+        <div>
+          <dt>Beta licence</dt>
+          <dd>
+            Version {betaLicenceKeyed.version} ({betaLicenceKeyed.id}), with your personal beta access key
+          </dd>
+        </div>
+        <div>
+          <dt>Push-to-talk</dt>
+          <dd>Foreground-only; background push-to-talk is separate work</dd>
+        </div>
+      </dl>
+      {withDownloads ? (
+        <div className="mt-6">
+          <ReleaseArtifacts r={r} caption={`LynxDock ${r.version} installers`} />
+          <p className="small mt-3">{r.provenance}.</p>
+        </div>
+      ) : (
+        <p className="small mt-6">
+          Its installers, with their SHA-256 values, are on the{" "}
+          <Link href="/beta/#status" className="text-link">
+            tester hub
+          </Link>
+          .
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** The release-status card: the current release once it is published, otherwise the next release. */
+export function ReleaseNowCard({
+  headingLevel = 2,
+  idBase = "next-release",
+  withDownloads = false,
+}: {
+  headingLevel?: 2 | 3;
+  idBase?: string;
+  withDownloads?: boolean;
+}) {
+  const r = siteStatus.currentRelease;
+  return r ? (
+    <CurrentReleaseCard r={r} headingLevel={headingLevel} withDownloads={withDownloads} />
+  ) : (
+    <NextReleaseCard headingLevel={headingLevel} idBase={idBase} />
   );
 }
 
@@ -98,7 +184,7 @@ export function ReleaseArtifacts({ r, caption }: { r: ReleaseRecord; caption: st
                     data-beta-download=""
                     data-filename={a.filename}
                     data-sha256={a.sha256}
-                    data-size={a.sizeBytes}
+                    data-size={a.sizeBytes ?? undefined}
                     className="text-link mt-1 inline-flex min-h-[40px] items-center text-[0.875rem]"
                     rel="noreferrer"
                   >
@@ -110,7 +196,7 @@ export function ReleaseArtifacts({ r, caption }: { r: ReleaseRecord; caption: st
               </th>
               <td role="cell" data-label="Format and size" className="px-4 py-3 text-muted">
                 {a.format === "msi" ? "Windows Installer (.msi)" : "Windows setup (.exe)"}
-                <span className="block text-[0.8125rem]">{formatBytes(a.sizeBytes)}</span>
+                <span className="block text-[0.8125rem]">{a.sizeBytes === null ? a.sizeLabel : formatBytes(a.sizeBytes)}</span>
                 <span className="block text-[0.8125rem]">{a.signed ? `Signed: ${r.publisher}` : "Unsigned"}</span>
               </td>
               <td role="cell" data-label="SHA-256" className="mono break-all px-4 py-3 text-[0.78rem] leading-relaxed text-[#c3ced3]">

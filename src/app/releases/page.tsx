@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
-import { NextReleaseCard, fmtDate } from "@/components/site/ReleaseBlocks";
+import { ReleaseNowCard, fmtDate } from "@/components/site/ReleaseBlocks";
 import siteStatus from "@/data/siteStatus";
 import { v6Candidate } from "@/data/v6Candidate";
 import { closedBetaBuild, supersededInstallers } from "@/data/closedBeta";
 import { betaDownloads } from "@/data/betaDownloads";
 
-// Public release status. The current state is the next tester release (owner wording, siteStatus.nextRelease);
+// Public release status. The current state is the next tester release (owner wording, siteStatus.nextRelease) until
+// the slot holds the complete, signed 0.3.0 manifest (siteStatus.currentRelease); then it is LynxDock 0.3.0;
 // below it, only releases that were actually published to testers, by date. Installers and SHA-256 values are in
 // the tester hub's archive. (public/releases.json, the release-tools placeholder, is kept but no longer rendered:
 // it still describes an unreleased 0.1.0-alpha.)
 export const metadata: Metadata = {
   title: "Release status",
   description:
-    "Where LynxDock releases stand: the next tester release is in qualification, and earlier published beta rounds are listed by date.",
+    siteStatus.currentRelease
+      ? `Where LynxDock releases stand: LynxDock ${siteStatus.currentRelease.version} is the current beta, and earlier published beta rounds are listed by date.`
+      : "Where LynxDock releases stand: the next tester release is in qualification, and earlier published beta rounds are listed by date.",
 };
 
 type Row = { date: string | null; name: string; detail: string; standing: string };
@@ -23,12 +26,19 @@ export default function ReleasesPage() {
   const s = siteStatus;
   const r026 = s.earlierPublished;
   const rows: Row[] = [
-    {
-      date: null,
-      name: `Next release (provisionally ${s.nextRelease.provisionalVersion})`,
-      detail: "The V8 generation.",
-      standing: "In qualification · not yet available for distribution",
-    },
+    s.currentRelease
+      ? {
+          date: s.currentRelease.date,
+          name: `LynxDock ${s.currentRelease.version}`,
+          detail: `Signed app and Host installers, the V8 generation (source ${s.currentRelease.sourceCommit.slice(0, 7)}).`,
+          standing: "Published · the current beta, on the tester hub",
+        }
+      : {
+          date: null,
+          name: `Next release (provisionally ${s.nextRelease.provisionalVersion})`,
+          detail: "The V8 generation.",
+          standing: "In qualification · not yet available for distribution",
+        },
     {
       date: r026.date,
       name: `LynxDock ${r026.version}`,
@@ -62,7 +72,7 @@ export default function ReleasesPage() {
         title="Where LynxDock releases stand."
         intro={
           <p>
-            {s.nextRelease.statement} {s.generation.meaning} Earlier published releases, with their checksums, are in
+            {s.releaseNow.statement} {s.generation.meaning} Earlier published releases, with their checksums, are in
             the{" "}
             <Link href="/beta/#archive" className="text-link">
               tester hub&rsquo;s archive
@@ -79,7 +89,7 @@ export default function ReleasesPage() {
           </h2>
           <p className="small mt-2">As of {s.asOfLabel}.</p>
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
-            <NextReleaseCard headingLevel={3} idBase="releases-next" />
+            <ReleaseNowCard headingLevel={3} idBase="releases-next" />
             <div className="flex flex-col gap-4">
               <div className="card">
                 <p className="eyebrow">Earlier release, still published</p>

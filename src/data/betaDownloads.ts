@@ -1,5 +1,10 @@
-// Private-beta (trusted-tester) download metadata — typed view over the fillable
-// manifest at public/beta-manifest.json.
+// Private-beta (trusted-tester) download metadata — typed view over the 0.1.0 round's
+// manifest, frozen at public/beta-0.1.0.json for the release archive.
+//
+// FROZEN (2026-11-10): public/beta-0.1.0.json is a byte copy of the 0.1.0 manifest that
+// public/beta-manifest.json held. beta-manifest.json is now the CURRENT-release slot, which
+// the beta-publish pipeline replaces (see currentRelease.mjs and release030.ts), so the
+// archive no longer reads it. The notes below describe how that pipeline fills a manifest.
 //
 // This is DELIBERATELY separate from the PUBLIC release state in `releases.ts` /
 // `public/releases.json`. Public release truth stays `released: false` until a
@@ -27,7 +32,7 @@
 // The /beta page derives ALL signed/unsigned copy from that via `betaSigning` below — it
 // never claims "signed" unless the manifest header says so AND every available artifact is
 // signed (see src/data/betaSigning.mjs + its node tests).
-import rawJson from "../../public/beta-manifest.json";
+import rawJson from "../../public/beta-0.1.0.json";
 import { deriveAuthenticodeStatus, SIGNING_PUBLISHER } from "./betaSigning.mjs";
 
 export type BetaChannel = "trusted-tester";

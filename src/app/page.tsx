@@ -120,7 +120,7 @@ export default function HomePage() {
                 Windows {s.stage.toLowerCase()}
               </span>
               <span>
-                For invited testers. {s.nextRelease.statement}{" "}
+                For invited testers. {s.releaseNow.statement}{" "}
                 <Link href="/download/" className="text-link">
                   Request beta access
                 </Link>
@@ -228,7 +228,7 @@ export default function HomePage() {
               </h2>
               <p className="body mt-4">
                 LynxDock is tested by invited communities that run their own servers.{" "}
-                {s.nextRelease.statement}
+                {s.releaseNow.statement}
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link href="/download/" className="btn btn-secondary">
@@ -255,8 +255,12 @@ export default function HomePage() {
                 <dd>Run by each community, on infrastructure it controls</dd>
               </div>
               <div>
-                <dt>Next approved tester release</dt>
-                <dd>In qualification; not yet available for distribution</dd>
+                <dt>{s.currentRelease ? "Current tester release" : "Next approved tester release"}</dt>
+                <dd>
+                  {s.currentRelease
+                    ? `LynxDock ${s.currentRelease.version}, signed; its installers are on the tester hub`
+                    : "In qualification; not yet available for distribution"}
+                </dd>
               </div>
               <div>
                 <dt>Push-to-talk</dt>

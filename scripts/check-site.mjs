@@ -8,6 +8,7 @@
 // testers read it, and retired claims do not reappear on the primary routes.
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
+import { classifyManifest, CURRENT_VERSION } from "../src/data/currentRelease.mjs";
 
 const OUT = join(process.cwd(), "out");
 const PREVIEW = process.argv.includes("--production") ? false : true;
@@ -140,15 +141,52 @@ for (const [route, raw] of pages) {
   if (route === "/beta/" && !/noindex/.test(robots)) fail(route, "the tester hub must be noindex");
 }
 
-// Download links: only the release this site serves, only on the tester hub, all re-verified 0.2.6 objects.
+// The current-release slot (src/data/currentRelease.mjs). public/beta-manifest.json is either the 0.1.0 record, byte for
+// byte as frozen in public/beta-0.1.0.json, or a complete, signed manifest for 0.3.0. Anything else (a half-filled or
+// unsigned 0.3.0 manifest, or a manifest for another release) fails the build, so it is never served or shown.
+const SLOT = join(process.cwd(), "public", "beta-manifest.json");
+const FROZEN_010 = join(process.cwd(), "public", "beta-0.1.0.json");
+const lf = (s) => s.replace(/\r\n/g, "\n");
+let slotManifest = null;
+let slot = { state: "incomplete", problems: ["public/beta-manifest.json is missing or is not JSON"] };
+try {
+  slotManifest = JSON.parse(readFileSync(SLOT, "utf8"));
+  slot = classifyManifest(slotManifest, CURRENT_VERSION);
+} catch {
+  // reported below as incomplete
+}
+if (slot.state === "incomplete") for (const p of slot.problems) fail("public/beta-manifest.json", p);
+if (slot.state === "other" && lf(readFileSync(SLOT, "utf8")) !== lf(readFileSync(FROZEN_010, "utf8"))) {
+  fail(
+    "public/beta-manifest.json",
+    `holds a manifest for ${slotManifest?.version}, which is neither ${CURRENT_VERSION} nor the frozen 0.1.0 record`,
+  );
+}
+const published = slot.state === "complete";
+const currentLinks = new Set(published ? slotManifest.artifacts.map((a) => a.url) : []);
+console.log(
+  published
+    ? `Release slot: the complete, signed ${CURRENT_VERSION} manifest (source ${slot.sourceCommit.slice(0, 7)}); ${CURRENT_VERSION} is presented as the current beta.`
+    : `Release slot: ${slot.state === "other" ? "the frozen 0.1.0 record" : "not usable"}; ${CURRENT_VERSION} is presented as the next release.`,
+);
+
+// Download links: only the releases this site serves (the re-verified 0.2.6 objects, and the 0.3.0 objects once its
+// manifest is in), only on the tester hub.
 for (const [route, html] of pages) {
   const links = [...html.matchAll(/href="(https:\/\/beta-dl\.lynxdock\.app\/[^"]+)"/g)].map((m) => m[1]);
   if (!links.length) continue;
   if (route !== "/beta/") fail(route, `download links outside the tester hub: ${links.length}`);
+  const links026 = links.filter((l) => l.includes("/beta/0.2.6/facc36a/"));
+  const linksCurrent = links.filter((l) => currentLinks.has(l));
   for (const l of links) {
-    if (!l.includes("/beta/0.2.6/facc36a/")) fail(route, `download link outside the published 0.2.6 round: ${l}`);
+    if (!links026.includes(l) && !linksCurrent.includes(l)) {
+      fail(route, `download link outside the published rounds (0.2.6${published ? ` and ${CURRENT_VERSION}` : ""}): ${l}`);
+    }
   }
-  if (links.length !== 4) fail(route, `expected the 4 published 0.2.6 installers, found ${links.length}`);
+  if (links026.length !== 4) fail(route, `expected the 4 published 0.2.6 installers, found ${links026.length}`);
+  if (linksCurrent.length !== (published ? 4 : 0)) {
+    fail(route, `expected ${published ? 4 : 0} ${CURRENT_VERSION} installer link(s), found ${linksCurrent.length}`);
+  }
 }
 
 // The push-to-talk scope, in body text, where members and testers read it.
@@ -158,11 +196,16 @@ for (const route of ["/beta/", "/products/lynxdock/", "/docs/getting-started/", 
   if (!text.includes(PTT)) fail(route, "the push-to-talk scope statement is missing");
 }
 
-// The current release state, in the owner's exact wording, wherever the site states it.
+// The current release state, in the owner's exact wording, wherever the site states it: the next-release statement
+// until the slot holds the complete, signed 0.3.0 manifest; then "LynxDock 0.3.0 is the current beta." and the
+// next-release statement nowhere.
 const STATEMENT = "The next tester release is in qualification and is not yet available for distribution.";
+const CURRENT_STATEMENT = `LynxDock ${CURRENT_VERSION} is the current beta.`;
 for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
   const text = (pages.get(route) || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ");
-  if (!text.includes(STATEMENT)) fail(route, "the current-state statement is missing or reworded");
+  if (!text.includes(published ? CURRENT_STATEMENT : STATEMENT)) fail(route, "the current-state statement is missing or reworded");
+  if (published && text.includes(STATEMENT)) fail(route, "still says the next release is not yet available");
+  if (!published && text.includes(CURRENT_STATEMENT)) fail(route, `calls ${CURRENT_VERSION} the current beta before its manifest is in`);
 }
 
 // Only published releases (and the provisional next number) may be named. An allow-list, so this script never
@@ -357,7 +400,9 @@ if (builtAsPreview) {
   for (const must of [
     "Your key comes only in the owner's key email",
     "Keys never come from a community's administrator, and never with a community invitation",
-    "Builds released before them need no key",
+    "Releases before them need no key",
+    // Coordinator, 2026-11-10: the 0.3.0 installers are the keyed configuration; nothing under 1.0 was released.
+    "No build has been released under version 1.0 of the licence.",
     // The owner-approved sentence for direct invitees (2026-11-08), exactly as rendered.
     "If a community invites you directly, write to admin@lynxdock.app yourself, from the email address you want your key sent to, and ask for a beta access key.",
   ]) {

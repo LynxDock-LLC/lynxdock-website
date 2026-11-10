@@ -57,8 +57,11 @@ test("the current state is the next release, in the owner's exact words, with no
   assert.match(status, /approved: false/);
   assert.match(status, /installerState: "unavailable"/);
   assert.match(blocks, /Installer unavailable/);
-  assert.ok(!/data-beta-round="current"/.test(page), "no release is presented as the current download");
-  assert.match(page, /data-beta-round="next"/, "the status section is marked as the next release");
+  // Until the slot holds the complete, signed 0.3.0 manifest, the hub marks the status as the next release and
+  // presents nothing as current (release030.test.mjs checks the switch itself).
+  assert.ok(!/data-beta-round="current"/.test(page), "no release is presented as the current download unconditionally");
+  assert.match(page, /data-beta-round=\{s\.currentRelease \? "current" : "next"\}/, "the status marker follows currentRelease");
+  assert.match(blocks, /return r \?\s*\(\s*<CurrentReleaseCard/, "the status card is the current release only when there is one");
 });
 
 test("published releases live in a dated archive; only 0.2.6 keeps links", () => {

@@ -38,7 +38,12 @@ export default function BetaLicencePage() {
         intro={
           <p>
             Version 1.0 (licence ID {betaLicence.id}), effective {effectiveDate}. This licence covers the LynxDock
-            0.3.0 beta builds; the copy installed with a build is the one that governs that build. Members who take
+            0.3.0 beta builds; the copy installed with a build is the one that governs that build. No build has been
+            released with this version: the 0.3.0 installers ship{" "}
+            <Link href="/beta/licence/v1.1/" className="text-link">
+              version 1.1
+            </Link>
+            , which adds beta access keys. Members who take
             part with the older 0.2.6 app do not accept this licence: they acknowledge the{" "}
             <Link href="/beta/participation/" className="text-link">
               beta participation requirements

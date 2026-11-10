@@ -11,13 +11,18 @@
 //   37623249656). NEVER type a version, signing state, SHA-256 or download URL here that its record does not show.
 //   A release only gets download links once its bytes are uploaded and the served bytes re-verified.
 import release026, { type ReleaseDownload } from "./release026";
+import release030 from "./release030";
+import { SIGNING_PUBLISHER } from "./betaSigning.mjs";
 
 export type ReleaseArtifact = {
   product: "desktop" | "host";
   label: string;
   filename: string;
   format: "exe" | "msi";
-  sizeBytes: number;
+  /** Exact byte count, when the release's record has one (0.2.6). */
+  sizeBytes: number | null;
+  /** The manifest's own size text, for a release whose manifest records no byte count (0.3.0). */
+  sizeLabel?: string;
   sha256: string;
   signed: boolean;
   /** Set only when the object is published and re-verified. */
@@ -107,11 +112,10 @@ export const eligibility = {
   scope:
     "That includes people who request access on this site, people a community invites directly, people who run a community server with LynxDock Host, and members who join with the older 0.2.6 app.",
   selfDeclaration:
-    "Age is an affirmative self-declaration, not age verification: you declare that you are 18 or older. This site’s forms and the next release’s app and Host check only that the declaration was made; LynxDock does not independently verify age, and nothing asks for a date of birth or proof of age.",
+    `Age is an affirmative self-declaration, not age verification: you declare that you are 18 or older. This site’s forms and ${release030.published ? `the LynxDock ${release030.version}` : "the next release’s"} app and Host check only that the declaration was made; LynxDock does not independently verify age, and nothing asks for a date of birth or proof of age.`,
   routes: {
     site: "On this site, the beta access form asks you to tick a box to declare it.",
-    nextRelease:
-      "From the next tester release, the installers and the LynxDock app and LynxDock Host show the beta licence, which includes this requirement, and ask you to accept it: on the installer page, and again before you sign in or start services, where you also tick the 18+ declaration. The app or Host keeps a record of your acceptance on your device only; it is not sent anywhere.",
+    nextRelease: `From ${release030.published ? `LynxDock ${release030.version}` : "the next tester release"}, the installers and the LynxDock app and LynxDock Host show the beta licence, which includes this requirement, and ask you to accept it: on the installer page, and again before you sign in or start services, where you also tick the 18+ declaration. The app or Host keeps a record of your acceptance on your device only; it is not sent anywhere.`,
     olderApp:
       "The older 0.2.6 app shows no licence screen. If you will join with it, acknowledge the beta participation requirements, including this one, in the section below before a community’s administrator invites you.",
   },
@@ -164,6 +168,50 @@ export const betaLicenceKeyed = {
   textUrl: "/beta/licence/v1.1/",
   file: "LYNXDOCK-BETA-EVAL-1.1.txt",
 };
+
+const longDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+/**
+ * LynxDock 0.3.0, the current release, once public/beta-manifest.json holds its complete, signed manifest (release030.ts,
+ * rules in currentRelease.mjs); null until then, and every page keeps the next-release wording. Every hash, size, URL and
+ * commit comes from that manifest. The 0.3.0 installers are the keyed configuration (coordinator, 2026-11-10): they
+ * ship version 1.1 of the beta licence and ask for a beta access key; nothing under version 1.0 has been published.
+ */
+export const release030Record: ReleaseRecord | null = release030.published
+  ? {
+      version: release030.version,
+      tag: "",
+      sourceCommit: release030.sourceCommit,
+      date: release030.date,
+      dateLabel: "Published on this site",
+      publisher: SIGNING_PUBLISHER,
+      signed: true,
+      downloadsOnThisSite: true,
+      summary: `Signed Windows installers for the LynxDock app and LynxDock Host. They ship version ${betaLicenceKeyed.version} of the beta licence and ask for your beta access key.`,
+      provenance: `Source commit ${release030.sourceCommit.slice(0, 7)}`,
+      artifacts: release030.artifacts.map((a) => ({
+        product: a.product,
+        label: `${a.productLabel} - ${a.installerLabel}`,
+        filename: a.filename,
+        format: a.installerType === "msi" ? ("msi" as const) : ("exe" as const),
+        sizeBytes: null,
+        sizeLabel: a.size,
+        sha256: a.sha256.toUpperCase(),
+        signed: a.signed,
+        url: a.url,
+      })),
+    }
+  : null;
+
+/** What every page says about the release state: the current release once it is published, otherwise the next one. */
+export const releaseNow = release030Record
+  ? {
+      published: true,
+      heading: `LynxDock ${release030Record.version}`,
+      statement: `LynxDock ${release030Record.version} is the current beta.`,
+    }
+  : { published: false, heading: nextRelease.heading, statement: nextRelease.statement };
 
 /**
  * Beta access keys for the keyed beta builds, as the tester hub describes them (/beta/#keys). Source: ADR-0029 in the
@@ -226,8 +274,8 @@ export const limitations: Limitation[] = [
 ];
 
 export const siteStatus = {
-  asOf: "2026-10-21",
-  asOfLabel: "21 October 2026",
+  asOf: release030Record ? release030Record.date : "2026-10-21",
+  asOfLabel: release030Record ? longDate(release030Record.date) : "21 October 2026",
   stage: "Closed beta",
   audience: "Invited testers",
   platform: "Windows (x64)",
@@ -237,6 +285,10 @@ export const siteStatus = {
     meaning: "V8 is the current development generation, not an installer version.",
   },
   nextRelease,
+  /** The release-state wording every page uses (the current release once it is published). */
+  releaseNow,
+  /** LynxDock 0.3.0 once its complete, signed manifest is in the slot; null until then. */
+  currentRelease: release030Record,
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,
