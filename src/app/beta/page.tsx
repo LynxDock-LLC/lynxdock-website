@@ -3,7 +3,7 @@ import Link from "next/link";
 import PageHero from "@/components/site/PageHero";
 import {
   LimitationsList,
-  NextReleaseCard,
+  ReleaseNowCard,
   ReleaseArtifacts,
   ReleaseIdentity,
   fmtDate,
@@ -182,15 +182,21 @@ export default function BetaPage() {
         </nav>
       </PageHero>
 
-      {/* RELEASE STATUS: the current state is the next release, not yet available */}
-      <section id="status" aria-labelledby="status-title" className="section" data-beta-round="next">
+      {/* RELEASE STATUS: the next release, not yet available, until the slot holds the complete, signed 0.3.0 manifest
+          (siteStatus.currentRelease); then the current release with its installers. */}
+      <section
+        id="status"
+        aria-labelledby="status-title"
+        className="section"
+        data-beta-round={s.currentRelease ? "current" : "next"}
+      >
         <div className="wrap">
           <h2 id="status-title" className="h-section">
             Release status
           </h2>
           <p className="small mt-2">As of {s.asOfLabel}.</p>
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start">
-            <NextReleaseCard headingLevel={3} idBase="beta-next" />
+            <ReleaseNowCard headingLevel={3} idBase="beta-next" withDownloads />
             <div className="card-quiet">
               <h3 className="h-card">Earlier releases</h3>
               <p className="small mt-2">
@@ -198,7 +204,7 @@ export default function BetaPage() {
                 <a href="#archive" className="text-link">
                   release archive
                 </a>{" "}
-                below, with their SHA-256 values, so an install can be identified. The most recent,{" "}
+                below, with their SHA-256 values, so an install can be identified. The most recent of them,{" "}
                 LynxDock {r026.version} ({fmtDate(r026.date)}), still has its verified download links there. Ask the
                 person running your server which release your community uses.
               </p>
@@ -238,17 +244,17 @@ export default function BetaPage() {
             <div id="licence" className="card">
               <h3 className="h-card">The beta licence and the participation requirements</h3>
               <p className="small mt-2">
-                The next release&rsquo;s app and Host are used under the {betaLicence.name} ({betaLicence.id}), which
-                you accept in the installer and when the app or Host first starts: <LicenceTextLink />.
-              </p>
-              <p className="small mt-2">
-                Version {betaLicenceKeyed.version} of that licence ({betaLicenceKeyed.id}) covers the keyed LynxDock
-                0.3.0 beta builds that ship with it, the ones that ask for a{" "}
+                {s.currentRelease ? `LynxDock ${s.currentRelease.version}` : "The next release"} ships version{" "}
+                {betaLicenceKeyed.version} of the {betaLicenceKeyed.name} ({betaLicenceKeyed.id}): its app and Host ask
+                you to accept that licence in the installer and when they first start, and then for your{" "}
                 <a href="#keys" className="text-link">
                   beta access key
                 </a>
-                . It is published at its own address: <KeyedLicenceTextLink />. Version 1.0 stays published unchanged
-                for the builds that use it.
+                . The licence text: <KeyedLicenceTextLink />.
+              </p>
+              <p className="small mt-2">
+                Version 1.0 of that licence ({betaLicence.id}) stays published unchanged: <LicenceTextLink />. No build
+                has been released with it.
               </p>
               <p className="small mt-2">
                 Members who join with the older 0.2.6 app don&rsquo;t accept that licence. They acknowledge the beta
@@ -288,7 +294,8 @@ export default function BetaPage() {
                 Joining with the older 0.2.6 app? Acknowledge the requirements here before you are invited
               </h3>
               <p className="body mt-3">
-                During the move to the next release, the 0.2.6 app can still connect to a community server, but it
+                During the move to {s.currentRelease ? `LynxDock ${s.currentRelease.version}` : "the next release"}, the
+                0.2.6 app can still connect to a community server, but it
                 shows no licence screen. If you will join with it, you acknowledge the beta participation requirements
                 here instead. Your acknowledgement covers taking part in the beta only: it does not license, replace or
                 change the terms of your 0.2.6 app.
@@ -322,13 +329,20 @@ export default function BetaPage() {
               <p className="small mt-5">
                 <span className="strong">If you run a community server:</span> before you invite a member who will use
                 the 0.2.6 app, send them to this section and wait until they tell you they have acknowledged the
-                requirements. The requirement applies to you as well: the next release&rsquo;s Host asks you to accept
+                requirements. The requirement applies to you as well:{" "}
+                {s.currentRelease ? `the LynxDock ${s.currentRelease.version} Host` : "the next release’s Host"} asks you
+                to accept
                 the beta licence, ticking the 18+ declaration, before it starts services, and your acceptance covers
                 only you, never a member.
               </p>
               <p className="small mt-3">
-                <span className="strong">On the next release instead:</span> members who install the next release,
-                once it is available, don&rsquo;t use this form. Its installer and the app ask them to accept the beta
+                <span className="strong">
+                  On {s.currentRelease ? `LynxDock ${s.currentRelease.version}` : "the next release"} instead:
+                </span>{" "}
+                {s.currentRelease
+                  ? `members who install LynxDock ${s.currentRelease.version} don’t use this form.`
+                  : "members who install the next release, once it is available, don’t use this form."}{" "}
+                Its installer and the app ask them to accept the beta
                 licence, ticking the same 18+ declaration, before the app signs in. The app won&rsquo;t record the
                 acceptance without the declaration, and keeps that record on their own device.
               </p>
@@ -357,12 +371,12 @@ export default function BetaPage() {
               the LynxDock app or LynxDock Host, and nothing else.
             </p>
             <p className="body mt-3">
-              Builds released before them need no key and work as they do now: the beta builds used under version 1.0
-              of the licence, and the older 0.2.6 app, whose members keep acknowledging the participation requirements{" "}
+              Releases before them need no key and work as they do now: the older 0.2.6 app, whose members keep
+              acknowledging the participation requirements{" "}
               <a href="#confirm" className="text-link">
                 above
               </a>
-              .
+              . No build has been released under version 1.0 of the licence.
             </p>
           </div>
           <div className="mt-8 grid gap-4 lg:grid-cols-2">
@@ -583,7 +597,9 @@ export default function BetaPage() {
             Release archive
           </h2>
           <p className="body mt-3 max-w-3xl">
-            Releases that were published to testers, newest first. None of them is the next release.{" "}
+            {s.currentRelease
+              ? `Earlier releases that were published to testers, newest first. The current release, LynxDock ${s.currentRelease.version}, is in the release status above.`
+              : "Releases that were published to testers, newest first. None of them is the next release."}{" "}
             {r026.version} keeps its verified download links; the older rounds are listed for identification only,
             so ask the person running your server if you need one of their files.
           </p>

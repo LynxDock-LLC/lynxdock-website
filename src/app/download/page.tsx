@@ -79,8 +79,12 @@ export default function DownloadPage() {
                   </dd>
                 </div>
                 <div>
-                  <dt>Next tester release</dt>
-                  <dd>In qualification; not yet available for distribution</dd>
+                  <dt>{s.currentRelease ? "Current tester release" : "Next tester release"}</dt>
+                  <dd>
+                    {s.currentRelease
+                      ? `LynxDock ${s.currentRelease.version}, signed; its installers are on the tester hub`
+                      : "In qualification; not yet available for distribution"}
+                  </dd>
                 </div>
               </dl>
               <p className="small mt-4">

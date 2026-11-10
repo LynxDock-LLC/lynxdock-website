@@ -69,8 +69,8 @@ test("unknown / malformed values fail safe to unsigned", () => {
   }
 });
 
-test("the committed public/beta-manifest.json derives consistently with its own fields", () => {
-  const manifest = JSON.parse(readFileSync(new URL("../../public/beta-manifest.json", import.meta.url), "utf8"));
+test("the frozen 0.1.0 record (public/beta-0.1.0.json) derives consistently with its own fields", () => {
+  const manifest = JSON.parse(readFileSync(new URL("../../public/beta-0.1.0.json", import.meta.url), "utf8"));
   const s = deriveAuthenticodeStatus(manifest);
   const expected =
     manifest.authenticode === "signed" &&
