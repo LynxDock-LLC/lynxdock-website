@@ -222,8 +222,8 @@ export default function PrivacyPage() {
             directed at children.
           </p>
           <p>
-            Builds of the LynxDock app and LynxDock Host after 0.2.6 ask for this declaration when they first start,
-            as part of accepting the terms for those builds, and will not record the acceptance without it. That
+            From LynxDock 0.3.0, the LynxDock app and LynxDock Host ask for this declaration when they first start, as
+            part of accepting the terms for those builds, and will not record the acceptance without it. That
             happens in the app, not on this website. The app keeps the record on your device only, for your Windows
             account: the identifier and version of what you accepted, a fingerprint of its text, your 18+ declaration,
             the time and the app version. When the app starts, it compares this record with the build; nothing is
