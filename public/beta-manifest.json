@@ -15,12 +15,12 @@
       "installerLabel": "Windows installer (.exe)",
       "filename": "LynxDock_0.3.1_x64-setup.exe",
       "version": "0.3.1",
-      "sourceCommit": "d840ce1c20f9e76be5124a4e534255b9fcc4a44e",
+      "sourceCommit": "cd0b286dcfa7e0ad32e1ca2ed576b7b128496286",
       "size": "5.2 MB",
-      "sha256": "35e6cd28fbf01cf8fa6635c290552bd515463f163170eef7c0e88e566cec55f1",
-      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/d840ce1/LynxDock_0.3.1_x64-setup.exe",
+      "sha256": "79057f1b0d9a21e44892b58c0f8a1a98d2195f15784b3057891d9972e68d5d84",
+      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/cd0b286/LynxDock_0.3.1_x64-setup.exe",
       "signed": true,
-      "publishedAt": "2026-11-10T08:46:46.991Z",
+      "publishedAt": "2026-11-10T16:12:21.784Z",
       "available": true
     },
     {
@@ -32,12 +32,12 @@
       "installerLabel": "MSI installer (.msi)",
       "filename": "LynxDock_0.3.1_x64_en-US.msi",
       "version": "0.3.1",
-      "sourceCommit": "d840ce1c20f9e76be5124a4e534255b9fcc4a44e",
+      "sourceCommit": "cd0b286dcfa7e0ad32e1ca2ed576b7b128496286",
       "size": "7.1 MB",
-      "sha256": "c448b4ae0029e1d3daa309cd711d767de2ef6c9c6e9aa3e7c98ce6daf4a74c2d",
-      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/d840ce1/LynxDock_0.3.1_x64_en-US.msi",
+      "sha256": "a7587fa2d9ca5e131257ba51576161b73cc9df317af6899b402a1267c1a5bcbc",
+      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/cd0b286/LynxDock_0.3.1_x64_en-US.msi",
       "signed": true,
-      "publishedAt": "2026-11-10T08:46:46.991Z",
+      "publishedAt": "2026-11-10T16:12:21.784Z",
       "available": true
     },
     {
@@ -49,12 +49,12 @@
       "installerLabel": "Windows installer (.exe)",
       "filename": "LynxDock Host_0.3.1_x64-setup.exe",
       "version": "0.3.1",
-      "sourceCommit": "d840ce1c20f9e76be5124a4e534255b9fcc4a44e",
+      "sourceCommit": "cd0b286dcfa7e0ad32e1ca2ed576b7b128496286",
       "size": "8.9 MB",
-      "sha256": "4758ce4bbcad0c1fad0d1e303056ba9d7788c5b5dc2df829250eac04820c0790",
-      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/d840ce1/LynxDock%20Host_0.3.1_x64-setup.exe",
+      "sha256": "aa860a76c6a4756774bad0dc911712fd805771f08d47ded16301deb1e8b62281",
+      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/cd0b286/LynxDock%20Host_0.3.1_x64-setup.exe",
       "signed": true,
-      "publishedAt": "2026-11-10T08:46:46.991Z",
+      "publishedAt": "2026-11-10T16:12:21.784Z",
       "available": true
     },
     {
@@ -66,12 +66,12 @@
       "installerLabel": "MSI installer (.msi)",
       "filename": "LynxDock Host_0.3.1_x64_en-US.msi",
       "version": "0.3.1",
-      "sourceCommit": "d840ce1c20f9e76be5124a4e534255b9fcc4a44e",
+      "sourceCommit": "cd0b286dcfa7e0ad32e1ca2ed576b7b128496286",
       "size": "12.7 MB",
-      "sha256": "8726e2205b6d44456a284018e842a80f2e304409f6edd5662bf620bedfd00b9a",
-      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/d840ce1/LynxDock%20Host_0.3.1_x64_en-US.msi",
+      "sha256": "9813f585ed005b53161c1e55b9e524a2195302c106dabbb21a0be9e9aaf51dac",
+      "url": "https://beta-dl.lynxdock.app/beta/0.3.1/cd0b286/LynxDock%20Host_0.3.1_x64_en-US.msi",
       "signed": true,
-      "publishedAt": "2026-11-10T08:46:46.991Z",
+      "publishedAt": "2026-11-10T16:12:21.784Z",
       "available": true
     }
   ]
