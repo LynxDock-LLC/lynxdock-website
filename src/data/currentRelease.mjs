@@ -1,17 +1,22 @@
 // The current-release slot: public/beta-manifest.json, exactly as the product repository's beta-publish pipeline writes
-// it (tooling/beta/make-beta-manifest.mjs, workflow .github/workflows/beta-publish.yml). The site presents LynxDock
-// 0.3.0 as published only when that file is a complete, signed manifest for 0.3.0; until then every page keeps the
-// next-release wording and offers no 0.3.0 download.
+// it (tooling/beta/make-beta-manifest.mjs, workflow .github/workflows/beta-publish.yml).
 //
-// Until the 0.3.0 manifest replaces it, the slot still holds the pipeline's earlier 0.1.0 manifest, unchanged: it is
-// served at /beta-manifest.json, which the product repository's install scripts read. That file is NOT a current
-// release. The site's archive reads its frozen copy, public/beta-0.1.0.json, so the slot can change without touching
-// the archive.
+// 0.3.1 (owner, 2026-11-10): the patched release, a security update to 0.3.0 (bundled SQLite 3.54.1 for
+// RUSTSEC-2026-0459; licence v1.2). The site presents LynxDock 0.3.1 as the current beta only when the slot holds a
+// complete, signed 0.3.1 manifest. Until then the slot keeps the 0.3.0 manifest, byte for byte as frozen in
+// public/beta-0.3.0.json, and every page keeps presenting 0.3.0 exactly as it was published on 2026-11-09. Once 0.3.1
+// is in, 0.3.0 moves to the archive as superseded, with its hashes and without download links. The slot is served at
+// /beta-manifest.json, which the product repository's install scripts read.
 //
-// Plain JavaScript with no dependencies, so the pages (through release030.ts), the node tests and
+// Earlier: the slot held the 0.1.0 manifest until 0.3.0 replaced it; that record is frozen in public/beta-0.1.0.json.
+//
+// Plain JavaScript with no dependencies, so the pages (through release030.ts and release031.ts), the node tests and
 // scripts/check-site.mjs all apply the same rules.
 
-export const CURRENT_VERSION = "0.3.0";
+export const CURRENT_VERSION = "0.3.1";
+/** The release the slot holds until CURRENT_VERSION's manifest replaces it, frozen at PREVIOUS_FILE. */
+export const PREVIOUS_VERSION = "0.3.0";
+export const PREVIOUS_FILE = "beta-0.3.0.json";
 export const DOWNLOAD_ORIGIN = "https://beta-dl.lynxdock.app";
 
 /** The four installers a beta-publish round carries (the product repository's tooling/beta/beta-artifacts.json). */

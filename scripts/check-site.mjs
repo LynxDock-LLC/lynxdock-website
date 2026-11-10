@@ -8,7 +8,7 @@
 // testers read it, and retired claims do not reappear on the primary routes.
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
-import { classifyManifest, CURRENT_VERSION } from "../src/data/currentRelease.mjs";
+import { classifyManifest, CURRENT_VERSION, PREVIOUS_VERSION, PREVIOUS_FILE } from "../src/data/currentRelease.mjs";
 
 const OUT = join(process.cwd(), "out");
 const PREVIEW = process.argv.includes("--production") ? false : true;
@@ -141,11 +141,12 @@ for (const [route, raw] of pages) {
   if (route === "/beta/" && !/noindex/.test(robots)) fail(route, "the tester hub must be noindex");
 }
 
-// The current-release slot (src/data/currentRelease.mjs). public/beta-manifest.json is either the 0.1.0 record, byte for
-// byte as frozen in public/beta-0.1.0.json, or a complete, signed manifest for 0.3.0. Anything else (a half-filled or
-// unsigned 0.3.0 manifest, or a manifest for another release) fails the build, so it is never served or shown.
+// The current-release slot (src/data/currentRelease.mjs). public/beta-manifest.json is either the 0.3.0 record, byte for
+// byte as frozen in public/beta-0.3.0.json (then 0.3.0 is the current beta), or a complete, signed manifest for 0.3.1
+// (then 0.3.1 is, and 0.3.0 is superseded). Anything else (a half-filled or unsigned 0.3.1 manifest, or a manifest for
+// another release) fails the build, so it is never served or shown. The frozen 0.3.0 record must itself be complete.
 const SLOT = join(process.cwd(), "public", "beta-manifest.json");
-const FROZEN_010 = join(process.cwd(), "public", "beta-0.1.0.json");
+const FROZEN_PREV = join(process.cwd(), "public", PREVIOUS_FILE);
 const lf = (s) => s.replace(/\r\n/g, "\n");
 let slotManifest = null;
 let slot = { state: "incomplete", problems: ["public/beta-manifest.json is missing or is not JSON"] };
@@ -156,18 +157,25 @@ try {
   // reported below as incomplete
 }
 if (slot.state === "incomplete") for (const p of slot.problems) fail("public/beta-manifest.json", p);
-if (slot.state === "other" && lf(readFileSync(SLOT, "utf8")) !== lf(readFileSync(FROZEN_010, "utf8"))) {
+if (slot.state === "other" && lf(readFileSync(SLOT, "utf8")) !== lf(readFileSync(FROZEN_PREV, "utf8"))) {
   fail(
     "public/beta-manifest.json",
-    `holds a manifest for ${slotManifest?.version}, which is neither ${CURRENT_VERSION} nor the frozen 0.1.0 record`,
+    `holds a manifest for ${slotManifest?.version}, which is neither ${CURRENT_VERSION} nor the frozen ${PREVIOUS_VERSION} record`,
   );
 }
-const published = slot.state === "complete";
-const currentLinks = new Set(published ? slotManifest.artifacts.map((a) => a.url) : []);
+const prevManifest = JSON.parse(readFileSync(FROZEN_PREV, "utf8"));
+const prev = classifyManifest(prevManifest, PREVIOUS_VERSION);
+if (prev.state !== "complete") {
+  for (const p of prev.problems.length ? prev.problems : ["not a complete, signed manifest"]) fail(`public/${PREVIOUS_FILE}`, p);
+}
+const currentIsNew = slot.state === "complete";
+const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
+const published = currentIsNew || prev.state === "complete";
+const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
 console.log(
-  published
-    ? `Release slot: the complete, signed ${CURRENT_VERSION} manifest (source ${slot.sourceCommit.slice(0, 7)}); ${CURRENT_VERSION} is presented as the current beta.`
-    : `Release slot: ${slot.state === "other" ? "the frozen 0.1.0 record" : "not usable"}; ${CURRENT_VERSION} is presented as the next release.`,
+  currentIsNew
+    ? `Release slot: the complete, signed ${CURRENT_VERSION} manifest (source ${slot.sourceCommit.slice(0, 7)}); ${CURRENT_VERSION} is presented as the current beta and ${PREVIOUS_VERSION} as superseded.`
+    : `Release slot: ${slot.state === "other" ? `the frozen ${PREVIOUS_VERSION} record` : "not usable"}; ${PREVIOUS_VERSION} is presented as the current beta.`,
 );
 
 // Download links: only the releases this site serves (the re-verified 0.2.6 objects, and the 0.3.0 objects once its
@@ -196,22 +204,28 @@ for (const route of ["/beta/", "/products/lynxdock/", "/docs/getting-started/", 
   if (!text.includes(PTT)) fail(route, "the push-to-talk scope statement is missing");
 }
 
-// The current release state, in the owner's exact wording, wherever the site states it: the next-release statement
-// until the slot holds the complete, signed 0.3.0 manifest; then "LynxDock 0.3.0 is the current beta." and the
-// next-release statement nowhere.
+// The current release state, in the owner's exact wording, wherever the site states it: "LynxDock <current> is the
+// current beta." with the outstanding voice test (0.3.0 until the slot holds the complete, signed 0.3.1 manifest, then
+// 0.3.1, with its reason), and the next-release statement nowhere.
 const STATEMENT = "The next tester release is in qualification and is not yet available for distribution.";
 // Owner, 2026-11-10: the outstanding in-app voice-media test stays explicit in every release claim.
-const CURRENT_STATEMENT = `LynxDock ${CURRENT_VERSION} is the current beta. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding.`;
+const CURRENT_STATEMENT = `LynxDock ${currentVersion} is the current beta. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding.`;
+const REASON_031 = "A security update to 0.3.0 (bundled SQLite 3.54.1, RUSTSEC-2026-0459).";
 for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
   const text = (pages.get(route) || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ");
   if (!text.includes(published ? CURRENT_STATEMENT : STATEMENT)) fail(route, "the current-state statement is missing or reworded");
   if (published && text.includes(STATEMENT)) fail(route, "still says the next release is not yet available");
-  if (!published && text.includes(CURRENT_STATEMENT)) fail(route, `calls ${CURRENT_VERSION} the current beta before its manifest is in`);
+  if (!currentIsNew && text.includes(`LynxDock ${CURRENT_VERSION} is the current beta.`)) {
+    fail(route, `calls ${CURRENT_VERSION} the current beta before its manifest is in`);
+  }
+  if (currentIsNew && ["/beta/", "/releases/"].includes(route) && !text.includes(REASON_031)) {
+    fail(route, `does not say why ${CURRENT_VERSION} replaces ${PREVIOUS_VERSION}`);
+  }
 }
 
 // Only published releases (and the provisional next number) may be named. An allow-list, so this script never
 // has to name an unpublished build.
-const ALLOWED_VERSIONS = new Set(["0.2.6", "0.3.0"]);
+const ALLOWED_VERSIONS = new Set(["0.2.6", "0.3.0", "0.3.1"]);
 const ALLOWED_TAGS = new Set(["desktop-v0.2.6"]);
 for (const [route, raw] of pages) {
   for (const v of raw.match(/\b0\.[23]\.\d+\b/g) ?? []) {
@@ -383,10 +397,14 @@ if (builtAsPreview) {
   // that name it, and version 1.1, for the keyed builds, has its own address. Both pages are unlisted.
   const v10 = pages.get("/beta/licence/") || "";
   const v11 = pages.get("/beta/licence/v1.1/") || "";
+  // Version 1.2, for the keyed 0.3.1 builds (owner, 2026-11-10; C R250), at its own address beside 1.0 and 1.1.
+  const v12 = pages.get("/beta/licence/v1.2/") || "";
   if (!v10.includes('href="/legal/LYNXDOCK-BETA-EVAL-1.0.txt"')) fail("/beta/licence/", "does not link the version 1.0 text");
   if (!v11) fail("/beta/licence/v1.1/", "the version 1.1 page was not built");
   else if (!v11.includes('href="/legal/LYNXDOCK-BETA-EVAL-1.1.txt"')) fail("/beta/licence/v1.1/", "does not link the version 1.1 text");
-  for (const [route, raw] of [["/beta/licence/", v10], ["/beta/licence/v1.1/", v11]]) {
+  if (!v12) fail("/beta/licence/v1.2/", "the version 1.2 page was not built");
+  else if (!v12.includes('href="/legal/LYNXDOCK-BETA-EVAL-1.2.txt"')) fail("/beta/licence/v1.2/", "does not link the version 1.2 text");
+  for (const [route, raw] of [["/beta/licence/", v10], ["/beta/licence/v1.1/", v11], ["/beta/licence/v1.2/", v12]]) {
     if (!/<meta name="robots" content="[^"]*noindex/.test(raw)) fail(route, "a licence page must be noindex");
   }
 }

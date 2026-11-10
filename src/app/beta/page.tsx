@@ -12,6 +12,7 @@ import siteStatus, {
   betaAccessKeys,
   betaLicence,
   betaLicenceKeyed,
+  keyedLicenceVersions,
   formatBytes,
   participationDocument,
 } from "@/data/siteStatus";
@@ -117,10 +118,10 @@ function LicenceTextLink() {
 
 // Version 1.1 of the licence, for the keyed 0.3.0 builds that ship with it (licence section 1), at its own address
 // (betaLicenceKeyed; ADR-0029 K8b). Its file is the text the owner approved by hash on 2026-11-06.
-function KeyedLicenceTextLink() {
+function KeyedLicenceTextLink({ l = betaLicenceKeyed }: { l?: { textUrl: string; version: string } }) {
   return (
-    <a href={betaLicenceKeyed.textUrl} className="text-link">
-      read version {betaLicenceKeyed.version}
+    <a href={l.textUrl} className="text-link">
+      read version {l.version}
     </a>
   );
 }
@@ -142,6 +143,8 @@ function ParticipationDocumentLink() {
 
 export default function BetaPage() {
   const s = siteStatus;
+  // The licence the current release's installers ship: 1.1 for 0.3.0, 1.2 for 0.3.1.
+  const currentLicence = s.currentRelease?.licence ?? betaLicenceKeyed;
   const r026 = s.earlierPublished;
 
   return (
@@ -204,9 +207,11 @@ export default function BetaPage() {
                 <a href="#archive" className="text-link">
                   release archive
                 </a>{" "}
-                below, with their SHA-256 values, so an install can be identified. The most recent of them,{" "}
-                LynxDock {r026.version} ({fmtDate(r026.date)}), still has its verified download links there. Ask the
-                person running your server which release your community uses.
+                below, with their SHA-256 values, so an install can be identified.{" "}
+                {s.supersededRelease
+                  ? `LynxDock ${s.supersededRelease.version}, which ${s.currentRelease?.version} replaces, is listed there for identification only, without download links. The most recent one with download links, LynxDock ${r026.version} (${fmtDate(r026.date)}), still has them there.`
+                  : `The most recent of them, LynxDock ${r026.version} (${fmtDate(r026.date)}), still has its verified download links there.`}{" "}
+                Ask the person running your server which release your community uses.
               </p>
             </div>
           </div>
@@ -245,13 +250,19 @@ export default function BetaPage() {
               <h3 className="h-card">The beta licence and the participation requirements</h3>
               <p className="small mt-2">
                 {s.currentRelease ? `LynxDock ${s.currentRelease.version}` : "The next release"} ships version{" "}
-                {betaLicenceKeyed.version} of the {betaLicenceKeyed.name} ({betaLicenceKeyed.id}): its app and Host ask
+                {currentLicence.version} of the {currentLicence.name} ({currentLicence.id}): its app and Host ask
                 you to accept that licence in the installer and when they first start, and then for your{" "}
                 <a href="#keys" className="text-link">
                   beta access key
                 </a>
-                . The licence text: <KeyedLicenceTextLink />.
+                . The licence text: <KeyedLicenceTextLink l={currentLicence} />.
               </p>
+              {s.supersededRelease ? (
+                <p className="small mt-2">
+                  Version {betaLicenceKeyed.version} ({betaLicenceKeyed.id}), which LynxDock {s.supersededRelease.version}{" "}
+                  ships, stays published unchanged: <KeyedLicenceTextLink />.
+                </p>
+              ) : null}
               <p className="small mt-2">
                 Version 1.0 of that licence ({betaLicence.id}) stays published unchanged: <LicenceTextLink />. No build
                 has been released with it.
@@ -366,7 +377,7 @@ export default function BetaPage() {
               {betaAccessKeys.heading}
             </h2>
             <p className="lead mt-3">
-              Keyed beta builds, the ones that ship with version {betaLicenceKeyed.version} of the licence, ask for a
+              Keyed beta builds, the ones that ship with version {keyedLicenceVersions} of the licence, ask for a
               personal beta access key as well as your acceptance of that licence. A key lets you run a keyed build of
               the LynxDock app or LynxDock Host, and nothing else.
             </p>
@@ -604,6 +615,23 @@ export default function BetaPage() {
             so ask the person running your server if you need one of their files.
           </p>
           <div className="mt-6 border-b border-line">
+            {s.supersededRelease ? (
+              <ArchiveEntry
+                id="release-0-3-0"
+                date={s.supersededRelease.date}
+                title={`LynxDock ${s.supersededRelease.version} (source ${s.supersededRelease.sourceCommit.slice(0, 7)})`}
+                standing={`Superseded by ${s.currentRelease?.version} · identification only`}
+                round="superseded"
+                version={s.supersededRelease.version}
+              >
+                <p className="body max-w-3xl">
+                  {s.supersededRelease.summary} Published here on {fmtDate(s.supersededRelease.date)}. LynxDock{" "}
+                  {s.currentRelease?.version} replaces it. {s.currentRelease?.reason} Its installers are no longer offered
+                  for download; their SHA-256 values stay here so an install can be identified.
+                </p>
+                <ReleaseArtifacts r={s.supersededRelease} caption={`LynxDock ${s.supersededRelease.version} installers`} />
+              </ArchiveEntry>
+            ) : null}
             <ArchiveEntry
               id="release-0-2-6"
               date={r026.date}

@@ -90,7 +90,8 @@ export function CurrentReleaseCard({
         <div>
           <dt>Beta licence</dt>
           <dd>
-            Version {betaLicenceKeyed.version} ({betaLicenceKeyed.id}), with your personal beta access key
+            Version {(r.licence ?? betaLicenceKeyed).version} ({(r.licence ?? betaLicenceKeyed).id}), with your personal
+            beta access key
           </dd>
         </div>
         <div>

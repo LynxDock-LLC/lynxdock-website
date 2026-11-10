@@ -1,0 +1,284 @@
+LYNXDOCK BETA EVALUATION LICENCE
+Version 1.2 (keyed 0.3.1 beta builds)  Licence ID: LYNXDOCK-BETA-EVAL-1.2
+Effective date: 2026-11-10
+
+Licensor: LynxDock LLC ("LynxDock", "we")
+Notice address: admin@lynxdock.app (notices by email)
+Questions: admin@lynxdock.app
+
+Please read this before installing. This is a beta, provided free of
+charge for evaluation and testing only, on the terms below.
+
+1. WHAT THIS LICENCE COVERS
+This licence applies to the keyed LynxDock 0.3.1 beta builds that ship
+with this licence version - the LynxDock app and LynxDock Host, including
+the server that the Host installs and runs - as signed and distributed by
+LynxDock. "LynxDock code" means the parts of
+those builds that LynxDock owns. Third-party components (section 7) and
+catalogue data (section 8) are not LynxDock code.
+
+2. YOUR PERMISSION
+Subject to this licence, LynxDock grants you a personal, non-exclusive,
+non-transferable, revocable licence to install the builds on devices you
+control and to use them to evaluate and test LynxDock during the beta
+period, alone or with a community you belong to or operate. If you run
+LynxDock Host, members of your community may connect to it using their
+own copies of the app: a build covered by this licence, installed under
+it, or an earlier build, which stays under the terms that already govern
+it while its user meets the participation requirements in section 17. Your
+acceptance as an operator covers you only; each member accepts or
+acknowledges for themselves (section 17). No other right is granted.
+
+3. HOW LONG IT LASTS
+The beta period has no fixed end date. It ends on the earlier of:
+(a) the end date LynxDock gives in a notice under section 11, which will
+be at least 14 days after the notice is posted; or
+(b) termination under section 4. LynxDock may extend the beta period, or
+postpone a notified end date, by a later notice.
+
+4. ENDING IT, AND WHAT THAT DOES NOT DO
+You may end this licence at any time by uninstalling. LynxDock may end it
+for everyone by notice under section 3(a). LynxDock may also end it for
+you, or for everyone, with immediate effect by notice if that is needed
+because of a breach of this licence, a security problem, or a legal
+requirement. When it ends, stop using the builds and uninstall them within
+a reasonable time.
+   Ending this licence is a contractual matter only. These builds contain
+no online or remote licence check and no remote control; the only
+activation is the local, offline beta access key check described in this
+section. The licence-related checks are local: you must accept this
+licence when the app or the Host first starts, or after its text
+changes, and enter the personal beta access key LynxDock emailed to you
+when the app or the Host first starts. At each start the app or the Host
+checks the acceptance and the access key stored on your device,
+including this build's built-in list of withdrawn key IDs (sections 14
+and 17). Withdrawing a key takes effect only in later builds you
+install; it never affects an installed copy. LynxDock cannot and will
+not remotely disable, alter or delete an installed copy, or anything on
+a community server; a build keeps working technically after the licence
+ends, but you no longer have permission to use it.
+   Records on a community server are held by that community's operator
+under the operator's own arrangements with its members. Ending this
+licence does not delete them and gives nobody access to them.
+
+5. RESTRICTIONS
+Except as this licence or section 7 allows, or as applicable law permits
+notwithstanding this clause, you must not: (a) copy or distribute the
+builds, the installers or the LynxDock code, or make them available to
+anyone else, including by posting a download; (b) sell, rent, lend,
+sublicense or commercially exploit them; (c) remove or alter any notice,
+signature, version or licence text; (d) modify, decompile, disassemble or
+reverse engineer the LynxDock code, or circumvent any security or
+integrity feature; (e) use the builds for anything unlawful, or to attack,
+probe or disrupt a server you are not authorised to test; (f) present
+yourself as LynxDock, or a beta build as a final release.
+   Obtain the builds only from LynxDock's own download location. Share the
+link and your community's invite code, never the files.
+
+6. OWNERSHIP; NO OPEN-SOURCE GRANT FOR LYNXDOCK CODE
+LynxDock and its licensors own the builds and the LynxDock code, including
+Commander Tactical Mode ("Tactical"), and reserve every right not
+expressly granted here. This licence is the only licence LynxDock grants
+for its code in these builds. In particular, the MIT License is NOT
+granted for the LynxDock code in these builds, Tactical included, and
+nothing in the builds, their notices or other LynxDock materials grants
+it. Section 12 says what this does and does not mean for earlier builds.
+
+7. THIRD-PARTY COMPONENTS KEEP THEIR OWN LICENCES
+The builds contain open-source components owned by others. They are listed
+in THIRD-PARTY-NOTICES.txt, installed beside this file, with their licence
+and notice texts; the same file names the components LynxDock Host
+downloads when you turn voice on. Each remains under its own licence.
+Nothing in this licence limits any right those licences give you in those
+components, including rights to obtain, modify or redistribute their
+source. Section 5 restricts the LynxDock code only.
+
+8. CATALOGUE AND REFERENCE DATA
+Game, item and market data shown in the app come from the providers named
+on the catalogue surfaces (for example Star Citizen Wiki content under
+CC BY-SA 4.0, and UEX Corp data under UEX's own terms). That data stays
+under its providers' terms, which may restrict commercial use. LynxDock
+is not affiliated with or endorsed by any game publisher or data
+provider.
+
+9. BETA STATUS; COMMERCIAL LICENSING OF TACTICAL
+This is a beta. Features may be incomplete, later builds may change or
+remove them, and the builds may contain errors. Keep your own backups of
+what the app stores on your device; an operator should also keep backups
+of the community server's data. Do not rely on LynxDock for
+safety-critical or irreversible decisions.
+   Beta participation does not grant permanent free access to Tactical or
+a licence to any future commercial edition. The commercial licensing model
+for Tactical is a separate one-time purchase and activation for each
+individual user, with no recurring monthly or annual Tactical licensing
+fee. Price, the included edition, optional upgrades and availability will
+be disclosed before purchase. This beta agreement does not authorise a
+charge, create a subscription or constitute an offer to sell. The beta
+access key (section 4) is issued free of charge, is not a Tactical
+activation, and grants no rights in any commercial edition.
+
+10. FEEDBACK
+If you send suggestions, bug reports or other feedback, LynxDock may use
+them to improve its products without any obligation to you. Do not send
+information you are not entitled to share. Beta participation imposes no
+confidentiality obligation on you.
+
+11. NOTICES AND LATER VERSIONS
+LynxDock posts beta notices, including an end date, an extension or an
+immediate termination, at https://lynxdock.app/beta/, and may also send
+them through the contact by which you obtained the beta. A notice takes
+effect when posted unless it states a later date. Later terms apply only
+to a build that ships with them: the licence text installed with a build
+is the one that governs that build.
+
+12. EARLIER BUILDS
+Earlier LynxDock builds were distributed before this licence existed. This
+licence applies only to the builds described in section 1. It does not
+grant, withdraw or alter any rights in
+copies of earlier builds. Using an earlier build to take part in a 0.3.0 or 0.3.1
+beta community does not bring that build under this licence, and the
+acknowledgement described in section 17 does not replace or change the
+terms that govern that build.
+
+13. ELIGIBILITY
+You must be at least 18 years old and able to enter a binding agreement.
+This applies to every 0.3.0 or 0.3.1 beta participant: people who request access
+through LynxDock's website, people invited directly by a community,
+operators who run LynxDock Host, and members who take part using an
+earlier build (section 17). You declare that you are 18 or older by
+ticking the declaration when you accept this licence as the app or the
+Host first starts or, if you use an earlier build, when you acknowledge
+the participation requirements on LynxDock's tester page. This is an
+affirmative self-declaration, not age verification. What LynxDock checks
+is only that the declaration was made: the app and the Host will not
+record your acceptance without it. LynxDock does not independently verify
+your age, and the apps, the installers and community servers ask for no
+date of birth or proof of age.
+
+14. PRIVACY
+For community chat and voice, the app connects to the community server
+address you enter and, for voice, to the media service that server's
+operator runs and to the connection helpers that server gives it: by
+default Google's public STUN server, and the operator's TURN server if
+TURN is enabled. LynxDock Host makes further contacts only as its operator
+sets it up.
+   Components. When the operator turns voice on, the Host downloads
+LiveKit from LiveKit's GitHub release and, if TURN is enabled, coturn from
+LynxDock's download storage, and checks each download against a signed
+manifest shipped in the build before using it. Those hosts see the
+ordinary connection details of the download.
+   External address. To learn the server's public address, the Host asks
+public STUN servers (Google's and Cloudflare's) when the operator uses
+"Make reachable", and each time voice starts with TURN enabled, including
+an automatic start the operator has switched on. The LiveKit configuration
+the Host writes also sets LiveKit to discover the public address itself
+when it starts, and names no STUN servers; according to LiveKit's
+documentation, LiveKit then uses STUN for this, and which servers it
+contacts has not been verified. "Make reachable" also asks the operator's
+router for a UPnP port mapping.
+   Catalogue. If the operator enables an optional catalogue provider, the
+server, not any member's device, fetches reference data from it.
+   Installation. If Microsoft's WebView2 runtime is missing from your PC,
+either installer downloads Microsoft's WebView2 bootstrapper from
+Microsoft during installation.
+   Updates. Neither the app nor the Host checks for, downloads or installs
+application updates; you install a new build yourself from LynxDock's
+download location. The Host's "Update the server" setting installs a
+server program from a file the operator chooses and never fetches one. The
+component downloads above are not application updates.
+   Licence and key checks. The licence and key checks are local: when
+it starts, the app or the Host compares the acceptance record on your
+device with this build's licence ID, version and text hash, checks that
+your 18+ declaration is recorded, and verifies the stored beta access
+key's signature and this build's built-in list of withdrawn key IDs.
+Nothing is verified online and no licence or key information is sent.
+When you accept, the app or the Host stores a record in your local user
+profile on that device: the licence ID and version, the text hash, your
+18+ declaration, the time of acceptance and the app version; earlier
+acceptances stay in the same record. When you enter your access key, it
+is stored in the same place. The acceptance record and the stored key
+contain no name, account, email address or device identifier; the key
+itself carries only its issue date, a random key ID and technical
+fields.
+   Issuance records. LynxDock emails your personal access key to you and
+keeps an issuance record linking that key's ID to your email address,
+together with the issuance correspondence, while your participation is
+active and afterwards for up to one year, with a recorded participation
+end date; the record and correspondence are then deleted. A community
+operator never receives or relays your key. The LynxDock website privacy
+notice (https://lynxdock.app/privacy/) gives the details.
+   Neither the app, the Host nor the server sends unsolicited usage or
+crash telemetry to LynxDock. The app can automatically retry a bug report
+that you previously reviewed and approved, to the destination configured
+at the time, as described below. LynxDock does not operate your community
+server; its data is handled by the server's operator.
+   Beyond the contacts described above, information leaves your device
+only when you choose to send it. You can copy diagnostics and send them
+yourself. The app's bug-report feature sends a report only after you have
+reviewed and approved it, and only if a report destination has been set on
+that PC by an environment variable; no destination is set by default, and
+without one reports can only be reviewed and exported. A report you
+approve stays queued until it is delivered: the app retries it at each
+later start, at most five attempts in all, while a destination is set, and
+sends it to the destination set at that time. If you acknowledge the
+participation requirements on LynxDock's tester page, the details you
+enter there are submitted to Formspree, the form service that page uses.
+If you write to LynxDock, we keep that correspondence to deal with it. The
+privacy notes distributed with each build give the details.
+
+15. NO WARRANTY; LIMITATION OF LIABILITY
+THE BUILDS ARE PROVIDED "AS IS" AND "AS AVAILABLE", FREE OF CHARGE, FOR
+EVALUATION, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT,
+ACCURACY, OR UNINTERRUPTED OR ERROR-FREE OPERATION. TO THE EXTENT THE LAW
+PERMITS, LYNXDOCK IS NOT LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL OR
+CONSEQUENTIAL LOSS, LOSS OF DATA OR LOST PROFITS ARISING FROM THE BUILDS
+OR THIS LICENCE, AND ITS TOTAL LIABILITY UNDER THIS LICENCE IS LIMITED TO
+USD 100. Nothing in this licence excludes or limits
+liability that the law does not allow to be excluded or limited, including
+for fraud, gross negligence, or death or personal injury caused by
+negligence, or removes any consumer right that cannot be waived.
+
+16. GOVERNING LAW AND FORUM
+The law of the State of Oregon, United States governs this licence, and
+disputes may be brought in the state and federal courts located in
+Oregon, in each case without displacing mandatory protections of the law
+of the place where you live. This licence has no arbitration clause and
+no class-action waiver.
+
+17. ACCEPTANCE AND GENERAL
+You accept this licence by clicking "I Agree" on the installer page, or
+by ticking the declaration and accepting when the app or LynxDock Host
+first starts; the app does not sign in to a community, and the Host does
+not start its services, until you have accepted there and, in a keyed
+beta build, entered a valid beta access key. LynxDock emails your
+personal key to you; a community operator never provides it. If your key
+is lost, or your email address changes, write to admin@lynxdock.app for
+a replacement; a replacement withdraws the old key in later builds. If
+you decline at first start, the app or Host closes without changing
+your settings or data. If you do not agree, do not install; if you
+already have,
+uninstall. If a later build ships with a changed licence text, the app or
+Host asks you to accept again before you continue. An operator's
+acceptance covers the operator only, never the community's members; each
+member accepts, or on an earlier build acknowledges, for themselves.
+   Members on an earlier build. If you take part in a 0.3.0 or 0.3.1 beta
+community using an earlier LynxDock build that shows no licence screen,
+you must first acknowledge the beta participation requirements,
+including the 18+ requirement in section 13, on LynxDock's tester page
+at https://lynxdock.app/beta/, before the community's operator invites
+you. Those requirements are set out in the LynxDock 0.3.0 Beta
+Participation Requirements, v1.0, at
+https://lynxdock.app/beta/participation/. Your acknowledgement concerns
+your taking part in the beta only: it does not license, replace or
+change the licence or terms that govern your earlier build (section 12).
+If you later install a build covered by this licence, you accept this
+licence for that build as described above.
+   If any term is unenforceable, the rest stays in force. This licence is
+the entire agreement about the beta builds; it does not change any
+arrangement between you and a community operator. You may not assign it.
+LynxDock may assign it to a successor that takes on its obligations.
+
+----------------------------------------------------------------------
+LynxDock Beta Evaluation Licence v1.2 (LYNXDOCK-BETA-EVAL-1.2)
+LynxDock LLC - admin@lynxdock.app (notices by email) - admin@lynxdock.app

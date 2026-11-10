@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import siteStatus, { betaLicenceKeyed } from "@/data/siteStatus";
+import siteStatus, { keyedLicenceVersions } from "@/data/siteStatus";
 
 export const metadata: Metadata = {
   title: "Quickstart",
@@ -43,7 +43,7 @@ export default function Quickstart() {
             release the server runs, so you install the matching app.
           </li>
           <li>
-            A keyed beta build (one that ships with version {betaLicenceKeyed.version} of the beta licence) also needs
+            A keyed beta build (one that ships with version {keyedLicenceVersions} of the beta licence) also needs
             your personal <strong>beta access key</strong>. LynxDock&rsquo;s owner emails it to you; it never comes from
             your administrator or with an invitation. See{" "}
             <Link href="/beta/#keys">beta access keys</Link> on the tester hub.

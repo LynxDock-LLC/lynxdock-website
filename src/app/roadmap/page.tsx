@@ -27,7 +27,8 @@ const columns: { id: string; title: string; summary: string; items: { title: str
           },
           {
             title: "Cleaner voice behaviour in operations",
-            text: `Voice rooms closed when an operation ends, a renamed live voice channel keeping everyone connected, and bans or ended sessions cutting voice reliably. These are in LynxDock ${current.version}, and take effect once your community’s server runs ${current.version}.`,
+            // Once 0.3.1 replaces 0.3.0, the items are in both: they came with 0.3.0.
+            text: `Voice rooms closed when an operation ends, a renamed live voice channel keeping everyone connected, and bans or ended sessions cutting voice reliably. These are in LynxDock ${siteStatus.supersededRelease ? `${siteStatus.supersededRelease.version} and later` : current.version}, and take effect once your community’s server runs ${siteStatus.supersededRelease ? `${siteStatus.supersededRelease.version} or later` : current.version}.`,
           },
         ]
       : [

@@ -30,7 +30,7 @@ export default function ReleasesPage() {
       ? {
           date: s.currentRelease.date,
           name: `LynxDock ${s.currentRelease.version}`,
-          detail: `Signed app and Host installers, the V8 generation (source ${s.currentRelease.sourceCommit.slice(0, 7)}).`,
+          detail: `${s.currentRelease.reason ? `${s.currentRelease.reason} ` : ""}Signed app and Host installers, the V8 generation (source ${s.currentRelease.sourceCommit.slice(0, 7)}).`,
           standing: "Published · the current beta, on the tester hub",
         }
       : {
@@ -39,6 +39,16 @@ export default function ReleasesPage() {
           detail: "The V8 generation.",
           standing: "In qualification · not yet available for distribution",
         },
+    ...(s.supersededRelease
+      ? [
+          {
+            date: s.supersededRelease.date,
+            name: `LynxDock ${s.supersededRelease.version}`,
+            detail: `Signed app and Host installers, the V8 generation (source ${s.supersededRelease.sourceCommit.slice(0, 7)}).`,
+            standing: `Superseded by ${s.currentRelease?.version}, a security update · not offered for download`,
+          },
+        ]
+      : []),
     {
       date: r026.date,
       name: `LynxDock ${r026.version}`,
@@ -179,9 +189,14 @@ export default function ReleasesPage() {
           </ol>
           {s.currentRelease ? (
             <p className="body mt-5">
-              LynxDock {s.currentRelease.version} was published with step 3&rsquo;s hands-on voice test still outstanding
-              for its new secure remote connection: voice signalling and TURN over TLS were verified in qualification, an
-              in-app voice call with real listeners over that connection was not.
+              LynxDock {s.currentRelease.version}
+              {s.supersededRelease ? `, like ${s.supersededRelease.version},` : ""} was published with step 3&rsquo;s
+              hands-on voice test still outstanding for{" "}
+              {s.supersededRelease
+                ? `the secure remote connection ${s.supersededRelease.version} introduced`
+                : "its new secure remote connection"}
+              : voice signalling and TURN over TLS were verified in qualification, an in-app voice call with real listeners
+              over that connection was not.
             </p>
           ) : null}
         </div>

@@ -78,7 +78,7 @@ test("published releases live in a dated archive; only 0.2.6 keeps links", () =>
 
 test("only published releases (and the provisional next number) are named in the site source", () => {
   // An allow-list, so this file never has to name an unpublished build to keep it off the site.
-  const allowedVersions = new Set(["0.2.6", "0.3.0"]);
+  const allowedVersions = new Set(["0.2.6", "0.3.0", "0.3.1"]);
   const allowedTags = new Set(["desktop-v0.2.6"]);
   for (const file of sources(src)) {
     const text = readFileSync(file, "utf8");

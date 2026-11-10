@@ -10,14 +10,16 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { classifyManifest, pacificDate, CURRENT_VERSION, EXPECTED_ARTIFACTS } from "./currentRelease.mjs";
+import { classifyManifest, pacificDate, CURRENT_VERSION, PREVIOUS_VERSION, PREVIOUS_FILE, EXPECTED_ARTIFACTS } from "./currentRelease.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..");
 const read = (...p) => readFileSync(join(root, ...p), "utf8");
 const lf = (s) => s.replace(/\r\n/g, "\n");
+const ws = (s) => lf(s).replace(/\s+/g, " ");
 
 // A synthetic, complete manifest in the pipeline's own shape (make-beta-manifest.mjs). Its hashes, commit and sizes are
 // made up for this test and appear nowhere else.
@@ -96,13 +98,26 @@ test("a manifest for another version is not presented as current", () => {
   assert.equal(classifyManifest(m).state, "other");
 });
 
-test("the slot holds either the frozen 0.1.0 record or a complete 0.3.0 manifest, nothing else", () => {
+test("the slot holds either the frozen 0.3.0 record or a complete 0.3.1 manifest, nothing else", () => {
+  assert.equal(CURRENT_VERSION, "0.3.1");
+  assert.equal(PREVIOUS_VERSION, "0.3.0");
   const slotText = read("public", "beta-manifest.json");
   const r = classifyManifest(JSON.parse(slotText));
   assert.notEqual(r.state, "incomplete", `the slot is a half-filled manifest: ${r.problems.join("; ")}`);
   if (r.state === "other") {
-    assert.equal(lf(slotText), lf(read("public", "beta-0.1.0.json")), "until 0.3.0 is in, the slot is the 0.1.0 record, unchanged");
+    assert.equal(lf(slotText), lf(read("public", PREVIOUS_FILE)), "until 0.3.1 is in, the slot is the 0.3.0 record, unchanged");
   }
+});
+
+test("the frozen 0.3.0 record is the published beta-publish manifest, complete and signed", () => {
+  // Beta-publish run 42759542278, relaying signed release run 42756852607 (9fc2af3b); live since 9 November 2026.
+  const text = read("public", "beta-0.3.0.json");
+  assert.equal(createHash("sha256").update(lf(text)).digest("hex").slice(0, 16), "15f9b3e3ee132af8", "the frozen file is the published manifest");
+  const r = classifyManifest(JSON.parse(text), PREVIOUS_VERSION);
+  assert.equal(r.state, "complete", r.problems.join("; "));
+  assert.equal(r.sourceCommit, "9fc2af3b681a41590ad92ffffd24bed27af837b3");
+  assert.match(read("src", "data", "release030.ts"), /import raw from "\.\.\/\.\.\/public\/beta-0\.3\.0\.json";/);
+  assert.match(read("src", "data", "release031.ts"), /import raw from "\.\.\/\.\.\/public\/beta-manifest\.json";/);
 });
 
 test("the archive reads the frozen 0.1.0 record, not the slot", () => {
@@ -121,7 +136,6 @@ test("the archive reads the frozen 0.1.0 record, not the slot", () => {
   const downloads = read("src", "data", "betaDownloads.ts");
   assert.match(downloads, /import rawJson from "\.\.\/\.\.\/public\/beta-0\.1\.0\.json";/);
   assert.ok(!/public\/beta-manifest\.json";/.test(downloads), "the archive no longer imports the slot");
-  assert.match(read("src", "data", "release030.ts"), /import raw from "\.\.\/\.\.\/public\/beta-manifest\.json";/);
 });
 
 test("the Pacific date is the one the notices use", () => {
@@ -129,17 +143,24 @@ test("the Pacific date is the one the notices use", () => {
   assert.equal(pacificDate("2026-11-10T09:00:00.000Z"), "2026-11-10");
 });
 
-test("every page switches on currentRelease, and the copy says what the keyed 0.3.0 builds are", () => {
+test("every page switches on currentRelease: 0.3.0 until 0.3.1 is in, then 0.3.1 with 0.3.0 superseded", () => {
   const status = read("src", "data", "siteStatus.ts");
   const blocks = read("src", "components", "site", "ReleaseBlocks.tsx");
   const hub = lf(read("src", "app", "beta", "page.tsx")).replace(/\s+/g, " ");
-  assert.match(status, /export const release030Record: ReleaseRecord \| null = release030\.published/);
+  assert.match(status, /const currentRound: Round = release031\.published \? release031 : release030;/);
+  assert.match(status, /export const currentReleaseRecord: ReleaseRecord \| null = release031Record \?\? release030Record;/);
+  assert.match(status, /export const supersededRelease: ReleaseRecord \| null = release031Record \? release030Record : null;/);
   assert.match(
     status,
-    /statement: `LynxDock \$\{release030Record\.version\} is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`/,
+    /statement: `LynxDock \$\{currentReleaseRecord\.version\} is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`/,
   );
   assert.match(status, /: \{ published: false, heading: nextRelease\.heading, statement: nextRelease\.statement \}/);
-  assert.match(status, /ship version \$\{betaLicenceKeyed\.version\} of the beta licence and ask for your beta access key/);
+  // 0.3.0 keeps its published text and licence 1.1, and loses its download links once superseded.
+  assert.ok(ws(status).includes("`Signed Windows installers for the LynxDock app and LynxDock Host. They ship version ${betaLicenceKeyed.version} of the beta licence and ask for your beta access key.`, !release031.published,"));
+  // 0.3.1: its reason, licence 1.2 and its downloads.
+  assert.ok(status.includes('const REASON_031 = "A security update to 0.3.0 (bundled SQLite 3.54.1, RUSTSEC-2026-0459).";'));
+  assert.ok(ws(status).includes("They ship version ${betaLicenceKeyed12.version} of the beta licence and ask for your beta access key.`, true, REASON_031,"));
+  assert.match(status, /url: downloadsOnThisSite \? a\.url : undefined,/);
   for (const page of ["page.tsx", join("releases", "page.tsx")]) {
     const text = read("src", "app", page);
     assert.ok(!/s\.nextRelease\.statement/.test(text), `${page} states the release through releaseNow`);
@@ -149,19 +170,28 @@ test("every page switches on currentRelease, and the copy says what the keyed 0.
   assert.ok(hub.includes('<ReleaseNowCard headingLevel={3} idBase="beta-next" withDownloads />'), "the hub offers downloads only through the card");
   assert.ok(!/withDownloads/.test(read("src", "app", "releases", "page.tsx")), "downloads stay on the tester hub");
   assert.match(blocks, /r\.downloadsOnThisSite && a\.url \?/);
-  // Licence 1.1 for the next release: the published 0.3.0 is keyed, and no build shipped under 1.0.
-  assert.ok(hub.includes("ships version{\" \"} {betaLicenceKeyed.version} of the {betaLicenceKeyed.name} ({betaLicenceKeyed.id})"), "the hub names licence 1.1 for 0.3.0");
+  assert.match(blocks, /Version \{\(r\.licence \?\? betaLicenceKeyed\)\.version\}/, "the card names the release's own licence");
+  // The licence card names the current release's licence; 1.1 stays published for 0.3.0; no build shipped under 1.0.
+  assert.ok(hub.includes("const currentLicence = s.currentRelease?.licence ?? betaLicenceKeyed;"));
+  assert.ok(hub.includes("ships version{\" \"} {currentLicence.version} of the {currentLicence.name} ({currentLicence.id})"), "the hub names the current release's licence");
+  assert.ok(hub.includes("which LynxDock {s.supersededRelease.version}{\" \"} ships, stays published unchanged: <KeyedLicenceTextLink />."));
   assert.ok(hub.includes("No build has been released with it."), "and says no build shipped under 1.0");
-  assert.ok(!/The next release&rsquo;s app and Host are used under the \{betaLicence\.name\}/.test(hub), "the 1.0 wording for the next release is gone");
+  assert.ok(hub.includes("Keyed beta builds, the ones that ship with version {keyedLicenceVersions} of the licence"));
+  assert.match(status, /\? `\$\{betaLicenceKeyed\.version\} or \$\{betaLicenceKeyed12\.version\}`\s*: betaLicenceKeyed\.version;/);
+  // The superseded 0.3.0 entry: hashes, no links, the reason.
+  assert.ok(hub.includes('id="release-0-3-0"') && hub.includes("Superseded by ${s.currentRelease?.version} · identification only"));
+  assert.ok(hub.includes("Its installers are no longer offered for download; their SHA-256 values stay here so an install can be identified."));
 });
 
-test("the roadmap's published state says what 0.3.0 includes, and when it applies", () => {
+test("the roadmap says what 0.3.0 includes, and when it applies, before and after 0.3.1", () => {
   // Coordinator, 2026-11-10: the signed 0.3.0 build ships all three voice items (its release notes, "On the server");
-  // they apply once the community's server runs 0.3.0.
+  // they apply once the community's server runs 0.3.0. 0.3.1 carries them too.
   const roadmap = read("src", "app", "roadmap", "page.tsx");
   assert.ok(!/\[UNCONFIRMED/.test(roadmap), "no unconfirmed claim remains");
   assert.ok(
-    roadmap.includes("These are in LynxDock ${current.version}, and take effect once your community’s server runs ${current.version}."),
+    roadmap.includes(
+      "These are in LynxDock ${siteStatus.supersededRelease ? `${siteStatus.supersededRelease.version} and later` : current.version}, and take effect once your community’s server runs ${siteStatus.supersededRelease ? `${siteStatus.supersededRelease.version} or later` : current.version}.",
+    ),
     "the voice items are stated as included, with the server condition",
   );
   assert.ok(roadmap.includes("These are in qualification, not released."), "and as not released until then");
@@ -183,12 +213,9 @@ test("every release claim keeps the outstanding in-app voice test explicit (owne
     assert.ok(read("src", "app", page).includes(`its installers are on the tester hub; ${voice}`), `${page}: the current-release line`);
   }
   const releases = lf(read("src", "app", "releases", "page.tsx")).replace(/\s+/g, " ");
-  assert.ok(
-    releases.includes(
-      "was published with step 3&rsquo;s hands-on voice test still outstanding for its new secure remote connection: voice signalling and TURN over TLS were verified in qualification, an in-app voice call with real listeners over that connection was not.",
-    ),
-    "/releases says which step is outstanding",
-  );
+  assert.ok(releases.includes("was published with step 3&rsquo;s hands-on voice test still outstanding for{\" \"}"), "/releases says which step is outstanding");
+  assert.ok(releases.includes('`the secure remote connection ${s.supersededRelease.version} introduced` : "its new secure remote connection"}'));
+  assert.ok(releases.includes(": voice signalling and TURN over TLS were verified in qualification, an in-app voice call with real listeners over that connection was not."));
   assert.match(read("scripts", "check-site.mjs"), /is the current beta\. Its in-app voice test over a secure remote connection, with real listeners, is still outstanding\.`;/);
   // C R247 P1 (voice): the /releases page description, its search-result and og:description text, says it too.
   assert.ok(
@@ -197,11 +224,30 @@ test("every release claim keeps the outstanding in-app voice test explicit (owne
     ),
     "/releases metadata description",
   );
+  assert.ok(releases.includes("standing: `Superseded by ${s.currentRelease?.version}, a security update · not offered for download`"));
+});
+
+test("licence version 1.2 is published byte for byte at its own address (C R250)", () => {
+  const sha = (...p) => createHash("sha256").update(readFileSync(join(root, ...p))).digest("hex");
+  assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.2.txt"), "931a448292bd3ba6108407c5fd382f4f20081682a8a5c69592a1730fa25f3f05");
+  assert.equal(readFileSync(join(root, "public", "legal", "LYNXDOCK-BETA-EVAL-1.2.txt")).length, 16921);
+  const text = read("public", "legal", "LYNXDOCK-BETA-EVAL-1.2.txt");
+  assert.match(text, /Licence ID: LYNXDOCK-BETA-EVAL-1\.2/);
+  assert.match(text, /^Effective date: 2026-11-10$/m);
+  const page = read("src", "app", "beta", "licence", "v1.2", "page.tsx");
+  assert.match(page, /const FILE = betaLicenceKeyed12\.file;/);
+  assert.match(page, /Licence ID: \$\{betaLicenceKeyed12\.id\}/, "the build fails if the file's licence ID is not 1.2");
+  assert.match(page, /robots: \{ index: false, follow: false \}/);
+  // 1.0 and 1.1 stay as approved.
+  assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.0.txt"), "ca695383376fdcc33255a9eb4ec312cc7d1398cb7e1251236c8db71e44f7d313");
+  assert.equal(sha("public", "legal", "LYNXDOCK-BETA-EVAL-1.1.txt"), "13a83f87ba3317999cf30064eca782de02e60b0e5f89af4aa1e853cc27410759");
 });
 
 test("the check-site rules use the same classifier", () => {
   const check = read("scripts", "check-site.mjs");
-  assert.match(check, /import \{ classifyManifest, CURRENT_VERSION \} from "\.\.\/src\/data\/currentRelease\.mjs";/);
+  assert.match(check, /import \{ classifyManifest, CURRENT_VERSION, PREVIOUS_VERSION, PREVIOUS_FILE \} from "\.\.\/src\/data\/currentRelease\.mjs";/);
   assert.match(check, /if \(slot\.state === "incomplete"\) for \(const p of slot\.problems\) fail/);
-  assert.match(check, /neither \$\{CURRENT_VERSION\} nor the frozen 0\.1\.0 record/);
+  assert.match(check, /neither \$\{CURRENT_VERSION\} nor the frozen \$\{PREVIOUS_VERSION\} record/);
+  assert.match(check, /does not say why \$\{CURRENT_VERSION\} replaces \$\{PREVIOUS_VERSION\}/);
+  assert.match(check, /the version 1\.2 page was not built/);
 });
