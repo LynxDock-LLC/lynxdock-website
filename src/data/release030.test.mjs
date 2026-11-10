@@ -270,7 +270,8 @@ test("a corrected 0.3.1 build replaces the first one: hashes kept for identifica
   assert.match(ws(status), /including the SQLite fix and version \$\{betaLicenceKeyed12\.version\} of the beta licence\.`, false, \)/, "no download links for the first build");
   const hub = ws(read("src", "app", "beta", "page.tsx"));
   assert.ok(hub.includes('id="release-0-3-1-first-build"'));
-  assert.ok(hub.includes("which corrects the app&rsquo;s self-reported version. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  // C R252 addendum 3 N1: the Host's hashes change too, without a functional change.
+  assert.ok(hub.includes("which corrects the app&rsquo;s self-reported version (the LynxDock Host files were rebuilt and re-signed without change). Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
   const releases = ws(read("src", "app", "releases", "page.tsx"));
   assert.ok(releases.includes("by this build, which corrects the app’s self-reported version; its files remain at their original addresses, and their SHA-256 values are in the tester hub’s archive."));
   const check = read("scripts", "check-site.mjs");
