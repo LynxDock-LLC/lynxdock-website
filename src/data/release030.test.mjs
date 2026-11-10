@@ -164,6 +164,16 @@ test("the roadmap's published state says what 0.3.0 includes, and when it applie
   assert.ok(roadmap.includes("These are in qualification, not released."), "and as not released until then");
 });
 
+test("privacy names the release that asks for the 18+ declaration (C R247 P1)", () => {
+  // "After 0.2.6" was ambiguous: a desktop-v0.2.7 tag exists and shows no declaration screen.
+  const privacy = read("src", "app", "privacy", "page.tsx").replace(/\s+/g, " ");
+  assert.ok(
+    privacy.includes("From LynxDock 0.3.0, the LynxDock app and LynxDock Host ask for this declaration when they first start, as part of accepting the terms for those builds"),
+    "the 18+ sentence names 0.3.0",
+  );
+  assert.ok(!/after 0\.2\.6 ask/.test(privacy), "the ambiguous wording is gone");
+});
+
 test("the check-site rules use the same classifier", () => {
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /import \{ classifyManifest, CURRENT_VERSION \} from "\.\.\/src\/data\/currentRelease\.mjs";/);
