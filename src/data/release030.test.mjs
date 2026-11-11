@@ -271,16 +271,42 @@ test("a corrected 0.3.1 build replaces the first one: hashes kept for identifica
   const hub = ws(read("src", "app", "beta", "page.tsx"));
   assert.ok(hub.includes('id="release-0-3-1-first-build"'));
   // Owner wording (2026-11-10), exactly; it also covers C R252 addendum 3 N1 (the Host's hashes change too).
-  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Desktop version constant corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  assert.ok(hub.includes("{(s.replacedBuildSecond ?? s.currentRelease)?.sourceCommit.slice(0, 7)}). Desktop version constant corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
   // Owner: never "everything else identical" or "everything else matches" (it could imply identical bytes).
   for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
   const releases = ws(read("src", "app", "releases", "page.tsx"));
-  assert.ok(releases.includes("by this build, which corrects the app’s self-reported version; its files remain at their original addresses, and their SHA-256 values are in the tester hub’s archive."));
+  assert.ok(releases.includes('by ${s.replacedBuildSecond ? `a second build (source ${s.replacedBuildSecond.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildSecond ? "corrected" : "corrects"} the app’s self-reported version;'));
+  assert.ok(releases.includes('${s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.'));
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /does not note the replaced first \$\{CURRENT_VERSION\} build/);
   assert.match(check, /does not list the replaced first build's \$\{a\.filename\} hash/);
   assert.ok(check.includes('const FIRST_031_CHANGE = "Desktop version constant corrected; installers rebuilt and re-signed.";'));
   assert.match(check, /says the replaced first build is otherwise identical or matching/);
+});
+
+test("a third 0.3.1 build replaces the second one the same way: hashes kept for identification, no links", () => {
+  // Owner, 2026-11-11: the second build's Report-a-bug panel drew its controls as plain text; a corrected build follows.
+  const text = read("public", "beta-0.3.1-cd0b286.json");
+  assert.equal(createHash("sha256").update(lf(text)).digest("hex").slice(0, 16), "acc22edc3fe54de6", "the frozen second build is the published manifest");
+  const r = classifyManifest(JSON.parse(text));
+  assert.equal(r.state, "complete");
+  assert.equal(r.sourceCommit, "cd0b286dcfa7e0ad32e1ca2ed576b7b128496286");
+  const status = read("src", "data", "siteStatus.ts");
+  assert.match(status, /release031\.sourceCommit !== release031Second\.sourceCommit/, "only a different source commit counts as a replacement");
+  assert.match(ws(status), /Its Report-a-bug panel \(Settings → About\) drew its controls as plain text\.", false, \)/, "no download links for the second build");
+  assert.match(status, /replacedBuildSecond: replacedBuild031Second,/);
+  const hub = ws(read("src", "app", "beta", "page.tsx"));
+  assert.ok(hub.includes('id="release-0-3-1-second-build"'));
+  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Report-a-bug controls corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  // The first build's entry names the build that replaced it (the second), not whichever build is current.
+  assert.ok(hub.includes('by {s.replacedBuildSecond ? "the second" : "the current"} build (source{" "} {(s.replacedBuildSecond ?? s.currentRelease)?.sourceCommit.slice(0, 7)}).'));
+  for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
+  const releases = ws(read("src", "app", "releases", "page.tsx"));
+  assert.ok(releases.includes("by this build, which corrects the Report-a-bug panel’s controls;"));
+  const check = read("scripts", "check-site.mjs");
+  assert.match(check, /does not note the replaced second \$\{CURRENT_VERSION\} build/);
+  assert.match(check, /does not list the replaced second build's \$\{a\.filename\} hash/);
+  assert.ok(check.includes('const SECOND_031_CHANGE = "Report-a-bug controls corrected; installers rebuilt and re-signed.";'));
 });
 
 test("the check-site rules use the same classifier", () => {

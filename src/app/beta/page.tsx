@@ -615,21 +615,43 @@ export default function BetaPage() {
             so ask the person running your server if you need one of their files.
           </p>
           <div className="mt-6 border-b border-line">
+            {s.replacedBuildSecond ? (
+              <ArchiveEntry
+                id="release-0-3-1-second-build"
+                date={s.replacedBuildSecond.date}
+                title={`LynxDock ${s.replacedBuildSecond.version}, second build (source ${s.replacedBuildSecond.sourceCommit.slice(0, 7)})`}
+                standing={`Replaced by the current ${s.currentRelease?.version} build · identification only`}
+                round="superseded"
+                version={s.replacedBuildSecond.version}
+              >
+                <p className="body max-w-3xl">
+                  {s.replacedBuildSecond.summary} Published here on {fmtDate(s.replacedBuildSecond.date)} and replaced{" "}
+                  {s.replacedBuildSecond.date === s.currentRelease?.date
+                    ? "the same day"
+                    : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
+                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Report-a-bug controls
+                  corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256
+                  values are listed here so you can tell which build you have.
+                </p>
+                <ReleaseArtifacts r={s.replacedBuildSecond} caption={`LynxDock ${s.replacedBuildSecond.version} second build installers`} />
+              </ArchiveEntry>
+            ) : null}
             {s.replacedBuild ? (
               <ArchiveEntry
                 id="release-0-3-1-first-build"
                 date={s.replacedBuild.date}
                 title={`LynxDock ${s.replacedBuild.version}, first build (source ${s.replacedBuild.sourceCommit.slice(0, 7)})`}
-                standing={`Replaced by the current ${s.currentRelease?.version} build · identification only`}
+                standing={`Replaced by ${s.replacedBuildSecond ? "a later" : "the current"} ${s.currentRelease?.version} build · identification only`}
                 round="superseded"
                 version={s.replacedBuild.version}
               >
                 <p className="body max-w-3xl">
                   {s.replacedBuild.summary} Published here on {fmtDate(s.replacedBuild.date)} and replaced{" "}
-                  {s.replacedBuild.date === s.currentRelease?.date
+                  {s.replacedBuild.date === (s.replacedBuildSecond ?? s.currentRelease)?.date
                     ? "the same day"
-                    : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
-                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Desktop version constant
+                    : `on ${fmtDate((s.replacedBuildSecond ?? s.currentRelease)?.date ?? "")}`}{" "}
+                  by {s.replacedBuildSecond ? "the second" : "the current"} build (source{" "}
+                  {(s.replacedBuildSecond ?? s.currentRelease)?.sourceCommit.slice(0, 7)}). Desktop version constant
                   corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256
                   values are listed here so you can tell which build you have.
                 </p>

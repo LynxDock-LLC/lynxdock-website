@@ -14,6 +14,7 @@ import release026, { type ReleaseDownload } from "./release026";
 import release030 from "./release030";
 import release031 from "./release031";
 import release031First from "./release031first";
+import release031Second from "./release031second";
 import { SIGNING_PUBLISHER } from "./betaSigning.mjs";
 import type { Round } from "./releaseRound";
 
@@ -282,6 +283,21 @@ export const replacedBuild031: ReleaseRecord | null =
       )
     : null;
 
+/**
+ * The second 0.3.1 build (source cd0b286), once a corrected 0.3.1 build with another source commit is in the slot; null
+ * while the slot still holds the second build. Its Report-a-bug panel drew its controls as plain text; the corrected
+ * build fixes that. Listed for identification only: its hashes, no download links (release031second.ts).
+ */
+export const replacedBuild031Second: ReleaseRecord | null =
+  release031.published && release031Second.published && release031.sourceCommit !== release031Second.sourceCommit
+    ? roundRecord(
+        release031Second,
+        betaLicenceKeyed12,
+        "The second 0.3.1 build. Its Report-a-bug panel (Settings → About) drew its controls as plain text.",
+        false,
+      )
+    : null;
+
 /** The current release: 0.3.1 once it is in, otherwise 0.3.0. */
 export const currentReleaseRecord: ReleaseRecord | null = release031Record ?? release030Record;
 /** 0.3.0 once 0.3.1 has replaced it (identification only, no download links); null until then. */
@@ -379,6 +395,8 @@ export const siteStatus = {
   supersededRelease,
   /** The first 0.3.1 build once a corrected 0.3.1 build has replaced it; null until then. */
   replacedBuild: replacedBuild031,
+  /** The second 0.3.1 build once a corrected 0.3.1 build has replaced it; null until then. */
+  replacedBuildSecond: replacedBuild031Second,
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,

@@ -178,6 +178,14 @@ const first031 = classifyManifest(first031Manifest, CURRENT_VERSION);
 if (first031.state !== "complete") fail("public/beta-0.3.1-d840ce1.json", "the frozen first 0.3.1 build is not a complete, signed 0.3.1 manifest");
 const replaced031 = currentIsNew && first031.state === "complete" && slot.sourceCommit !== first031.sourceCommit;
 const FIRST_031_CHANGE = "Desktop version constant corrected; installers rebuilt and re-signed.";
+// The second 0.3.1 build (source cd0b286), frozen in public/beta-0.3.1-cd0b286.json, under the same rules once a later
+// 0.3.1 build with another source commit is in the slot.
+const SECOND_031 = join(process.cwd(), "public", "beta-0.3.1-cd0b286.json");
+const second031Manifest = JSON.parse(readFileSync(SECOND_031, "utf8"));
+const second031 = classifyManifest(second031Manifest, CURRENT_VERSION);
+if (second031.state !== "complete") fail("public/beta-0.3.1-cd0b286.json", "the frozen second 0.3.1 build is not a complete, signed 0.3.1 manifest");
+const replaced031Second = currentIsNew && second031.state === "complete" && slot.sourceCommit !== second031.sourceCommit;
+const SECOND_031_CHANGE = "Report-a-bug controls corrected; installers rebuilt and re-signed.";
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
@@ -242,6 +250,15 @@ for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
   }
   if (replaced031 && ["/beta/", "/releases/"].includes(route) && /everything else (matches|is identical|identical)/i.test(text)) {
     fail(route, "says the replaced first build is otherwise identical or matching");
+  }
+  if (replaced031Second && route === "/releases/" && !text.includes(`a second build (source ${second031.sourceCommit.slice(0, 7)})`)) {
+    fail(route, `does not note the replaced second ${CURRENT_VERSION} build`);
+  }
+  if (replaced031Second && route === "/beta/") {
+    for (const a of second031Manifest.artifacts) {
+      if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced second build's ${a.filename} hash`);
+    }
+    if (!text.includes(SECOND_031_CHANGE)) fail(route, "does not give the wording for what changed in the replaced second build");
   }
 }
 
