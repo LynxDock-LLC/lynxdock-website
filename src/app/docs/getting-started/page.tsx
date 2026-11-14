@@ -73,7 +73,14 @@ export default function Quickstart() {
             On a keyed build, the first time the app starts, accept the beta licence, then paste your beta access key
             from the owner&rsquo;s key email.
           </li>
-          <li>Open LynxDock and enter the server address your administrator gave you.</li>
+          <li>
+            Open LynxDock and enter the server address your administrator gave you. A server on another PC has an{" "}
+            <code>https://</code> address. If your administrator also sent a certificate file (
+            <code>lynxdock-host-ca.cer</code>), install it first: double-click it → Install Certificate → Current User
+            → Trusted Root Certification Authorities, and accept only if the thumbprint Windows shows matches the one
+            they gave you. Never install a <code>.pem</code> key file. &ldquo;Connection error&rdquo; after joining
+            usually means that step is missing or the name does not resolve on your network.
+          </li>
           <li>Enter your invite code and create your account. Your account lives on that server.</li>
           <li>You arrive in the community&rsquo;s workspace, with its channels and operations.</li>
         </ol>

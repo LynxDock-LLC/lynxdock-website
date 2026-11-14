@@ -373,7 +373,22 @@ export const limitations: Limitation[] = [
     title: "The overlay needs windowed or borderless",
     text: "The in-game overlay is a separate click-through window. It cannot appear over a game in exclusive fullscreen, and compatibility depends on the build and the game's display mode.",
   },
+  {
+    title: "Other computers connect over https only",
+    text: "The desktop app reaches a server on another computer only over https://; a plain http:// address works only for a server on the same PC. The administrator provides a certificate for the server's name, and each member device trusts its authority once (compare the thumbprint the administrator gives you; never install a key file).",
+  },
 ];
+
+/**
+ * The Host's guided secure-sharing setup ("Who can connect?": the Host creates the certificate and shows the trust
+ * steps) exists on the product repository's fix branch (fix/host-secure-sharing-onboarding, 05735c30) and in NO
+ * published release. Pages render this text only once a release that carries it is the current one; until then the
+ * 0.3.1-true wording above is all the site says. Flip `released` in the same change that records that release.
+ */
+export const hostSecureSharingWizard = {
+  released: false,
+  text: "In Server Profile the Host asks one question - Only this PC, or other devices on your network or the internet - and for the network answer it can create the certificate itself and shows each device's trust steps with the real thumbprint and address.",
+};
 
 export const siteStatus = {
   asOf: currentReleaseRecord ? currentReleaseRecord.date : "2026-10-21",

@@ -509,7 +509,12 @@ export default function BetaPage() {
                 Get the <span className="strong">server address</span> and an{" "}
                 <span className="strong">invite code</span> from the same person.
               </li>
-              <li>Open LynxDock, enter the address and the invite code, and create your account.</li>
+              <li>
+                Open LynxDock, enter the address and the invite code, and create your account. A server on another PC
+                has an https:// address; if your administrator sent a certificate file (lynxdock-host-ca.cer), install
+                it first under Current User → Trusted Root Certification Authorities and compare the thumbprint they
+                gave you. Never install a .pem key file.
+              </li>
               <li>
                 Check your microphone and speaker in the voice controls, and set a push-to-talk key in Settings if
                 your community uses push-to-talk.

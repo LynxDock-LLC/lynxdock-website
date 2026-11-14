@@ -6,6 +6,7 @@ import HostingIllustration from "@/components/site/HostingIllustration";
 import DemoCta from "@/components/site/DemoCta";
 import { shots } from "@/data/screenshots";
 import { demoLink } from "@/data/siteShell";
+import { hostSecureSharingWizard } from "@/data/siteStatus";
 
 export const metadata: Metadata = {
   title: "LynxDock Host",
@@ -46,6 +47,7 @@ const stays = [
   "Installing updates, and testing a restore now and then",
   "Capacity: bandwidth and hardware for the community's voice and screen sharing",
   "Moderation and who is given access",
+  "A certificate for the server's name when other devices join, and getting its authority trusted on every member device",
 ];
 
 export default function HostPage() {
@@ -128,6 +130,7 @@ export default function HostPage() {
                 <li key={s}>{s}</li>
               ))}
             </ul>
+            {hostSecureSharingWizard.released && <p className="small mt-3">{hostSecureSharingWizard.text}</p>}
           </div>
           <div className="card-2">
             <h3 className="h-card">Platform</h3>
