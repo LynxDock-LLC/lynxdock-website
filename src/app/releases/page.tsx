@@ -34,9 +34,13 @@ export default function ReleasesPage() {
             s.replacedBuild
               ? ` A first ${s.replacedBuild.version} build (source ${s.replacedBuild.sourceCommit.slice(0, 7)}) was published on ${fmtDate(s.replacedBuild.date)} and replaced ${s.replacedBuild.date === (s.replacedBuildSecond ?? s.currentRelease).date ? "the same day" : `on ${fmtDate((s.replacedBuildSecond ?? s.currentRelease).date)}`} by ${s.replacedBuildSecond ? `a second build (source ${s.replacedBuildSecond.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildSecond ? "corrected" : "corrects"} the app’s self-reported version;${
                   s.replacedBuildSecond
-                    ? ` that second build was replaced ${s.replacedBuildSecond.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which corrects the Report-a-bug panel’s controls;`
+                    ? ` that second build was replaced ${s.replacedBuildSecond.date === (s.replacedBuildThird ?? s.currentRelease).date ? "the same day" : `on ${fmtDate((s.replacedBuildThird ?? s.currentRelease).date)}`} by ${s.replacedBuildThird ? `a third build (source ${s.replacedBuildThird.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildThird ? "corrected" : "corrects"} the Report-a-bug panel’s controls;`
                     : ""
-                } ${s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
+                }${
+                  s.replacedBuildThird
+                    ? ` that third build was replaced ${s.replacedBuildThird.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which adds the Host’s secure-sharing setup, with lifecycle and diagnostic fixes;`
+                    : ""
+                } ${s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
               : ""
           }`,
           standing: "Published · the current beta, on the tester hub",

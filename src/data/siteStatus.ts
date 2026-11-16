@@ -15,6 +15,7 @@ import release030 from "./release030";
 import release031 from "./release031";
 import release031First from "./release031first";
 import release031Second from "./release031second";
+import release031Third from "./release031third";
 import { SIGNING_PUBLISHER } from "./betaSigning.mjs";
 import type { Round } from "./releaseRound";
 
@@ -298,6 +299,22 @@ export const replacedBuild031Second: ReleaseRecord | null =
       )
     : null;
 
+/**
+ * The third 0.3.1 build (source bc50a6a), once a later 0.3.1 build with another source commit is in the slot; null while
+ * the slot still holds the third build. Its Host could not create a certificate in its secure-sharing setup, and its
+ * start refusal gave no way forward; the fourth build adds the guided "Who can connect?" setup. Listed for
+ * identification only: its hashes, no download links (release031third.ts).
+ */
+export const replacedBuild031Third: ReleaseRecord | null =
+  release031.published && release031Third.published && release031.sourceCommit !== release031Third.sourceCommit
+    ? roundRecord(
+        release031Third,
+        betaLicenceKeyed12,
+        "The third 0.3.1 build. Its Host's setup could not create a certificate, and its start refusal gave no way forward.",
+        false,
+      )
+    : null;
+
 /** The current release: 0.3.1 once it is in, otherwise 0.3.0. */
 export const currentReleaseRecord: ReleaseRecord | null = release031Record ?? release030Record;
 /** 0.3.0 once 0.3.1 has replaced it (identification only, no download links); null until then. */
@@ -380,13 +397,18 @@ export const limitations: Limitation[] = [
 ];
 
 /**
- * The Host's guided secure-sharing setup ("Who can connect?": the Host creates the certificate and shows the trust
- * steps) exists on the product repository's fix branch (fix/host-secure-sharing-onboarding, 05735c30) and in NO
- * published release. Pages render this text only once a release that carries it is the current one; until then the
- * 0.3.1-true wording above is all the site says. Flip `released` in the same change that records that release.
+ * The Host's guided secure-sharing setup ("Who can connect?": the Host creates the certificate itself and shows each
+ * device's trust steps) ships in the fourth 0.3.1 build, whose source is the merge commit of the product repository's
+ * PR #42 (fix/host-secure-sharing-onboarding). This branch records that build by the manifest that replaces the third
+ * build (source bc50a6a1) in public/beta-manifest.json, so `released` is read from the slot: true once the slot holds a
+ * complete, signed 0.3.1 manifest whose source is none of the three earlier 0.3.1 builds (release031first.ts,
+ * release031second.ts, release031third.ts). The Host page then says it exactly when the current release carries it,
+ * and in no build of this branch made before the manifest lands; until then the 0.3.1-true wording above is all the
+ * site says.
  */
+const earlierBuilds031 = [release031First, release031Second, release031Third].map((r) => r.sourceCommit);
 export const hostSecureSharingWizard = {
-  released: false,
+  released: release031.published && !earlierBuilds031.includes(release031.sourceCommit),
   text: "In Server Profile the Host asks one question - Only this PC, or other devices on your network or the internet - and for the network answer it can create the certificate itself and shows each device's trust steps with the real thumbprint and address.",
 };
 
@@ -412,6 +434,8 @@ export const siteStatus = {
   replacedBuild: replacedBuild031,
   /** The second 0.3.1 build once a corrected 0.3.1 build has replaced it; null until then. */
   replacedBuildSecond: replacedBuild031Second,
+  /** The third 0.3.1 build once a later 0.3.1 build has replaced it; null until then. */
+  replacedBuildThird: replacedBuild031Third,
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,

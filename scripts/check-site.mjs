@@ -186,6 +186,14 @@ const second031 = classifyManifest(second031Manifest, CURRENT_VERSION);
 if (second031.state !== "complete") fail("public/beta-0.3.1-cd0b286.json", "the frozen second 0.3.1 build is not a complete, signed 0.3.1 manifest");
 const replaced031Second = currentIsNew && second031.state === "complete" && slot.sourceCommit !== second031.sourceCommit;
 const SECOND_031_CHANGE = "Report-a-bug controls corrected; installers rebuilt and re-signed.";
+// The third 0.3.1 build (source bc50a6a), frozen in public/beta-0.3.1-bc50a6a.json, under the same rules once a later
+// 0.3.1 build with another source commit is in the slot.
+const THIRD_031 = join(process.cwd(), "public", "beta-0.3.1-bc50a6a.json");
+const third031Manifest = JSON.parse(readFileSync(THIRD_031, "utf8"));
+const third031 = classifyManifest(third031Manifest, CURRENT_VERSION);
+if (third031.state !== "complete") fail("public/beta-0.3.1-bc50a6a.json", "the frozen third 0.3.1 build is not a complete, signed 0.3.1 manifest");
+const replaced031Third = currentIsNew && third031.state === "complete" && slot.sourceCommit !== third031.sourceCommit;
+const THIRD_031_CHANGE = "Host secure-sharing setup added (“Who can connect?” with Host-made certificates), lifecycle and diagnostic fixes; installers rebuilt and re-signed.";
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
@@ -259,6 +267,15 @@ for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
       if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced second build's ${a.filename} hash`);
     }
     if (!text.includes(SECOND_031_CHANGE)) fail(route, "does not give the wording for what changed in the replaced second build");
+  }
+  if (replaced031Third && route === "/releases/" && !text.includes(`a third build (source ${third031.sourceCommit.slice(0, 7)})`)) {
+    fail(route, `does not note the replaced third ${CURRENT_VERSION} build`);
+  }
+  if (replaced031Third && route === "/beta/") {
+    for (const a of third031Manifest.artifacts) {
+      if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced third build's ${a.filename} hash`);
+    }
+    if (!text.includes(THIRD_031_CHANGE)) fail(route, "does not give the wording for what changed in the replaced third build");
   }
 }
 

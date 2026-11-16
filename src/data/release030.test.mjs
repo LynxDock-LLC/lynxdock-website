@@ -276,7 +276,7 @@ test("a corrected 0.3.1 build replaces the first one: hashes kept for identifica
   for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
   const releases = ws(read("src", "app", "releases", "page.tsx"));
   assert.ok(releases.includes('by ${s.replacedBuildSecond ? `a second build (source ${s.replacedBuildSecond.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildSecond ? "corrected" : "corrects"} the app’s self-reported version;'));
-  assert.ok(releases.includes('${s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.'));
+  assert.ok(releases.includes('${s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.'));
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /does not note the replaced first \$\{CURRENT_VERSION\} build/);
   assert.match(check, /does not list the replaced first build's \$\{a\.filename\} hash/);
@@ -297,16 +297,53 @@ test("a third 0.3.1 build replaces the second one the same way: hashes kept for 
   assert.match(status, /replacedBuildSecond: replacedBuild031Second,/);
   const hub = ws(read("src", "app", "beta", "page.tsx"));
   assert.ok(hub.includes('id="release-0-3-1-second-build"'));
-  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Report-a-bug controls corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  assert.ok(hub.includes("{(s.replacedBuildThird ?? s.currentRelease)?.sourceCommit.slice(0, 7)}). Report-a-bug controls corrected; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
   // The first build's entry names the build that replaced it (the second), not whichever build is current.
   assert.ok(hub.includes('by {s.replacedBuildSecond ? "the second" : "the current"} build (source{" "} {(s.replacedBuildSecond ?? s.currentRelease)?.sourceCommit.slice(0, 7)}).'));
   for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
   const releases = ws(read("src", "app", "releases", "page.tsx"));
-  assert.ok(releases.includes("by this build, which corrects the Report-a-bug panel’s controls;"));
+  assert.ok(releases.includes('by ${s.replacedBuildThird ? `a third build (source ${s.replacedBuildThird.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildThird ? "corrected" : "corrects"} the Report-a-bug panel’s controls;'));
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /does not note the replaced second \$\{CURRENT_VERSION\} build/);
   assert.match(check, /does not list the replaced second build's \$\{a\.filename\} hash/);
   assert.ok(check.includes('const SECOND_031_CHANGE = "Report-a-bug controls corrected; installers rebuilt and re-signed.";'));
+});
+
+test("a fourth 0.3.1 build replaces the third one the same way: hashes kept for identification, no links", () => {
+  // Coordinator, 2026-11-16: the third build's Host could not create a certificate in its secure-sharing setup and its
+  // start refusal gave no way forward; the fourth build (the merge commit of the product repository's PR #42) adds the
+  // guided "Who can connect?" setup. Inert while the slot still holds the third build (source bc50a6a1).
+  const text = read("public", "beta-0.3.1-bc50a6a.json");
+  assert.equal(createHash("sha256").update(lf(text)).digest("hex").slice(0, 16), "e490a828fe749051", "the frozen third build is the published manifest");
+  const r = classifyManifest(JSON.parse(text));
+  assert.equal(r.state, "complete");
+  assert.equal(r.sourceCommit, "bc50a6a1a8af70103b4557e05e045d8bb4431d93");
+  const status = read("src", "data", "siteStatus.ts");
+  assert.match(status, /release031\.sourceCommit !== release031Third\.sourceCommit/, "only a different source commit counts as a replacement");
+  assert.match(ws(status), /Its Host's setup could not create a certificate, and its start refusal gave no way forward\.", false, \)/, "no download links for the third build");
+  assert.match(status, /replacedBuildThird: replacedBuild031Third,/);
+  const hub = ws(read("src", "app", "beta", "page.tsx"));
+  assert.ok(hub.includes('id="release-0-3-1-third-build"'));
+  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host secure-sharing setup added (“Who can connect?” with Host-made certificates), lifecycle and diagnostic fixes; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  // The second build's entry names the build that replaced it (the third), not whichever build is current.
+  assert.ok(hub.includes('by {s.replacedBuildThird ? "the third" : "the current"} build (source{" "} {(s.replacedBuildThird ?? s.currentRelease)?.sourceCommit.slice(0, 7)}).'));
+  assert.ok(hub.includes('standing={`Replaced by ${s.replacedBuildThird ? "a later" : "the current"} ${s.currentRelease?.version} build · identification only`}'));
+  for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
+  const releases = ws(read("src", "app", "releases", "page.tsx"));
+  assert.ok(releases.includes("by this build, which adds the Host’s secure-sharing setup, with lifecycle and diagnostic fixes;"));
+  assert.ok(releases.includes('${s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.'));
+  const check = read("scripts", "check-site.mjs");
+  assert.match(check, /does not note the replaced third \$\{CURRENT_VERSION\} build/);
+  assert.match(check, /does not list the replaced third build's \$\{a\.filename\} hash/);
+  assert.ok(check.includes('const THIRD_031_CHANGE = "Host secure-sharing setup added (“Who can connect?” with Host-made certificates), lifecycle and diagnostic fixes; installers rebuilt and re-signed.";'));
+  // The Host's "Who can connect?" sentence is released with the fourth build: the flag is read from the slot, true only
+  // once the slot's source commit is none of the three earlier 0.3.1 builds, so no build made before the manifest lands
+  // can claim it, and the Host page renders the sentence behind that flag alone.
+  assert.match(status, /const earlierBuilds031 = \[release031First, release031Second, release031Third\]\.map\(\(r\) => r\.sourceCommit\);/);
+  assert.match(status, /released: release031\.published && !earlierBuilds031\.includes\(release031\.sourceCommit\),/);
+  const hostPage = read("src", "app", "products", "lynxdock-host", "page.tsx");
+  assert.ok(hostPage.includes('{hostSecureSharingWizard.released && <p className="small mt-3">{hostSecureSharingWizard.text}</p>}'));
+  assert.ok(!/released: (true|false),/.test(status), "the flag is never a literal");
 });
 
 test("the check-site rules use the same classifier", () => {
