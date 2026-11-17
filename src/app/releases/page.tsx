@@ -42,7 +42,7 @@ export default function ReleasesPage() {
                     : ""
                 }${
                   s.replacedBuildFourth
-                    ? ` that fourth build was replaced ${s.replacedBuildFourth.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which lets members on the same network connect voice media (the Host now advertises this PC’s own addresses by default, with a Media address setting);`
+                    ? ` that fourth build was replaced ${s.replacedBuildFourth.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, whose Host now advertises this PC’s own media addresses by default (a Media address setting), which members on the same network need;`
                     : ""
                 } ${s.replacedBuildFourth ? "the files of all four" : s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
               : ""

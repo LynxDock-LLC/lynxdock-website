@@ -371,18 +371,18 @@ test("a fifth 0.3.1 build replaces the fourth one the same way: hashes kept for 
   assert.match(status, /replacedBuildFourth: replacedBuild031Fourth,/);
   const hub = ws(read("src", "app", "beta", "page.tsx"));
   assert.ok(hub.includes('id="release-0-3-1-fourth-build"'));
-  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host voice fix: members on the same network can connect media (the Host now advertises this PC's own addresses; new Media address setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
+  assert.ok(hub.includes("by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host voice fix: the Host now advertises this PC's own media addresses by default (new Media address setting), which members on the same network need; self-hosting guidance on sharing the address; installers rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here so you can tell which build you have."));
   // The third build's entry names the build that replaced it (the fourth), not whichever build is current.
   assert.ok(hub.includes('by {s.replacedBuildFourth ? "the fourth" : "the current"} build (source{" "} {(s.replacedBuildFourth ?? s.currentRelease)?.sourceCommit.slice(0, 7)}).'));
   assert.ok(hub.includes('standing={`Replaced by ${s.replacedBuildFourth ? "a later" : "the current"} ${s.currentRelease?.version} build · identification only`}'));
   for (const t of [status, hub, ws(read("src", "app", "releases", "page.tsx"))]) assert.doesNotMatch(t, /everything else/i);
   const releases = ws(read("src", "app", "releases", "page.tsx"));
-  assert.ok(releases.includes("by this build, which lets members on the same network connect voice media (the Host now advertises this PC’s own addresses by default, with a Media address setting);"));
+  assert.ok(releases.includes("by this build, whose Host now advertises this PC’s own media addresses by default (a Media address setting), which members on the same network need;"));
   assert.ok(releases.includes('${s.replacedBuildFourth ? "the files of all four" : s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.'));
   const check = read("scripts", "check-site.mjs");
   assert.match(check, /does not note the replaced fourth \$\{CURRENT_VERSION\} build/);
   assert.match(check, /does not list the replaced fourth build's \$\{a\.filename\} hash/);
-  assert.ok(check.includes("const FOURTH_031_CHANGE = \"Host voice fix: members on the same network can connect media (the Host now advertises this PC's own addresses; new Media address setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed.\";"));
+  assert.ok(check.includes("const FOURTH_031_CHANGE = \"Host voice fix: the Host now advertises this PC's own media addresses by default (new Media address setting), which members on the same network need; self-hosting guidance on sharing the address; installers rebuilt and re-signed.\";"));
   // The fourth build CARRIES the Host's "Who can connect?" setup, so it is not an earlier build for the wizard flag: the
   // list stays [First, Second, Third], and the flag stays read from the slot, never a literal.
   assert.match(status, /const earlierBuilds031 = \[release031First, release031Second, release031Third\]\.map\(\(r\) => r\.sourceCommit\);/);

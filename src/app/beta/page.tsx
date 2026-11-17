@@ -634,9 +634,7 @@ export default function BetaPage() {
                   {s.replacedBuildFourth.date === s.currentRelease?.date
                     ? "the same day"
                     : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
-                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host voice fix: members on
-                  the same network can connect media (the Host now advertises this PC's own addresses; new Media address
-                  setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed. Its files
+                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host voice fix: the Host now advertises this PC's own media addresses by default (new Media address setting), which members on the same network need; self-hosting guidance on sharing the address; installers rebuilt and re-signed. Its files
                   remain at their original addresses; their SHA-256 values are listed here so you can tell which build you
                   have.
                 </p>

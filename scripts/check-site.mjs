@@ -201,7 +201,7 @@ const fourth031Manifest = JSON.parse(readFileSync(FOURTH_031, "utf8"));
 const fourth031 = classifyManifest(fourth031Manifest, CURRENT_VERSION);
 if (fourth031.state !== "complete") fail("public/beta-0.3.1-4b3549e.json", "the frozen fourth 0.3.1 build is not a complete, signed 0.3.1 manifest");
 const replaced031Fourth = currentIsNew && fourth031.state === "complete" && slot.sourceCommit !== fourth031.sourceCommit;
-const FOURTH_031_CHANGE = "Host voice fix: members on the same network can connect media (the Host now advertises this PC's own addresses; new Media address setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed.";
+const FOURTH_031_CHANGE = "Host voice fix: the Host now advertises this PC's own media addresses by default (new Media address setting), which members on the same network need; self-hosting guidance on sharing the address; installers rebuilt and re-signed.";
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
