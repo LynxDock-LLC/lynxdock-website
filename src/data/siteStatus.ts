@@ -329,7 +329,7 @@ export const replacedBuild031Fourth: ReleaseRecord | null =
     ? roundRecord(
         release031Fourth,
         betaLicenceKeyed12,
-        "The fourth 0.3.1 build. Replaced by the fifth build: on a home network, members could not connect voice media because the Host advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice › Network › Media address).",
+        "The fourth 0.3.1 build. On a home network, members could not connect voice media because the Host advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice › Network › Media address).",
         false,
       )
     : null;

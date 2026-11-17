@@ -364,7 +364,7 @@ test("a fifth 0.3.1 build replaces the fourth one the same way: hashes kept for 
   assert.match(status, /release031\.sourceCommit !== release031Fourth\.sourceCommit/, "only a different source commit counts as a replacement");
   assert.ok(
     ws(status).includes(
-      "\"The fourth 0.3.1 build. Replaced by the fifth build: on a home network, members could not connect voice media because the Host advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice › Network › Media address).\", false, )",
+      "\"The fourth 0.3.1 build. On a home network, members could not connect voice media because the Host advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice › Network › Media address).\", false, )",
     ),
     "no download links for the fourth build",
   );
