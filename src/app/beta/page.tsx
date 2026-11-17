@@ -620,21 +620,45 @@ export default function BetaPage() {
             so ask the person running your server if you need one of their files.
           </p>
           <div className="mt-6 border-b border-line">
+            {s.replacedBuildFourth ? (
+              <ArchiveEntry
+                id="release-0-3-1-fourth-build"
+                date={s.replacedBuildFourth.date}
+                title={`LynxDock ${s.replacedBuildFourth.version}, fourth build (source ${s.replacedBuildFourth.sourceCommit.slice(0, 7)})`}
+                standing={`Replaced by the current ${s.currentRelease?.version} build · identification only`}
+                round="superseded"
+                version={s.replacedBuildFourth.version}
+              >
+                <p className="body max-w-3xl">
+                  {s.replacedBuildFourth.summary} Published here on {fmtDate(s.replacedBuildFourth.date)} and replaced{" "}
+                  {s.replacedBuildFourth.date === s.currentRelease?.date
+                    ? "the same day"
+                    : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
+                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host voice fix: members on
+                  the same network can connect media (the Host now advertises this PC's own addresses; new Media address
+                  setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed. Its files
+                  remain at their original addresses; their SHA-256 values are listed here so you can tell which build you
+                  have.
+                </p>
+                <ReleaseArtifacts r={s.replacedBuildFourth} caption={`LynxDock ${s.replacedBuildFourth.version} fourth build installers`} />
+              </ArchiveEntry>
+            ) : null}
             {s.replacedBuildThird ? (
               <ArchiveEntry
                 id="release-0-3-1-third-build"
                 date={s.replacedBuildThird.date}
                 title={`LynxDock ${s.replacedBuildThird.version}, third build (source ${s.replacedBuildThird.sourceCommit.slice(0, 7)})`}
-                standing={`Replaced by the current ${s.currentRelease?.version} build · identification only`}
+                standing={`Replaced by ${s.replacedBuildFourth ? "a later" : "the current"} ${s.currentRelease?.version} build · identification only`}
                 round="superseded"
                 version={s.replacedBuildThird.version}
               >
                 <p className="body max-w-3xl">
                   {s.replacedBuildThird.summary} Published here on {fmtDate(s.replacedBuildThird.date)} and replaced{" "}
-                  {s.replacedBuildThird.date === s.currentRelease?.date
+                  {s.replacedBuildThird.date === (s.replacedBuildFourth ?? s.currentRelease)?.date
                     ? "the same day"
-                    : `on ${fmtDate(s.currentRelease?.date ?? "")}`}{" "}
-                  by the current build (source {s.currentRelease?.sourceCommit.slice(0, 7)}). Host secure-sharing setup
+                    : `on ${fmtDate((s.replacedBuildFourth ?? s.currentRelease)?.date ?? "")}`}{" "}
+                  by {s.replacedBuildFourth ? "the fourth" : "the current"} build (source{" "}
+                  {(s.replacedBuildFourth ?? s.currentRelease)?.sourceCommit.slice(0, 7)}). Host secure-sharing setup
                   added (“Who can connect?” with Host-made certificates), lifecycle and diagnostic fixes; installers
                   rebuilt and re-signed. Its files remain at their original addresses; their SHA-256 values are listed here
                   so you can tell which build you have.

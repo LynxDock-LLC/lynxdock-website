@@ -38,9 +38,13 @@ export default function ReleasesPage() {
                     : ""
                 }${
                   s.replacedBuildThird
-                    ? ` that third build was replaced ${s.replacedBuildThird.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which adds the Host’s secure-sharing setup, with lifecycle and diagnostic fixes;`
+                    ? ` that third build was replaced ${s.replacedBuildThird.date === (s.replacedBuildFourth ?? s.currentRelease).date ? "the same day" : `on ${fmtDate((s.replacedBuildFourth ?? s.currentRelease).date)}`} by ${s.replacedBuildFourth ? `a fourth build (source ${s.replacedBuildFourth.sourceCommit.slice(0, 7)})` : "this build"}, which ${s.replacedBuildFourth ? "added" : "adds"} the Host’s secure-sharing setup, with lifecycle and diagnostic fixes;`
                     : ""
-                } ${s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
+                }${
+                  s.replacedBuildFourth
+                    ? ` that fourth build was replaced ${s.replacedBuildFourth.date === s.currentRelease.date ? "the same day" : `on ${fmtDate(s.currentRelease.date)}`} by this build, which lets members on the same network connect voice media (the Host now advertises this PC’s own addresses by default, with a Media address setting);`
+                    : ""
+                } ${s.replacedBuildFourth ? "the files of all four" : s.replacedBuildThird ? "the files of all three" : s.replacedBuildSecond ? "the files of both" : "its files"} remain at their original addresses, and their SHA-256 values are in the tester hub’s archive.`
               : ""
           }`,
           standing: "Published · the current beta, on the tester hub",

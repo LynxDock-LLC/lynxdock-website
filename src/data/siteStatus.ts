@@ -16,6 +16,7 @@ import release031 from "./release031";
 import release031First from "./release031first";
 import release031Second from "./release031second";
 import release031Third from "./release031third";
+import release031Fourth from "./release031fourth";
 import { SIGNING_PUBLISHER } from "./betaSigning.mjs";
 import type { Round } from "./releaseRound";
 
@@ -315,6 +316,24 @@ export const replacedBuild031Third: ReleaseRecord | null =
       )
     : null;
 
+/**
+ * The fourth 0.3.1 build (source 4b3549e), once a later 0.3.1 build with another source commit is in the slot; null while
+ * the slot still holds the fourth build. On a home network, members could not connect voice media because its Host
+ * advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice ›
+ * Network › Media address). This build carries the Host's "Who can connect?" setup, so it is not one of the
+ * earlierBuilds031 the wizard flag below excludes. Listed for identification only: its hashes, no download links
+ * (release031fourth.ts).
+ */
+export const replacedBuild031Fourth: ReleaseRecord | null =
+  release031.published && release031Fourth.published && release031.sourceCommit !== release031Fourth.sourceCommit
+    ? roundRecord(
+        release031Fourth,
+        betaLicenceKeyed12,
+        "The fourth 0.3.1 build. Replaced by the fifth build: on a home network, members could not connect voice media because the Host advertised only the router's public address; the fifth build advertises this PC's own addresses by default (Voice › Network › Media address).",
+        false,
+      )
+    : null;
+
 /** The current release: 0.3.1 once it is in, otherwise 0.3.0. */
 export const currentReleaseRecord: ReleaseRecord | null = release031Record ?? release030Record;
 /** 0.3.0 once 0.3.1 has replaced it (identification only, no download links); null until then. */
@@ -436,6 +455,8 @@ export const siteStatus = {
   replacedBuildSecond: replacedBuild031Second,
   /** The third 0.3.1 build once a later 0.3.1 build has replaced it; null until then. */
   replacedBuildThird: replacedBuild031Third,
+  /** The fourth 0.3.1 build once a later 0.3.1 build has replaced it; null until then. */
+  replacedBuildFourth: replacedBuild031Fourth,
   /** The most recent release published to testers on this site; it lives in the dated archive. */
   earlierPublished: release026Record,
   pushToTalk,

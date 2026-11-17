@@ -194,6 +194,14 @@ const third031 = classifyManifest(third031Manifest, CURRENT_VERSION);
 if (third031.state !== "complete") fail("public/beta-0.3.1-bc50a6a.json", "the frozen third 0.3.1 build is not a complete, signed 0.3.1 manifest");
 const replaced031Third = currentIsNew && third031.state === "complete" && slot.sourceCommit !== third031.sourceCommit;
 const THIRD_031_CHANGE = "Host secure-sharing setup added (“Who can connect?” with Host-made certificates), lifecycle and diagnostic fixes; installers rebuilt and re-signed.";
+// The fourth 0.3.1 build (source 4b3549e), frozen in public/beta-0.3.1-4b3549e.json, under the same rules once a later
+// 0.3.1 build with another source commit is in the slot.
+const FOURTH_031 = join(process.cwd(), "public", "beta-0.3.1-4b3549e.json");
+const fourth031Manifest = JSON.parse(readFileSync(FOURTH_031, "utf8"));
+const fourth031 = classifyManifest(fourth031Manifest, CURRENT_VERSION);
+if (fourth031.state !== "complete") fail("public/beta-0.3.1-4b3549e.json", "the frozen fourth 0.3.1 build is not a complete, signed 0.3.1 manifest");
+const replaced031Fourth = currentIsNew && fourth031.state === "complete" && slot.sourceCommit !== fourth031.sourceCommit;
+const FOURTH_031_CHANGE = "Host voice fix: members on the same network can connect media (the Host now advertises this PC's own addresses; new Media address setting), self-hosting guidance on sharing the address; installers rebuilt and re-signed.";
 const currentVersion = currentIsNew ? CURRENT_VERSION : PREVIOUS_VERSION;
 const published = currentIsNew || prev.state === "complete";
 const currentLinks = new Set(published ? (currentIsNew ? slotManifest : prevManifest).artifacts.map((a) => a.url) : []);
@@ -276,6 +284,16 @@ for (const route of ["/", "/beta/", "/releases/", "/roadmap/"]) {
       if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced third build's ${a.filename} hash`);
     }
     if (!text.includes(THIRD_031_CHANGE)) fail(route, "does not give the wording for what changed in the replaced third build");
+  }
+  if (replaced031Fourth && route === "/releases/" && !text.includes(`a fourth build (source ${fourth031.sourceCommit.slice(0, 7)})`)) {
+    fail(route, `does not note the replaced fourth ${CURRENT_VERSION} build`);
+  }
+  if (replaced031Fourth && route === "/beta/") {
+    for (const a of fourth031Manifest.artifacts) {
+      if (!text.includes(a.sha256.toUpperCase())) fail(route, `does not list the replaced fourth build's ${a.filename} hash`);
+    }
+    // The wording has an apostrophe (this PC's), which the built page carries as &#x27;.
+    if (!text.replace(/&#x27;/g, "'").includes(FOURTH_031_CHANGE)) fail(route, "does not give the wording for what changed in the replaced fourth build");
   }
 }
 
